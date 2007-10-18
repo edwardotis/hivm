@@ -1,0 +1,103 @@
+Start time: Fri_Oct_13_18-57-01_2006
+Beginning Model Validation
+Parsing for drug: NFV
+../../data/PR_2006-05-25_v2.0.tsv dimensions:
+Raw Spreadsheet Rows: 622
+Raw Spreadsheet Columns: 122
+seed: 42
+Pre-screening train dataset size: 423
+Pre-screening test dataset size: 198
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-18	Fold: 7.0
+Removed: SD-18_8	Fold: 8.9
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-16	Fold: 4.0
+Removed: SD-16_4	Fold: 4.3
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: RZ5	Fold: 29.9
+Removed: DD-03769	Fold: 31.4
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: RC-3472.2	Fold: 15.0
+Removed: RC-6860.5	Fold: 19.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-21_12	Fold: 7.7
+Removed: SD-21_20	Fold: 7.5
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-5_44	Fold: 1.6
+Removed: WAC-3	Fold: 1.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-5_44	Fold: 1.6
+Removed: RZ-L7	Fold: 1.4
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: SD-5_44	Fold: 1.6
+Removed: A0065	Fold: 1.1
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: NP-J1	Fold: 23.0
+Removed: WAC-6	Fold: 29.8
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: NP_2	Fold: 74.0
+Removed: NP_4	Fold: 57.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: NP_2	Fold: 74.0
+Removed: NP_7	Fold: 32.8
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: NP_2	Fold: 74.0
+Removed: NP_12	Fold: 67.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: NP_9	Fold: 219.0
+Removed: NP_15	Fold: 140.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: WAC-1	Fold: 18.4
+Removed: MLpat10	Fold: 27.0
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: WAC-5	Fold: 23.3
+Removed: V2002	Fold: 30.1
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: GHS-03	Fold: 25.8
+Removed: GHS-23	Fold: 74.8
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: GHS-24	Fold: 76.5
+Removed: GHS-26	Fold: 153.5
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: JGP-M2C	Fold: 3.4
+Removed: JGP-M2R	Fold: 2.6
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: JGP-M4C	Fold: 2.9
+Removed: JGP-M4R	Fold: 3.3
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: A0163	Fold: 1.6
+Removed: A0166	Fold: 1.7
+
+Found duplicate mutation sequence for drug: NFV
+Keeping: MLpat2_b	Fold: 82.0
+Removed: MLpat2_c	Fold: 86.0
+
+Total duplicates removed: 21
+Total rows screened out: 186
+Post-screening train dataset size: 308
+Post-screening test dataset size: 143
+Number of Experiment Results collected: 1
+Number of data points collected per Experiment: 143
+Total data points collected: 143
+Elapsed time: 
+0hr 0m 22s elapsed
+

@@ -1,0 +1,434 @@
+fileio
+
+X write
+X write with exceptions
+
+
+logger
+
+singleton
+make static function:
+append( string or stringstream)
+or overload << operator
+
+Logger log;
+log.append( "hello world);
+or
+log << hello world.
+
+test overload << ostream
+
+make date time into name for file
+
+Levels of logging? nah, can think abou
+that later.
+
+- Move int, working and output directory of testhivm to same as hivm, in order to 
+stop compiling all hivm objects 2 times. CAN'T BE DONE b/c I'm making
+2 different executables. Must compile separately.
+
+- compare paths.string()
+
+- svn inside Visual STudio
+
+- what if 'logs' folder isn't there? code more robust?
+
+NEXT TEST:
+
+log.append
+
+grab the filename,
+and read it in to the test.
+then check contents to see if they're equal.
+
+logger's done.
+
+FINISH LOG FIRST AND COMMIT TO SVN.
+Then, try moving the Visual Studio options around 
+
+ok, moving VS around was a 1.5 hour cluster fuck.
+jesus. they have a shit interface.
+
+--NEXT
+pull in dataset file to matrix, spreadsheet.
+make tests on this as part of Preprocessor.
+
+fix DRY TODOs if feeling slow.
+
+
+----------
+matrix
+
+both pi and rt NEXT
+for RT, We need to use the Excel friendly tab delimited to make life
+reasonable. Open Office and Excel cannot handle the raw data sets.
+However, we don't ever use the individual position data anyway. That's what the  mutlists
+are for. We sasume on this is that Stanford correctly made the mutlists in their datasets.
+
+small 5 row's each.
+
+full size ones too.
+
+Test using bind so that I can use foreach.
+Test that bind for each returns same as the while loop.
+
+test sizes, end points, empty's.
+(sizes to log files)
+
+test shuffle with constant seed.
+(log)
+
+test column headers.
+
+test size of each row is x slots.
+
+test col size and total row size.
+
+test logging input stats on drugs.
+(i.e. Out of 800 entries, 50 APV,  20 > threshold, 14 less than. )
+and actually count each one, not 1-amount. (to be safe)
+
+Test creating mutation string.
+find location of compmutlist for a matrix
+
+find( CompMutList ) == string mutation_list;
+
+
+string create_mutation_string( string wild_sequence, string mutation_list )
+- which mutlist or lists? CompMutList for both datasets
+- 
+
+test for bad data, unknown chars.
+(test writing bad,unknown data to logfile)
+in the columns that we are interested in.
+
+preprocess( drugname, threshold, )
+drug name, ie. APV
+threshold
+
+//MATRIX
+//OK, so if I can use a vector of vectors with the stl, especialy for_each,
+then maybe I should say to hell with the matrix, since no one out there has a single example
+of how to use the matrix iterators.
+
+http://groups.google.com/group/comp.lang.c++.moderated/browse_frm/thread/deb97ffbf5442fc2/70280e6f4b11a0e4?lnk=st&q=boost+matrix+iterator&rnum=10&hl=en#70280e6f4b11a0e4
+
+Note: There must be at least a space between “>” “>” in the declaration; otherwise compilers will confuse “>>” with the shift operator .
+
+SO, to use for_each, sort etc on my vector of vectors.
+I have to nest. or compose?
+for instance, I can do: OK, STL algorithms might suck on vector of vectors.
+Just use loops for now. and increment them with i++, not ++i;
+
+"vector< vector<int> > matrix (10, vector<int>(20, 42));
+
+(done, no for loops necessary -- and it wasn't such a long line)
+
+Or, if you were given the vector and you have to fill it, then:
+
+vector< vector<int> > matrix (10);
+fill (matrix.begin(), matrix.end(), vector<int>(20,42));
+
+If you have to fill it with random values:
+
+for_each (matrix.begin(), matrix.end(), fill_with_random);
+
+   // YES!!  for_each!!  One of the rare occasions where
+   // for_each seems really useful!!  :-)
+
+(could it be any clearer?  the function fill_with_random may
+turn out to be particularly useful, because it's fully
+reusable, to fill any sequence:  lists, vectors, C-arrays,
+etc.).
+
+Ah, you want the definition for fill_with_random??
+Ok, ok... :-)
+
+template <typename Iterator>
+void fill_with_random (Iterator begin, Iterator end)
+{
+    generate (begin, end, rand);   // std::generate
+
+} "
+
+
+
+
+-------
+//	//ok, I should be able to pass a string or stringstream and not a path
+//	//b/c path throws errors and I want that all handled inside FileIO
+//	//fuck. that's a refactor. oh, use the refactoring tool.
+
+
+- test the stringstream suggestion from newsgroup.
+
+- start using spreadsheet or masterlist
+
+- how does human brain work when it gets an ambiguous shapes?
+
+
+3 ways to create a matrix:
+
+	1. 
+	std::vector< std::vector<std::string> > spread_sheet (rows, std::vector<std::string>(cols, ""));
+
+	2.
+	std::vector< std::vector<std::string> > spread_sheet(rows);
+	std::fill(spread_sheet.begin(), spread_sheet.end(), std::vector<std::string>(cols, "") );
+	
+	3.
+	//std::vector< std::vector < std::string > > spread_sheet;
+	//std::vector< std::string> vstr( cols, "" );//vector size of columns with empty strings
+	//
+	////foreach row, insert a copy of vstr
+	//for( int k = 0; k < rows; k++ )
+	//{
+	//	spread_sheet.push_back( vstr );
+	//}
+
+//snippet for traversing 2D array with iterators
+		for( spread_sheet_row_iterator row_it = f.spread_sheet.begin();
+			row_it != f.spread_sheet.end();
+			row_it++
+			)
+		{
+			for( spread_sheet_column_const_iterator col_it = *row_it;
+			col_it != col_it.end();
+			col_it++
+			)
+
+		}
+		
+		//
+		
+-----------------
+ok, so I can't use the mutlist. or I have to check it and verify it programatically anyway.
+So, might as well not even bother with the lists at all, right? right.
+Also, add a function to remove rows with '*' in them too.
+
+The '*' means a stop codon. There are some sequences with poor quality.
+The '#' means an insertion.
+By the way, the '~' means a deletion. 
+
+---
+so, the rows with problems are ones that have blanks in the foldmatch columns.
+Search for this and delete that row too.
+
+hmmm, so the 3 errors are all actually the same row.
+Easy to fix this time. However, the plan below for marking the matrix is probably worthwhile.
+I had unique values to search for today, but if I get an = != ' error only, I will be SOL.
+
+And, I apparently will be scanning the fuck out of these datasets, so I think that is how I will do it
+from now on. think through it a little more first...ok, I like it.
+
+hmmm, ok. here's the issue. in theory, I need to do all my screenings before I delete, or else
+I can't refer back to the original spread sheet for corrections.
+
+That could have it's own problems...hmmmm.
+
+It might be easiest to combine the two.
+screen spread sheet for particular errors, etc. Return list of rows to remove.
+Function to erase those rows.
+Optional Function to write spread sheet to disk (in unit tests.) w/ timestamp-name.
+
+ok,good.
+
+Now, what about for columns?
+
+New screening function.
+RULE: Any error at any column in a given row, and that entire row is junked.
+(Log the errors found in the dataset.)
+
+screen rest of the row. (all those mutation slots.)
+compare to complete mut list? (trash if bad?)
+
+ALSO:
+Rename the datasets to the date-time that we last pulled them off of the 
+HivDB website. These are NOT the same 2004 datasets that I used  1 year ago.
+They must be time stamped as the only way I can keep up with them. Also, means
+LJ can't just pull the newest one and use it in my program b/c there's terrible
+error checking by Shafer's team.
+
+-----
+also, my work with spitting out the matrix index is kind of lame b/c the screen_drug function
+erases lines. thus making the row position unusable later.
+
+not an issue now, but could be.
+
+workaround:
+change screen_drug to take const spread_sheet, and return a container of row indices
+that need to be deleted.
+
+Then, a new function (delete_rows) that does nothing but delete. (could make debugging life easier.)
+
+-------
+
+Currently, my plan calls only for SvmMachine to only run cross_validation.
+However, I believe we have multiple experiment requirements beyond cross validation.
+
+Also, I don't like my Experiment class. It's really an ExperimentResult class.
+
+so, from cmd line, one experiement at a time can be called.
+I think I should have different Experiment classes to handle the different stuff thrown at me there.
+i.e.
+CrossValidationExperiment( PreProcWorkUnitSet, ExperimentResult ) //the fundamental experiment 10 fold
+
+others...
+Experiment2 //goal
+- Train with Set A.
+- Predict Set A. (should be very good results.)
+//this is the one I failed last time.
+
+Experiment3 //goal
+//One of Mike's? One of LJ's?
+//At this point, defer to making a test for LJ.
+//possibly one that we spoke of to test CrossValidation
+//Look it up.
+
+--------------
+
+WUSet destructor
+
+A. boost shared_ptr
+B. Copy logic from PhaseMachine using raw pointers
+
+Winner: (what makes graduation faster)
+Logic from PhaseMachine seems fine for this part.
+This is not a terribly complex use of pointers.
+
+ok, that seems to work well so far.
+Nice elegant solution with the destructor. me gusta.
+
+Might be a different story inside the cross-validation area.
+cross bridge come2it
+
+--------------------
+
+What's the Abstraction?
+It's svm, statistics talk.
+
+So, trainingMatrix, predicteeSet and predicteeMatrix
+eh. no go.
+
+Support: Yes!
+Crossvalidation( svmMatrix trainset );//internally handles splitting itself up
+//cross val
+void( createTrainSetandPredicteesFold( const svmMatrix trainset, collection trainsetRows2Predict,
+   svmMatrix  out_smalltrainMatrix, svmMatrix out_predicteeSet)
+
+Train( svmMatrix trainset)
+predict( svmMatrix trainset, svmSet predictee )
+
+svmMatrix trainMatrix
+svmSet predictee
+svmMatrix predictees
+
+for cross val, it's easy.
+wuset turns into a svmwu_matrix.
+
+createSvmWorkUnitMatrix(const PreProcWorkUnitSet& input, SvmWorkUnitMatrix &output )
+createTrainMatrix	   (const PreProcWorkUnitSet& input, SvmWorkUnitMatrix &trainset )
+
+each row keeps an ID and resistance.
+
+forget efficiency right now! :)
+
+what about when I have
+SvmWUSet* createSvmWorkUnitSet( const SvmWorkUnitMatrix& train_matrix, const PreProcWU& predictee)
+
+SvmWUSet* createSvmPredictee( const SvmWorkUnitMatrix& train_matrix, const PreProcWU& predictee)
+
+SvmWUMatrix* createSvmPredictees( const SvmWorkUnitMatrix& train_matrix, const PreProcWUSet& predictees)
+
+ok, so for making tests for this shiznit.
+the id and resistance are things to test.
+but obviously the main thing is the local alignment scores. which we haven't tested the dpl code yet.
+So, 2 things. 
+
+-1. test dpl code now. (at least partially)
+-2. go ahead and subclass BioProcessor so that I can have one class that spits out dummy var's for testing.
+and then I can add another class for dpl results later.
+
+Next:
+Code the SVMWorkUnit, Set and Matrix and test the destructors
+
+--
+ok, b/c I know cross val is a bitch. here's one way for the data structure to 
+stay simpler.
+
+For each fold in my 10 fold cross val, here's the function signature:
+\\pre: fold is 0-9
+void createFoldMatrices(const SvmWUMatrix& input, int fold, 
+	SvmWUMatrix& trainset_output,
+	SvmWUMatrix& predictees_output)
+	
+nice, eh? the core svmwumatrix never gets altered during cv from now on.
+Should keep things much cleaner, and easier to test. ok, where were we.
+right, double instead of SvmWU.
+
+--
+
+why do all that shit.
+Just change predict to a more descriptive name:
+
+predict_susceptible.
+
+susceptible == not-resistance.
+
+so, the training model is reversed.
+true = not-susceptible.
+but that's, ok, right.
+
+In this one place, I return true if suceptible. false if resistant.
+And, make my tpr and fpr go from there. 
+
+ok, cool.
+
+-------
+
+/**
+	//I could save model each time.
+	//I could put a hash into model file name.
+	//I could generate that Hash from: SvmWUMatrix row id's in order first to last.
+
+	ex. row 1 = CA3089
+		row 2 = SD-79
+		row 3 = CA3453
+	unique_id = "CA3089_SD-79_CA3453";
+	Except that would be 500 names long, and file systems don't support names that long.
+	So, Hash on that Unique ID. Wait.
+	It's name, plus resistance.
+	Wait, it's the scaled pairwise values that matter, and the resistance, and name.
+	
+	marker
+	//I could read in model each time.
+
+	//fuck that.
+
+void LibSvmAdapter::predict( const SvmWUMatrix& trainset, 
+	const SvmWUMatrix& predictees,
+	std::vector< bool > results
+	)
+
+	or
+
+	Look at my previous Result class....I did. That's an 'experiment result'. Not 
+	what I want for basic predictions here.
+
+	ok, the vector of booleans wins! simple, clean, keeps memory management all encapsulated
+	in the 2 versions of predict() in LibSvmAdapter. 
+
+	Less room for fuckups this way. cool.
+
+	Now test it.
+
+	//TODO  TEST PREDICTION VERSIONS AGAINST EACH OTHER!
+	Test the versions of predict against each other!
+
+
+--------------
+
+//What I see is a parameter search function in SVMMachine class that can take in 
+//an Experiment base class
+
+*/

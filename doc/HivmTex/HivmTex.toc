@@ -1,0 +1,82 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1.1}Contributions}{2}
+\contentsline {chapter}{\numberline {2}HIV Drug Resistance: Biology, Diagnostics, and The Role of hivm}{4}
+\contentsline {section}{\numberline {2.1}Definition of drug resistance}{4}
+\contentsline {section}{\numberline {2.2}Current methods for determining drug resistance}{5}
+\contentsline {section}{\numberline {2.3}Definition of Viral Load}{6}
+\contentsline {section}{\numberline {2.4}Definition of Genotypic Test}{6}
+\contentsline {section}{\numberline {2.5}Definition of Phenotypic Test}{7}
+\contentsline {section}{\numberline {2.6}hivm's goals for improved drug resistance testing}{9}
+\contentsline {section}{\numberline {2.7}Limitations in hivm model vs. the real world biology of the problem}{11}
+\contentsline {chapter}{\numberline {3}Support Vector Machines }{13}
+\contentsline {section}{\numberline {3.1}Two problems overcome by support vector machine in its design}{15}
+\contentsline {section}{\numberline {3.2}SVM Background Definitions}{15}
+\contentsline {section}{\numberline {3.3}The four key properties of the SVM algorithm}{16}
+\contentsline {section}{\numberline {3.4}Historical Development of SVM}{18}
+\contentsline {section}{\numberline {3.5}High-Dimensional mapping and Inner Product Kernels}{24}
+\contentsline {section}{\numberline {3.6}Support Vector Machine for Classification}{28}
+\contentsline {chapter}{\numberline {4}Modeling HIV Drug Resistance With hivm}{31}
+\contentsline {section}{\numberline {4.1}Use Cases}{32}
+\contentsline {section}{\numberline {4.2}Design Decisions}{34}
+\contentsline {subsection}{\numberline {4.2.1}Datasets}{34}
+\contentsline {subsection}{\numberline {4.2.2}Issues with RT Dataset}{35}
+\contentsline {subsection}{\numberline {4.2.3}CrossValidation}{36}
+\contentsline {subsection}{\numberline {4.2.4}Caching}{36}
+\contentsline {subsection}{\numberline {4.2.5}Parameter Grid Search}{37}
+\contentsline {subsection}{\numberline {4.2.6}Altering from Traditional Train and Test}{37}
+\contentsline {section}{\numberline {4.3}Comparison to Similar Software}{38}
+\contentsline {chapter}{\numberline {5}Implementation}{39}
+\contentsline {section}{\numberline {5.1}Introduction}{39}
+\contentsline {section}{\numberline {5.2}Converting Sequence Data into SVM Compatible Format}{40}
+\contentsline {subsection}{\numberline {5.2.1}HIV Drug Action and Nature of Resistance}{40}
+\contentsline {section}{\numberline {5.3}Libsvm Recommended Procedures for Model Selection}{42}
+\contentsline {section}{\numberline {5.4}ROC Analysis}{44}
+\contentsline {subsection}{\numberline {5.4.1}ROC}{44}
+\contentsline {subsection}{\numberline {5.4.2}Description of hivm ROC Curves}{45}
+\contentsline {section}{\numberline {5.5}Implementation Challenges}{47}
+\contentsline {subsection}{\numberline {5.5.1}Cross-Validation}{47}
+\contentsline {subsection}{\numberline {5.5.2}Cross-Validation Diagram}{51}
+\contentsline {subsection}{\numberline {5.5.3}Cross-Validation Pseudo-Code}{52}
+\contentsline {subsection}{\numberline {5.5.4}Test Driven Development}{53}
+\contentsline {subsection}{\numberline {5.5.5}Boost}{55}
+\contentsline {subsection}{\numberline {5.5.6}C and Memory}{56}
+\contentsline {section}{\numberline {5.6}Input Data}{56}
+\contentsline {section}{\numberline {5.7}Example of Sequences from the PI DataSet}{58}
+\contentsline {section}{\numberline {5.8}Drugs in the Datasets}{60}
+\contentsline {section}{\numberline {5.9}Software Architecture}{61}
+\contentsline {subsection}{\numberline {5.9.1}Classes}{61}
+\contentsline {subsection}{\numberline {5.9.2}Unit Tests}{66}
+\contentsline {section}{\numberline {5.10}Platform Support and Instructions for Compiling}{70}
+\contentsline {section}{\numberline {5.11}Usage}{70}
+\contentsline {section}{\numberline {5.12}Description of Directories and Files in HIVM}{72}
+\contentsline {chapter}{\numberline {6}Experimental Results and Analysis}{81}
+\contentsline {section}{\numberline {6.1}Model Selection Results}{81}
+\contentsline {section}{\numberline {6.2}Model Validation Analysis}{82}
+\contentsline {section}{\numberline {6.3}Probability vs Non-Probability Predictions}{84}
+\contentsline {section}{\numberline {6.4}Datasets}{84}
+\contentsline {section}{\numberline {6.5}Key to Results}{86}
+\contentsline {section}{\numberline {6.6}Thresholds}{88}
+\contentsline {section}{\numberline {6.7}Summary and Analysis of Results}{89}
+\contentsline {chapter}{\numberline {7}Conclusions}{92}
+\contentsline {chapter}{\numberline {8}Future Work}{94}
+\contentsline {section}{\numberline {8.1}Comparison to Similar Software}{94}
+\contentsline {section}{\numberline {8.2}Integrating Clinical Trial Data}{97}
+\contentsline {section}{\numberline {8.3}Source Forge}{99}
+\contentsline {section}{\numberline {8.4}Reverse Transcriptase}{99}
+\contentsline {section}{\numberline {8.5}Support for Multiple Classifications}{99}
+\contentsline {section}{\numberline {8.6}More Detailed Data Analysis}{99}
+\contentsline {section}{\numberline {8.7}Improved Speed}{101}
+\contentsline {section}{\numberline {8.8}Web Application or Web Service}{101}
+\contentsline {section}{\numberline {8.9}Alternative Local Alignment Algorithm}{102}
+\contentsline {section}{\numberline {8.10}Structure Based Scoring}{102}
+\contentsline {section}{\numberline {8.11}Exploring Variable Space and Storing Results}{103}
+\contentsline {section}{\numberline {8.12}Randomization within training data}{103}
+\contentsline {section}{\numberline {8.13}MS Visual Studio 8.0}{104}
+\contentsline {section}{\numberline {8.14}g++ and ROC Curve Creation}{104}
+\contentsline {section}{\numberline {8.15}MS Windows 7.1 and Virtual Memory}{104}
+\contentsline {section}{\numberline {8.16}Interface Directly into the HIVDB}{104}
+\contentsline {section}{\numberline {8.17}Add output files to regression tests}{105}
+\contentsline {section}{\numberline {8.18}Add regression test logic for testing only public interfaces}{105}
+\contentsline {section}{\numberline {8.19}Standardizing HIVDB Input Data Format}{105}
+\contentsline {chapter}{\numberline {9}Acknowledgements}{107}
+\contentsline {chapter}{Bibliography}{108}
