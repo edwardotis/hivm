@@ -1,0 +1,1 @@
+ssearch34 -q  -f -12 -g -2 wild_type.aa stop_codon.aa > test_result.txt

@@ -1,0 +1,23 @@
+Start time: Mon_Jul_17_20-44-49_2006
+Parsing for drug: ATV
+../data/PR_2006-05-25_v2.0.tsv dimensions:
+Raw Spreadsheet Rows: 622
+Raw Spreadsheet Columns: 122
+seed: 42
+Pre-screening train dataset size: 423
+Pre-screening test dataset size: 198
+Found duplicate mutation sequence for drug: ATV
+Keeping: RC-3472.2	Fold: 6.0
+Removed: RC-6860.5	Fold: 6.0
+
+Found duplicate mutation sequence for drug: ATV
+Keeping: MLpat2_b	Fold: 87.0
+Removed: MLpat2_c	Fold: 80.0
+
+Total duplicates removed: 2
+Total rows screeded out: 599
+Post-screening train dataset size: 53
+Post-screening test dataset size: 21
+Elapsed time: 
+0hr 0m 1s elapsed
+

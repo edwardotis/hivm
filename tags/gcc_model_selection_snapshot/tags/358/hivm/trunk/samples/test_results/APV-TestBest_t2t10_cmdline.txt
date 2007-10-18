@@ -1,0 +1,35 @@
+Start Time: Mon_Jul_17_20-42-58_2006
+
+0hr 1m 41s elapsed
+
+
+--purpose test
+--drug APV
+--thresholds  2
+--thresholds  10
+--wild-type ../data/PI_wild.seq
+--hivdb-file ../data/PR_2006-05-25_v2.0.tsv
+--seed 42
+--suscep-type Clinical
+--output results/APV-TestBest_t2t10
+--log-cost-c 15.5
+--log-gamma-g -14.5
+
+
+Svm Parameters: Set in Options.hpp constructor
+TODO: Move this to a config file.
+svm_type	 = 0
+kernel_type	 = 2
+degree		 = 3.0
+coef0		 = 0.0
+nu			 = 0.5
+cache_size	 = 100
+eps			 = 0.001
+p			 = 0.1
+shrinking	 = 1
+nr_weight	 = 0
+weight_label = NULL
+weight		 = NULL
+probability  = 0
+
+hivm --purpose test --drug APV --thresholds  2 --thresholds  10 --wild-type ../data/PI_wild.seq --hivdb-file ../data/PR_2006-05-25_v2.0.tsv --seed 42 --suscep-type Clinical --output results/APV-TestBest_t2t10 --log-cost-c 15.5 --log-gamma-g -14.5 

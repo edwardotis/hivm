@@ -1,0 +1,437 @@
+This is pdfeTeX, Version 3.141592-1.20a-rc7.2-2.2 (MiKTeX 2.4) (preloaded format=latex 2005.6.22)  2 JUL 2005 13:45
+entering extended mode
+**C:/workspace/PrsvmCvs/docs/HivmTex/HivmTex.tex
+(C:/workspace/PrsvmCvs/docs/HivmTex/HivmTex.tex
+LaTeX2e <2003/12/01>
+Babel <v3.8a> and hyphenation patterns for english, french, german, ngerman, dumylang, nohyphenation, loaded.
+(C:\texmf\tex\latex\base\report.cls
+Document Class: report 2004/02/16 v1.4f Standard LaTeX document class
+(C:\texmf\tex\latex\base\size12.clo
+File: size12.clo 2004/02/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (C:\texmf\tex\latex\base\latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+) (psfig.sty
+\@unused=\write3
+
+psfig/tex 1.9
+\ps@stream=\read1
+\p@intvaluex=\dimen103
+\p@intvaluey=\dimen104
+) (sfsuthesis.sty
+Document Style Option `quthesis' <9 Jan 1992>.
+(fancyhdr.sty
+\headwidth=\dimen105
+)
+
+Package Fancyhdr Warning: fancyhdr's E option without twoside option is useless on input line 236.
+
+) (C:\texmf\tex\latex\graphics\graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+ (C:\texmf\tex\latex\graphics\keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(C:\texmf\tex\latex\graphics\graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+ (C:\texmf\tex\latex\graphics\trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(C:\texmf\tex\latex\00miktex\graphics.cfg
+File: graphics.cfg 2003/03/12 v1.1 MiKTeX 'graphics' configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 80.
+ (C:\texmf\tex\latex\graphics\pdftex.def
+File: pdftex.def 2002/06/19 v0.03k graphics/color for pdftex
+\Gread@gobject=\count88
+))
+\Gin@req@height=\dimen106
+\Gin@req@width=\dimen107
+) (HivmTex.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+
+(C:\texmf\tex\context\base\supp-pdf.tex (C:\texmf\tex\context\base\supp-mis.tex
+loading : Context Support Macros / Miscellaneous 
+\protectiondepth=\count89
+\scratchcounter=\count90
+\scratchtoks=\toks15
+\scratchdimen=\dimen108
+\scratchskip=\skip43
+\scratchmuskip=\muskip10
+\scratchbox=\box26
+\scratchread=\read2
+\scratchwrite=\write4
+\zeropoint=\dimen109
+\onepoint=\dimen110
+\onebasepoint=\dimen111
+\minusone=\count91
+\thousandpoint=\dimen112
+\onerealpoint=\dimen113
+\emptytoks=\toks16
+\nextbox=\box27
+\nextdepth=\dimen114
+\everyline=\toks17
+\!!counta=\count92
+\!!countb=\count93
+\recursecounter=\count94
+)
+loading : Context Support Macros / PDF (2004.03.26)
+\nofMPsegments=\count95
+\nofMParguments=\count96
+\everyMPtoPDFconversion=\toks18
+)
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+
+ []
+
+[1
+
+{sfonts.map}]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2] [1
+
+
+] (HivmTex.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 3.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 3.
+ (C:\texmf\tex\latex\base\ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+) [2
+
+
+] [3])
+\tf@toc=\write5
+ [4] (HivmTex.lof)
+\tf@lof=\write6
+ [5
+
+
+]
+Chapter 1.
+[1
+
+
+] [2]
+Chapter 2.
+[3
+
+] [4] [5]
+Missing character: There is no … in font cmr12!
+ [6] [7] [8] [9] [10]
+Chapter 3.
+[11
+
+]
+Overfull \hbox (0.78574pt too wide) in paragraph at lines 171--171
+[]\OT1/cmr/bx/n/17.28 Two prob-lems over-come by sup-port vec-tor ma-
+ []
+
+[12] [13] [14] [15]
+Missing character: There is no … in font cmr12!
+ [16] <images/hyperplane1.png, id=104, 731.73375pt x 621.32124pt>
+File: images/hyperplane1.png Graphic file (type png)
+ <use images/hyperplane1.png>
+[17] [18 <images/hyperplane1.png>] <images/hyperplane2.png, id=115, 750.805pt x 624.3325pt>
+File: images/hyperplane2.png Graphic file (type png)
+
+<use images/hyperplane2.png> [19] [20 <images/hyperplane2.png>] [21] [22] [23] [24] [25] [26]
+Chapter 4.
+[27
+
+] [28] [29] [30] [31]
+Missing character: There is no • in font cmr12!
+Missing character: There is no • in font cmr12!
+Missing character: There is no • in font cmr12!
+ [32]
+Missing character: There is no • in font cmr12!
+
+Underfull \hbox (badness 10000) in paragraph at lines 530--531
+
+ []
+
+Missing character: There is no “ in font cmr12!
+Missing character: There is no ” in font cmr12!
+[33] <images/3239061284_APV_.png, id=170, 642.4pt x 481.8pt>
+File: images/3239061284_APV_.png Graphic file (type png)
+ <use images/3239061284_APV_.png> [34] [35 <images/3239061284_APV_.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 569--570
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 574--586
+
+ []
+
+[36]
+Overfull \hbox (8.75565pt too wide) in paragraph at lines 588--588
+[]\OT1/cmr/bx/n/17.28 Example of Two Se-quences from the PI DataSet 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 593--596
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 597--600
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 601--604
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 605--608
+
+ []
+
+[37]
+Underfull \hbox (badness 10000) in paragraph at lines 609--612
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 617--636
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 617--636
+
+ []
+
+[38] [39] <images/Hivm_uml.png, id=191, 732.7375pt x 1014.79124pt>
+File: images/Hivm_uml.png Graphic file (type png)
+ <use images/Hivm_uml.png>
+
+LaTeX Warning: Float too large for page by 41.9792pt on input line 647.
+
+<images/HivmStateChart.png, id=192, 456.70625pt x 874.26625pt>
+File: images/HivmStateChart.png Graphic file (type png)
+ <use images/HivmStateChart.png>
+
+LaTeX Warning: Float too large for page by 271.54054pt on input line 654.
+
+[40] [41 <images/Hivm_uml.png>] [42 <images/HivmStateChart.png>] [43] [44] [45] [46] [47]
+Chapter 5.
+[48
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 867--868
+
+ []
+
+[49] [50] [51] [52] [53] [54] [55]
+Chapter 6.
+[56
+
+]
+Chapter 7.
+[57
+
+] [58] [59]
+Chapter 8.
+[60
+
+]
+Missing character: There is no ¨ in font cmr12!
+Missing character: There is no – in font cmr12!
+
+
+LaTeX Warning: Empty `thebibliography' environment on input line 1317.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 1132) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [3] "`a no-nonsense guide to HIV drug re-sis-tance test-ing"'. Horn, Rich-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 1189) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [10] "`A Tu-to-r-ial on Sup-port Vec-tor Ma-chines"' Pai-Hsuen Chen, Chih-
+ []
+
+
+Underfull \hbox (badness 1184) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 Jen Lin, and Bern-hard Scholkopf De-part-ment of Com-puter Sci-ence and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [12] Nello Cris-tian-ini BIOwulf Tech-nolo-gies nello@support-vector.net
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Overfull \hbox (35.6057pt too wide) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [13] Wol-fram Re-search: Math-World. http://mathworld.wolfram.com/HilbertSpace.html 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 1533) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [14] http://www.opensource.org/licenses/mit-license.php Chih-Chung Chang
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 1748) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 [15] A Prac-ti-cal Guide to Sup-port Vec-tor Clas-si-fi-ca-tion Chih-Wei Hsu,
+ []
+
+
+Underfull \hbox (badness 1189) in paragraph at lines 1252--1317
+\OT1/cmr/m/n/12 Chih-Chung Chang, and Chih-Jen Lin De-part-ment of Com-puter Sci-ence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1252--1317
+
+ []
+
+[61
+
+
+] [62] [63] (HivmTex.aux) ) 
+Here is how much of TeX's memory you used:
+ 1414 strings out of 95519
+ 16439 string characters out of 1189651
+ 66703 words of memory out of 1066895
+ 4467 multiletter control sequences out of 35000
+ 8861 words of font info for 33 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 607
+ 28i,11n,45p,1260b,274s stack positions out of 1500i,500n,5000p,200000b,32768s
+ 270 PDF objects out of 300000
+ 0 named destinations out of 300000
+ 26 words of extra memory for PDF output out of 65536
+<C:\texmf\fonts\type1\bluesky\cm\cmr6.pfb><C:\texmf\fonts\type1\bluesky\cm\cmsy6.pfb><C:\texm
+f\fonts\type1\bluesky\cm\cmmi6.pfb><C:\texmf\fonts\type1\bluesky\cm\cmmi8.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr8.pfb>
+<C:\texmf\fonts\type1\bluesky\cm\cmex10.pfb><C:\texmf\fonts\type1\bluesky\cm\cmti12.pfb><C:\texmf\fonts\type1\bluesky\cm
+\cmsy8.pfb><C:\texmf\fonts\type1\bluesky\cm\cmmi12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmsy10.pfb><C:\texmf\fonts\type1
+\bluesky\cm\cmbx12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmcsc10.pfb>
+Output written on HivmTex.pdf (70 pages, 774866 bytes).

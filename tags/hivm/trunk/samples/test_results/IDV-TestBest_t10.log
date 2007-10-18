@@ -1,0 +1,87 @@
+Start time: Mon_Jul_17_20-50-10_2006
+Parsing for drug: IDV
+../data/PR_2006-05-25_v2.0.tsv dimensions:
+Raw Spreadsheet Rows: 622
+Raw Spreadsheet Columns: 122
+seed: 42
+Pre-screening train dataset size: 423
+Pre-screening test dataset size: 198
+Found duplicate mutation sequence for drug: IDV
+Keeping: RZ5	Fold: 6.3
+Removed: DD-03769	Fold: 6.1
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: RC-3472.2	Fold: 13.0
+Removed: RC-6860.5	Fold: 16.0
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: SD-21_12	Fold: 7.7
+Removed: SD-21_20	Fold: 6.6
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: SD-5_44	Fold: 1.1
+Removed: WAC-3	Fold: 0.8
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: SD-5_44	Fold: 1.1
+Removed: RZ-L7	Fold: 1.1
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: SD-5_44	Fold: 1.1
+Removed: A0065	Fold: 0.6
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: NP-J1	Fold: 25.2
+Removed: WAC-6	Fold: 23.4
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: NP_2	Fold: 3.2
+Removed: NP_4	Fold: 5.3
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: NP_2	Fold: 3.2
+Removed: NP_7	Fold: 1.3
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: NP_2	Fold: 3.2
+Removed: NP_12	Fold: 2.3
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: NP_9	Fold: 5.8
+Removed: NP_15	Fold: 12.0
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: WAC-1	Fold: 17.0
+Removed: MLpat10	Fold: 28.0
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: WAC-5	Fold: 1.1
+Removed: V2002	Fold: 1.2
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: GHS-03	Fold: 17.4
+Removed: GHS-23	Fold: 57.6
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: GHS-24	Fold: 91.3
+Removed: GHS-26	Fold: 172.2
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: JGP-M2C	Fold: 3.2
+Removed: JGP-M2R	Fold: 2.1
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: JGP-M4C	Fold: 1.6
+Removed: JGP-M4R	Fold: 1.2
+
+Found duplicate mutation sequence for drug: IDV
+Keeping: A0163	Fold: 0.8
+Removed: A0166	Fold: 1.0
+
+Total duplicates removed: 18
+Total rows screeded out: 216
+Post-screening train dataset size: 286
+Post-screening test dataset size: 136
+Elapsed time: 
+0hr 0m 12s elapsed
+

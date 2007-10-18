@@ -1,0 +1,51 @@
+Start time: Mon_Jul_17_20-51-02_2006
+Parsing for drug: LPV
+../data/PR_2006-05-25_v2.0.tsv dimensions:
+Raw Spreadsheet Rows: 622
+Raw Spreadsheet Columns: 122
+seed: 42
+Pre-screening train dataset size: 423
+Pre-screening test dataset size: 198
+Found duplicate mutation sequence for drug: LPV
+Keeping: WAC-1	Fold: 9.9
+Removed: MLpat10	Fold: 22.0
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: WAC-5	Fold: 0.6
+Removed: V2002	Fold: 0.8
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: GHS-03	Fold: 14.6
+Removed: GHS-23	Fold: 39.3
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: GHS-24	Fold: 47.0
+Removed: GHS-26	Fold: 84.1
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: JGP-M2C	Fold: 7.7
+Removed: JGP-M2R	Fold: 6.2
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: JGP-M4C	Fold: 19.0
+Removed: JGP-M4R	Fold: 15.0
+
+Found duplicate mutation sequence for drug: LPV
+Keeping: MLpat2_b	Fold: 73.0
+Removed: MLpat2_c	Fold: 77.0
+
+Total duplicates removed: 7
+Total rows screeded out: 429
+Post-screening train dataset size: 165
+Post-screening test dataset size: 65
+Exception Type: class boost::filesystem::filesystem_error
+FileIO: "cache\782995584_train_LA_scores.csv": File Not FoundCould not open cache file for reading.
+File path: cache/782995584_train_LA_scores.csv
+Continuing to run hivm...
+Exception Type: class boost::filesystem::filesystem_error
+FileIO: "cache\782995584_3783535594_predictee_LA_scores.csv": File Not FoundCould not open cache file for reading.
+File path: cache/782995584_3783535594_predictee_LA_scores.csv
+Continuing to run hivm...
+Elapsed time: 
+0hr 1m 2s elapsed
+

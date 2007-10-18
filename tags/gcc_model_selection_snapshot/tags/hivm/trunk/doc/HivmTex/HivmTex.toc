@@ -1,0 +1,42 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Biology and Medical Background}{3}
+\contentsline {section}{\numberline {2.1}What is drug resistance?}{3}
+\contentsline {section}{\numberline {2.2}How is a patient's drug resistance currently determined?}{4}
+\contentsline {section}{\numberline {2.3}What is Viral Load?}{5}
+\contentsline {section}{\numberline {2.4}What is a "Genotypic" Test?}{5}
+\contentsline {section}{\numberline {2.5}What is a "Phenotypic" Test?}{6}
+\contentsline {section}{\numberline {2.6}What gaps does hivm hope to fill?}{7}
+\contentsline {section}{\numberline {2.7}Limitations in our model vs. the real world biology of the problem.}{9}
+\contentsline {chapter}{\numberline {3}Support Vector Machines }{11}
+\contentsline {section}{\numberline {3.1}Three fundamental issues of machine learning}{12}
+\contentsline {section}{\numberline {3.2}Two problems overcome by support vector machine in its design}{13}
+\contentsline {section}{\numberline {3.3}SVM Background Definitions}{13}
+\contentsline {section}{\numberline {3.4}The four distinct concepts of SVM}{14}
+\contentsline {section}{\numberline {3.5}Historical Development of SVM}{16}
+\contentsline {section}{\numberline {3.6}High-Dimensional mapping and Inner Product Kernels}{21}
+\contentsline {section}{\numberline {3.7}Support Vector Machine for Classification}{25}
+\contentsline {chapter}{\numberline {4}Implementation}{27}
+\contentsline {section}{\numberline {4.1}Local Alignment}{27}
+\contentsline {section}{\numberline {4.2}Issues with Cross-Validation}{30}
+\contentsline {section}{\numberline {4.3}Libsvm Recommended Procedures}{32}
+\contentsline {section}{\numberline {4.4}ROC Analysis}{34}
+\contentsline {section}{\numberline {4.5}Testing}{36}
+\contentsline {section}{\numberline {4.6}Input Data}{36}
+\contentsline {section}{\numberline {4.7}Example of Two Sequences from the PI DataSet}{37}
+\contentsline {section}{\numberline {4.8}Drugs in the Datasets}{38}
+\contentsline {section}{\numberline {4.9}Classes}{40}
+\contentsline {section}{\numberline {4.10}Platform Support and Instructions for Compiling}{44}
+\contentsline {section}{\numberline {4.11}Usage}{45}
+\contentsline {section}{\numberline {4.12}Description of Directories and Files in HIVM}{46}
+\contentsline {chapter}{\numberline {5}Results}{48}
+\contentsline {section}{\numberline {5.1}Tests}{48}
+\contentsline {section}{\numberline {5.2}Datasets}{49}
+\contentsline {section}{\numberline {5.3}Key to Results}{49}
+\contentsline {section}{\numberline {5.4}11/2004 PI Results using Default Thresholds}{50}
+\contentsline {chapter}{\numberline {6}Conclusions}{56}
+\contentsline {chapter}{\numberline {7}Further Work}{57}
+\contentsline {section}{\numberline {7.1}Data Analysis}{57}
+\contentsline {section}{\numberline {7.2}Improved Speed}{58}
+\contentsline {section}{\numberline {7.3}Web Application}{58}
+\contentsline {chapter}{\numberline {8}Acknowledgements}{60}
+\contentsline {chapter}{Bibliography}{61}

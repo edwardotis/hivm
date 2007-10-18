@@ -1,0 +1,35 @@
+Start Time: Fri_Oct_13_17-23-51_2006
+
+0hr 0m 0s elapsed
+
+
+--purpose       model-validation
+--drug          NFV
+--thresholds    10
+--wild-type     ../../data/PI_wild.seq
+--hivdb-file    ../../data/PR_2006-05-25_v2.0.tsv
+--seed          42
+--suscep-type   Clinical
+--output        results/NFV-model-validationBest_t10
+--lg-cost-c     7.5
+--lg-gamma-g    -5.5
+--test-dataset  N/A
+
+
+Svm Parameters: Set in Options.hpp constructor
+TODO: Move this to a config file.
+svm_type      = 0
+kernel_type   = 2
+degree        = 3
+coef0         = 0
+nu            = 0.5
+cache_size    = 100
+eps           = 0.001
+p             = 0.1
+shrinking     = 1
+nr_weight     = 0
+weight_label  = 00000000
+weight        = 00000000
+probability   = 0
+
+hivm --purpose       model-validation --drug NFV --thresholds    10 --wild-type     ../../data/PI_wild.seq --hivdb-file    ../../data/PR_2006-05-25_v2.0.tsv --seed          42 --suscep-type   Clinical --output        results/NFV-model-validationBest_t10 --lg-cost-c     7.5 --lg-gamma-g    -5.5 --test-dataset  N/A 

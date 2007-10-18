@@ -1,0 +1,212 @@
+
+HIVM
+
+Usage:
+
+You can type in: hivm --help or hivm -h to see the usage at the command prompt.
+Sample scripts are available in samples/windows and samples/linux directories.
+
+Presently, hivm has these three functions:
+
+model-selection ( cross-validate and grid search for cost and gamma
+parameters )
+
+prediction (run classification on the test data using c,g parameters chosen
+from cross-validation)
+
+Allowed options:
+  -h [ --help ]                         produce help message
+  -p [ --purpose ] arg                  model-selection or prediction
+  -d [ --drug ] arg                     HIV drug to be tested
+  -t [ --thresholds ] arg               Thresholds for high  and low drug fold
+                                        resistance . Please use only 1 or 2
+                                        thresholds. Default: 2 and 10
+  -w [ --wild-type ] arg                Wild Type Enzyme Sequence File
+  -f [ --hivdb-file ] arg               HIVDB Susceptibility Data File
+  -s [ --seed ] arg (=42)               Optional: Seed for randomly splitting
+                                        susceptibility file into training and
+                                        testing sets. Positive integers only.
+                                        Default: 42
+  -e [ --suscep-type ] arg (=all)       Optional: Type of susceptibility
+                                        experiment used: clinical, lab, or all.
+  -c [ --log-cost-c ] arg (=0)          Log Cost.  Required: test operation.
+                                        Ignored for CrossValidation and
+                                        SelfValidation operations
+  -g [ --log-gamma-g ] arg (=0)         Log Gamma. Required: test operation.
+                                        Ignored for CrossValidation and
+                                        SelfValidation operations
+  -x [ --log-cost-low ] arg (=0)        Low Log Cost. Required: cross-validate
+                                        . For Grid Search of
+                                        Parameters
+  -y [ --log-cost-high ] arg (=0)       High Log Cost. Required: cross-validate
+                                        . For Grid Search of
+                                        Parameters
+  -z [ --log-cost-increment ] arg (=0)  Log Cost Increment. Required:
+                                        cross-validate . For
+                                        Grid Search of Parameters
+  -l [ --log-gamma-low ] arg (=0)       Low Log Gamma. Required: cross-validate
+                                        . For Grid Search of
+                                        Parameters
+  -m [ --log-gamma-high ] arg (=0)      High Log Gamma. Required:
+                                        cross-validate . For
+                                        Grid Search of Parameters
+  -n [ --log-gamma-increment ] arg (=0) Log Gamma Increment. Required:
+                                        cross-validate . For
+                                        Grid Search of Parameters
+  -o [ --output ] arg                   Optional: Prefix for output files.
+                                        Default: current timestamp
+
+
+
+Analysis:
+
+A spreadsheet comparing cross-validation results to test results of a prechosen cost, gamma parameter
+pair is available in:
+samples/test-results.xls
+
+This file contains results for 3 experiments with different threshold categories:
+2 fold only
+10 fold only
+2 fold and 10 fold simultaneously
+
+The "optimal" cost, gamma pair was chosen for the test was the one that created the greatest
+difference between True Postive Rate and False Positive Rate. 
+i.e. Maximized True Positive Rate and Minimized False Positive Rate
+
+Please use the sample scripts below to run any cost, gamma pairs that you would like to compare.
+
+Samples: (In Linux, executable permissions may need to be set for all scripts and executablers)
+The main sample scripts have already been run, and the results are available:
+samples/linux/results or samples/windows/results
+Precompiled x86, 32bit binaries for linux and windows are  available in the samples directory.
+
+Short Samples:
+Short samples are available to play with. They are much less computationally intensive than the
+full model selection scripts. Full scripts search a large number of possible cost, gamma parameter pairs, and
+may take several hours for each experiment to complete on an Intel 3Ghz Xeon.
+
+Samples Cache:
+The cache consists of precomputed of Local Alignment scores in comma separated values format.
+It is 30MB in size uncompressed, so it was compressed and placed into CVS repository.
+Please extract it if you wish to use it:
+samples/linux/cache/*.csv
+samples/windows/cache/*.csv
+
+Samples Output Files:
+
+Each model selection run results in 5 output files. They are described below:
+
+*results.csv - Statistics and results for every cost, gamma pair tried in an experiment.
+
+*cmdline.txt - Contains all the program options used by hivm in a particular experiment.
+Additionally, it creates a one line cmd line script so that the experiment can be easily run again.
+
+*.log - A log file that may have some useful messages writ_ten during the program execution.
+
+*gnuplot_script.gpl - A gnuplot script for creating a ROC curve image.
+
+*roc_data_points.csv - Datapoints for the gnuplot script.
+--
+*.png - ROC curve image output by gnuplot script.
+
+
+
+LINUX:
+
+Build Instructions:
+Run src/autogen.sh and src/make
+Compilation is controlled using autoconf and automake.
+Copy hivm.exe into samples/linux/
+
+Run:
+Open a drug script. like IDV.sh
+Comment lines in or out to run different model selection or prediction routines
+View output in samples/linux/results.
+
+ROC Curve Graphs:
+Find *.gpl scripts in samples/linux/results
+Run gnuplot script *.gpl to see a ROC curve of model selection results.
+From model selection, pick a c,g pair and run it in prediction mode,
+and then compare it to model selection.
+
+
+Linux Unit Tests:
+
+Compiling:
+Compile src/'make check'
+Copy the output file, src/test/testhivm.exe, into src/test/Debug for relative paths of unit tests to work.
+
+Running:
+src/test/Debug/testhivm.exe
+
+In order to control which tests are run use:
+src/test/Definitions.hpp
+
+By commenting out definitions, you can control which tests will be compiled into testhivm.exe
+
+TEST_ALL: full regression test of every possible test.*
+
+LONG_TESTS: In any given test class, there are some tests that take a long time to run. 
+
+This definition can be used to turn these on an off. Especially useful in conjunction with 
+'Classname'Tests = Definitions used to control explicitly which classes you want to test. 
+
+*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all other
+definitions before running these one at a time.
+
+WINDOWS:
+
+Build Instructions:
+Open hivm.sln in MS Visual Studio.(Created with v7.1)
+Choose Release version of the hivm project and build.
+Copy Release/hivm.exe into samples/windows/
+
+Run:
+Open a drug script. like IDV.bat
+Use start_IDV.bat to start IDV.at using a Low Process Priority.
+Comment lines in or out to run different model selection or prediction routines
+View output in samples/windows/results.
+
+ROC Curve Graphs:
+Find *.gpl scripts in samples/windows/results
+To see a ROC curve of model selection results.
+Run gnuplot script *.gpl 
+
+From model selection, pick a c,g pair and run it in prediction mode,
+and then compare it to model selection.
+
+Windows Unit Tests:
+
+Building 
+Open trunk/hivm.sln in MS Visual Studio. (Created with v7.1)
+Choose Release version of the testhivm project and build.
+
+Running:
+src/test/Debug/testhivm.exe
+
+In order to control which tests are run use:
+src/test/Definitions.hpp
+
+By commenting out definitions, you can control which tests will be compiled into testhivm.exe
+
+TEST_ALL: full regression test of every possible test.*
+
+LONG_TESTS: In any given test class, there are some tests that take a long time to run. 
+This definition can be used to turn these on an off. Especially useful in conjunction with 
+'Classname'Tests = Definitions used to control explicitly which classes you want to test. 
+
+*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all other
+definitions before running these one at a time.
+
+
+Other:
+
+# Samples Sizes for single thresholds with seed 42
+Train	Test		Drug
+300		137		 APV	
+53		21		  ATV 
+286		136		 IDV 
+165		65		 LPV 
+308		143		 NFV 
+249		119		 RTV 
+303		143		 SQV 

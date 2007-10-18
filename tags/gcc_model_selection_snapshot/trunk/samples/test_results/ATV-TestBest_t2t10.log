@@ -1,0 +1,31 @@
+Start time: Mon_Jul_17_20-44-39_2006
+Parsing for drug: ATV
+../data/PR_2006-05-25_v2.0.tsv dimensions:
+Raw Spreadsheet Rows: 622
+Raw Spreadsheet Columns: 122
+seed: 42
+Pre-screening train dataset size: 423
+Pre-screening test dataset size: 198
+Found duplicate mutation sequence for drug: ATV
+Keeping: RC-3472.2	Fold: 6.0
+Removed: RC-6860.5	Fold: 6.0
+
+Found duplicate mutation sequence for drug: ATV
+Keeping: MLpat2_b	Fold: 87.0
+Removed: MLpat2_c	Fold: 80.0
+
+Total duplicates removed: 2
+Total rows screeded out: 623
+Post-screening train dataset size: 35
+Post-screening test dataset size: 15
+Exception Type: class boost::filesystem::filesystem_error
+FileIO: "cache\2805559918_train_LA_scores.csv": File Not FoundCould not open cache file for reading.
+File path: cache/2805559918_train_LA_scores.csv
+Continuing to run hivm...
+Exception Type: class boost::filesystem::filesystem_error
+FileIO: "cache\2805559918_2254077234_predictee_LA_scores.csv": File Not FoundCould not open cache file for reading.
+File path: cache/2805559918_2254077234_predictee_LA_scores.csv
+Continuing to run hivm...
+Elapsed time: 
+0hr 0m 4s elapsed
+

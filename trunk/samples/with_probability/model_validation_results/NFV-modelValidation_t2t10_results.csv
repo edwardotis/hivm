@@ -1,0 +1,2 @@
+lg_cost, lg_gamma, P-error, DOR, Sensitivity, Specificity, PPV, NPV, Accuracy, Error_Rate, TPR Less FPR, TP, FP, TN, FN, KEY: -1_means_Undefined_Value, DOR = Diagnostic Odds Ratio
+13.5, -14, 0.21875, 169, 0.84375, 0.9767441860465116, 0.9310344827586207, 0.9438202247191011, 0.940677966101695, 0.05932203389830509, 0.8204941860465116, 27, 2, 84, 5, 

@@ -1,0 +1,34 @@
+Start Time: Mon_Jul_17_20-54-40_2006
+
+0hr 3m 49s elapsed
+
+
+--purpose test
+--drug NFV
+--thresholds  2
+--wild-type ../data/PI_wild.seq
+--hivdb-file ../data/PR_2006-05-25_v2.0.tsv
+--seed 42
+--suscep-type Clinical
+--output results/NFV-TestBest_t2
+--log-cost-c 14
+--log-gamma-g -7.5
+
+
+Svm Parameters: Set in Options.hpp constructor
+TODO: Move this to a config file.
+svm_type	 = 0
+kernel_type	 = 2
+degree		 = 3.0
+coef0		 = 0.0
+nu			 = 0.5
+cache_size	 = 100
+eps			 = 0.001
+p			 = 0.1
+shrinking	 = 1
+nr_weight	 = 0
+weight_label = NULL
+weight		 = NULL
+probability  = 0
+
+hivm --purpose test --drug NFV --thresholds  2 --wild-type ../data/PI_wild.seq --hivdb-file ../data/PR_2006-05-25_v2.0.tsv --seed 42 --suscep-type Clinical --output results/NFV-TestBest_t2 --log-cost-c 14 --log-gamma-g -7.5 

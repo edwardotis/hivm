@@ -1,0 +1,22 @@
+Isolate, Predicted Susceptible? (0|1), Actual Susceptibility (0|1), Probability_of_Pred., Lg_Cost, Lg_Gamma
+RC-250.8, 1, 1, n/a, 1.5, -1.5
+RC-2708.5, 1, 1, n/a, 1.5, -1.5
+RC-7545.5, 1, 1, n/a, 1.5, -1.5
+RC-6079.1, 1, 1, n/a, 1.5, -1.5
+RC-936.1, 0, 0, n/a, 1.5, -1.5
+RC-732.25, 1, 0, n/a, 1.5, -1.5
+RC-1236.1, 0, 0, n/a, 1.5, -1.5
+RC-6907.8, 0, 0, n/a, 1.5, -1.5
+WAC-1, 0, 0, n/a, 1.5, -1.5
+WAC-5, 1, 1, n/a, 1.5, -1.5
+WAC-11, 1, 1, n/a, 1.5, -1.5
+WAC-13, 0, 0, n/a, 1.5, -1.5
+WAC-15, 0, 0, n/a, 1.5, -1.5
+MLpat1_a, 1, 1, n/a, 1.5, -1.5
+MLpat1_b, 0, 1, n/a, 1.5, -1.5
+MLpat1_c, 0, 0, n/a, 1.5, -1.5
+MLpat2_a, 0, 1, n/a, 1.5, -1.5
+MLpat6_b, 1, 1, n/a, 1.5, -1.5
+MLpat7_b, 1, 1, n/a, 1.5, -1.5
+HSG_pat34, 1, 0, n/a, 1.5, -1.5
+LE_pat3, 1, 1, n/a, 1.5, -1.5
