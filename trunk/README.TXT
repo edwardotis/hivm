@@ -60,7 +60,8 @@ Allowed options:
 
 Analysis:
 
-A spreadsheet comparing cross-validation results to test results of a prechosen cost, gamma parameter
+A spreadsheet comparing cross-validation results to test results of a prechosen cost, gamma 
+parameter
 pair is available in:
 samples/test-results.xls
 
@@ -82,7 +83,8 @@ Precompiled x86, 32bit binaries for linux and windows are  available in the samp
 
 Short Samples:
 Short samples are available to play with. They are much less computationally intensive than the
-full model selection scripts. Full scripts search a large number of possible cost, gamma parameter pairs, and
+full model selection scripts. Full scripts search a large number of possible cost, gamma 
+parameter pairs, and
 may take several hours for each experiment to complete on an Intel 3Ghz Xeon.
 
 Samples Cache:
@@ -99,7 +101,8 @@ Each model selection run results in 5 output files. They are described below:
 *results.csv - Statistics and results for every cost, gamma pair tried in an experiment.
 
 *cmdline.txt - Contains all the program options used by hivm in a particular experiment.
-Additionally, it creates a one line cmd line script so that the experiment can be easily run again.
+Additionally, it creates a one line cmd line script so that the experiment can be easily run 
+again.
 
 *.log - A log file that may have some useful messages writ_ten during the program execution.
 
@@ -113,7 +116,13 @@ Additionally, it creates a one line cmd line script so that the experiment can b
 
 LINUX:
 
-Build Instructions:
+hivm was developed and tested using Boost.org libraries distribution: 3.1.13
+The x86 binaries libraries are included in this distribution of hivm.
+If these binaries do not work for you:
+
+Run src/build_libs.sh to build the appropriate Boost binaries.
+
+HIVM Build Instructions:
 Run src/autogen.sh and src/make
 Compilation is controlled using autoconf and automake.
 Copy hivm.exe into samples/linux/
@@ -134,7 +143,8 @@ Linux Unit Tests:
 
 Compiling:
 Compile src/'make check'
-Copy the output file, src/test/testhivm.exe, into src/test/Debug for relative paths of unit tests to work.
+Copy the output file, src/test/testhivm.exe, into src/test/Debug for relative paths of unit 
+tests to work.
 
 Running:
 src/test/Debug/testhivm.exe
@@ -151,12 +161,19 @@ LONG_TESTS: In any given test class, there are some tests that take a long time 
 This definition can be used to turn these on an off. Especially useful in conjunction with 
 'Classname'Tests = Definitions used to control explicitly which classes you want to test. 
 
-*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all other
+*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all 
+other
 definitions before running these one at a time.
 
 WINDOWS:
 
-Build Instructions:
+hivm was developed and tested using Boost.org libraries distribution: 3.1.13
+The appropriate win32 libraries are included in this distribution of hivm.
+If you need to build the libraries yourself for any reason, use this command:
+
+Run src/build_libs.bat
+
+HIVM Build Instructions:
 Open hivm.sln in MS Visual Studio.(Created with v7.1)
 Choose Release version of the hivm project and build.
 Copy Release/hivm.exe into samples/windows/
@@ -195,7 +212,8 @@ LONG_TESTS: In any given test class, there are some tests that take a long time 
 This definition can be used to turn these on an off. Especially useful in conjunction with 
 'Classname'Tests = Definitions used to control explicitly which classes you want to test. 
 
-*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all other
+*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all 
+other
 definitions before running these one at a time.
 
 
@@ -212,11 +230,15 @@ Train	Test		Drug
 303		143		 SQV 
 
 Single Class Warning:
-"Warning! Training data is all in same class. Predictions were all for same class as well. Please view Readme.txt to see ways to avoid this problem. View log to see details of training data."
+"Warning! Training data is all in same class. Predictions were all for same class as well. 
+Please view Readme.txt to see ways to avoid this problem. View log to see details of training 
+data."
 
 If you saw this warning, then all your training data is in the same class.
 
 Cookbook to solve this problem:
-a. Check the drug resistance threshold you used. If it is very low or very high then that will force all your training data to be in the same class.
-b. Change the seed used to randomly split training and test data. Perhaps you just got a bad draw with the previous seed.
+a. Check the drug resistance threshold you used. If it is very low or very high then that will 
+force all your training data to be in the same class.
+b. Change the seed used to randomly split training and test data. Perhaps you just got a bad 
+draw with the previous seed.
 c. If available, use more data for training.
