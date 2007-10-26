@@ -1,1 +1,0 @@
-start /LOW APV.bat
