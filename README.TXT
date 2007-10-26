@@ -6,7 +6,7 @@ Usage:
 You can type in: hivm --help or hivm -h to see the usage at the command prompt.
 Sample scripts are available in samples/windows and samples/linux directories.
 
-Presently, hivm has these three functions:
+Presently, hivm has these two functions:
 
 model-selection ( cross-validate and grid search for cost and gamma
 parameters )
