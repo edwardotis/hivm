@@ -1,1 +1,0 @@
-start /LOW RTV.bat
