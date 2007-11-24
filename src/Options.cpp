@@ -57,6 +57,7 @@ void Options::_initialize( int argc, char* argv[] )
 	wild_type_file = "../data/PI_wild.seq";
 	susceptibility_file = "../data/PR_2006-05-25_v2.0.tsv";
 	seed = 42;
+	kernel_type = 2;
 	susceptibility_type = "all";
 	probability  = 1;//enables svm_predict_probability() to return probability of classes
 
@@ -181,6 +182,7 @@ void Options::parse_options( int ac, char* av[], po::variables_map& vm )
 		std::string wild_type_desc = "Wild Type Enzyme Sequence File [" + wild_type_file + "]";
 		std::string hivdb_file_desc = "HIVDB Susceptibility Data File [" + susceptibility_file + "]";
 		std::string output_desc = "Prefix for output files. ['timestamp']";
+		std::string kernel_type_desc = "Kernel type (0: linear; 2: RBF) [2]";
 		std::string seed_desc = "Seed for training/test set partition, pos. integer [" + boost::lexical_cast<std::string>(seed) + "]";
 		std::string suscep_type_desc = "Type of susceptibility (clinical, lab, all) [" + susceptibility_type + "]";
 		std::string probability_desc = "Adds probability info. Changes SVM predicted class. model-selection and model-validation should synchronzie this option. (0,1) [" + boost::lexical_cast<std::string>(probability) + "]";
@@ -195,6 +197,7 @@ void Options::parse_options( int ac, char* av[], po::variables_map& vm )
 		("wild-type,w",   po::value<std::string>(&wild_type_file), wild_type_desc.c_str() )
 		("hivdb-file,f",  po::value<std::string>(&susceptibility_file), hivdb_file_desc.c_str() )		
 		("output,o",	  po::value<std::string>(&output_prefix), output_desc.c_str() )
+		("kernel_type,k",		  po::value<int>(&kernel_type), kernel_type_desc.c_str() )
 		("seed,s",		  po::value<int>(&seed), seed_desc.c_str() )
 		("suscep-type,e", po::value<std::string>(&susceptibility_type), suscep_type_desc.c_str() )//TODO maybe just in config file
 		("probability,b", po::value<int>(&probability), probability_desc.c_str() )
@@ -381,6 +384,7 @@ void Options::save_cmd_line_options_( const std::string file_name_prefix  ) cons
 			opts.append( "--thresholds    " + boost::lexical_cast<std::string>( thresholds[i] ) + "\n" );
 		}
 		
+		opts.append( "--kernel-type   " + boost::lexical_cast<std::string>( kernel_type ) + "\n" );
 		opts.append( "--wild-type     " + wild_type_file + "\n" );
 		opts.append( "--hivdb-file    " + susceptibility_file + "\n" );
 		
@@ -399,6 +403,7 @@ void Options::save_cmd_line_options_( const std::string file_name_prefix  ) cons
 
 		//cmd line
 		cmdline.append( "--drug " + drug + " " );
+		cmdline.append( "--kernel-type   " + boost::lexical_cast<std::string>( kernel_type ) + " " );
 		
 		for( int i=0; i < thresholds.size(); i++ )
 		{
@@ -451,7 +456,6 @@ void Options::save_cmd_line_options_( const std::string file_name_prefix  ) cons
 	opts.append( "\n\nSvm Parameters: Set in Options.hpp constructor\n" );
 	opts.append( "TODO: Move this to a config file.\n" );
 	opts.append( "svm_type      = " + boost::lexical_cast<std::string>(svm_type) + "\n");
-	opts.append( "kernel_type   = " + boost::lexical_cast<std::string>(kernel_type) + "\n");
 	opts.append( "degree        = " + boost::lexical_cast<std::string>(degree) + "\n");
 	opts.append( "coef0         = " + boost::lexical_cast<std::string>(coef0) + "\n");
 	opts.append( "nu            = " + boost::lexical_cast<std::string>(nu) + "\n");//MATCHES LIBSVM PYTHON EXAMPLE 
