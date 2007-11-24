@@ -332,38 +332,41 @@ void ExperimentAnalyzer::save_experiment_results_data( const ExperimentResultSet
 
 void ExperimentAnalyzer::analyze( const ExperimentResultSet& result_set, const Options& options )
 {
-
-	Log::append( "Number of Experiment Results collected: " + boost::lexical_cast<std::string>( result_set.size() ) );
-	Log::append( "Number of data points collected per Experiment: " + boost::lexical_cast<std::string>( ( result_set.front()->size() ) ) );
-	Log::append( "Total data points collected: " + boost::lexical_cast<std::string>( ( result_set.size() * result_set.front()->size() ) ) );
-	Log::append( "AUC without endpoints added: " + boost::lexical_cast<std::string>( compute_roc_auc( result_set, false ) ) );
-	Log::append( "AUC with endpoints added: " + boost::lexical_cast<std::string>( compute_roc_auc( result_set, true ) ) );
-
-	//options.save_config_file_options();
-	std::cerr << "\n\nSaving Results to local results directory...";
-
-	save_experiment_results_data( result_set, options.output_prefix );//all data points and statistics
-
-	if( options.purpose == "model-selection" )
-	{
-		save_all_roc_info( result_set, options.output_prefix, options.drug );//for ROC Curve. data points and script
-		save_model_selection_ids( result_set.front(), options.output_prefix );
-	}
-
-	if( options.purpose == "model-validation" )
-	{
-		save_prediction_detailed_results( result_set.front(), options.output_prefix );
-	}
+  Log::append( "Number of Experiment Results collected: " + 
+	       boost::lexical_cast<std::string>( result_set.size() ) );
+  Log::append( "Number of data points collected per Experiment: " + 
+	       boost::lexical_cast<std::string>( ( result_set.front()->size() ) ) );
+  Log::append( "Total data points collected: " + 
+	       boost::lexical_cast<std::string>( ( result_set.size() * result_set.front()->size() ) ) );
+  if( options.kernel_type == 2 ) {
+    Log::append( "AUC without endpoints added: " + 
+		 boost::lexical_cast<std::string>( compute_roc_auc( result_set, false ) ) );
+    Log::append( "AUC with endpoints added: " + 
+		 boost::lexical_cast<std::string>( compute_roc_auc( result_set, true ) ) );
+  }
+  //options.save_config_file_options();
+  std::cerr << "\n\nSaving Results to local results directory...";
+  
+  save_experiment_results_data( result_set, options.output_prefix );//all data points and statistics
+  
+  if( options.purpose == "model-selection" )
+    {
+      save_all_roc_info( result_set, options.output_prefix, options.drug );//for ROC Curve. data points and script
+      save_model_selection_ids( result_set.front(), options.output_prefix );
+    }
+  
+  if( options.purpose == "model-validation" )
+    save_prediction_detailed_results( result_set.front(), options.output_prefix );
 }
 
 void ExperimentAnalyzer::save_all_roc_info( const ExperimentResultSet& result_set,
 										   const std::string output_prefix, const std::string drug )
 {
-	ExperimentResultSet pruned_result_set;//only contains best TPR's per FPR
-	prune( result_set, pruned_result_set );
+  ExperimentResultSet pruned_result_set;//only contains best TPR's per FPR
+  prune( result_set, pruned_result_set );
 
-	save_roc_script_data_points( pruned_result_set, output_prefix );
-	save_gnuplot_script( pruned_result_set, output_prefix, drug );
+  save_roc_script_data_points( pruned_result_set, output_prefix );
+  save_gnuplot_script( pruned_result_set, output_prefix, drug );
 }
 
 void ExperimentAnalyzer::set_tp_tn_fn_fp_n( const ExperimentResult* result )
