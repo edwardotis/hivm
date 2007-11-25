@@ -133,6 +133,17 @@ void Options::_initialize( int argc, char* argv[] )
 		susceptibility_type = "All";
 	}
 
+	if (kernel_type == 0)
+	  {
+	    //
+	    // In case of linear kernel, gamma is not used (but it is
+	    // nevertheless shown in the output file). For output file
+	    // consistency, set low/high/increment to 0.
+	    //
+	    lg_gamma_low = 0;
+	    lg_gamma_high = 0;
+	  }
+
 	//don't show cmd line input for user help, or during most unit tests.
 	if( !help_flag )
 	{
