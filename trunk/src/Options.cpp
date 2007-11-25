@@ -163,148 +163,148 @@ bool Options::validate_required_options_()
 
 void Options::parse_options( int ac, char* av[], po::variables_map& vm )
 {
-	try
-	{
-		//Required Parameter descriptions
-		std::string drug_desc = "HIV drug to be tested";
-		//thresholds
-
-		// Declare the required parameters
-		po::options_description required("Required Parameters");
-		required.add_options()
-		("drug,d",		 po::value<std::string>(&drug), "HIV drug to be tested")
-		;
-
-		//Shared Options descriptions w/ defaults
-		std::string purpose_desc = "model-selection or model-validation [" + purpose + "]";
-		std::string thresholds_desc = "Low and high thresholds for drug fold resistance.\n\tPlease use only one or two values. ";
-		thresholds_desc += "[" + boost::lexical_cast<std::string>( threshold_default ) + "]";
-		std::string wild_type_desc = "Wild Type Enzyme Sequence File [" + wild_type_file + "]";
-		std::string hivdb_file_desc = "HIVDB Susceptibility Data File [" + susceptibility_file + "]";
-		std::string output_desc = "Prefix for output files. ['timestamp']";
-		std::string kernel_type_desc = "Kernel type (0: linear; 2: RBF) [2]";
-		std::string seed_desc = "Seed for training/test set partition, pos. integer [" + boost::lexical_cast<std::string>(seed) + "]";
-		std::string suscep_type_desc = "Type of susceptibility (clinical, lab, all) [" + susceptibility_type + "]";
-		std::string probability_desc = "Adds probability info. Changes SVM predicted class. model-selection and model-validation should synchronzie this option. (0,1) [" + boost::lexical_cast<std::string>(probability) + "]";
-
-
-		//Declare the shared options
-		po::options_description shared("Shared Options");
-		shared.add_options()
-		("help,h",		  "display usage")
-		("purpose,p",     po::value<std::string>(&purpose), purpose_desc.c_str() )
-		("thresholds,t",  po::value<std::vector< double > >(&thresholds), thresholds_desc.c_str() )
-		("wild-type,w",   po::value<std::string>(&wild_type_file), wild_type_desc.c_str() )
-		("hivdb-file,f",  po::value<std::string>(&susceptibility_file), hivdb_file_desc.c_str() )		
-		("output,o",	  po::value<std::string>(&output_prefix), output_desc.c_str() )
-		("kernel_type,k",		  po::value<int>(&kernel_type), kernel_type_desc.c_str() )
-		("seed,s",		  po::value<int>(&seed), seed_desc.c_str() )
-		("suscep-type,e", po::value<std::string>(&susceptibility_type), suscep_type_desc.c_str() )//TODO maybe just in config file
-		("probability,b", po::value<int>(&probability), probability_desc.c_str() )
-		//("config",	  po::value<std::string>(&hivm_config_file)->default_value("hivm_defaults.cfg"), "Optional: Custom configuration file. Default: hivm_defaulst.cfg")
-		;
-
-		//Model-Validation Only Options descriptions w/ defaults
-		std::string lg_cost_c_desc =  "SVM lg(cost) parameter.  Good choice is critical to performance. See Readme.txt [" + boost::lexical_cast<std::string>( lg_cost ) + "]";
-		std::string lg_gamma_g_desc = "SVM lg(gamma) parameter. Good choice is critical to performance. See Readme.txt [" + boost::lexical_cast<std::string>( lg_gamma ) + "]";
-		std::string hivdb_file_test_dataset_desc = "HIVDB Susceptibility Test Dataset File. If set, entire hivdb-file is used for training data. Seed to split susceptibility file is ignored. [" + susceptibility_file_test_dataset + "]";
-		
-		po::options_description model_validation("model-validation Only Options");
-		model_validation.add_options()
-		("lg-cost-c,c",		 po::value<double>(&lg_cost),  lg_cost_c_desc.c_str() )//todo rename to lg-cost, or was there an issue?
-		("lg-gamma-g,g",	 po::value<double>(&lg_gamma), lg_gamma_g_desc.c_str() )//todo rename to lg-gamma	
-		("test-dataset,q",  po::value<std::string>(&susceptibility_file_test_dataset), hivdb_file_test_dataset_desc.c_str() )	
-		
-		;
-
-		//Model-Selection Only  Options descriptions w/ defaults
-		std::string lg_cost_low_desc =   "SVM lg(cost) parameter, grid search low bound [" + boost::lexical_cast<std::string>( lg_cost_low ) + "]";
-		std::string lg_cost_high_desc =  "SVM lg(cost) parameter, grid search high bound [" + boost::lexical_cast<std::string>( lg_cost_high ) + "]";
-		std::string lg_cost_inc_desc =   "SVM lg(cost) parameter, grid search increment [" + boost::lexical_cast<std::string>( lg_cost_inc ) + "]";
-		std::string lg_gamma_low_desc =  "SVM lg(gamma) parameter, grid search low bound [" + boost::lexical_cast<std::string>( lg_gamma_low ) + "]";
-		std::string lg_gamma_high_desc = "SVM lg(gamma) parameter, grid search high bound [" + boost::lexical_cast<std::string>( lg_gamma_high ) + "]";
-		std::string lg_gamma_inc_desc =  "SVM lg(gamma) parameter, grid search increment [" + boost::lexical_cast<std::string>( lg_gamma_inc ) + "]";	
-		std::string use_entire_susceptbility_file_desc = "Use entire susceptibility file for model-selection. Seed to split susceptibility file is ignored. (0,1) [" + boost::lexical_cast<std::string>(use_entire_susceptbility_file) + "]";
-
-		//Describe Parameter Search Options
-		po::options_description model_selection("Model-Selection Only Options.\nGrid Search for Optimal Parameters");
-		model_selection.add_options()
-		("lg-cost-low,x",   po::value<double>(&lg_cost_low),   lg_cost_low_desc.c_str() )
-		("lg-cost-high,y",  po::value<double>(&lg_cost_high),  lg_cost_high_desc.c_str() )
-		("lg-cost-inc,z", po::value<double>(&lg_cost_inc),     lg_cost_inc_desc.c_str() )
-		("lg-gamma-low,l",  po::value<double>(&lg_gamma_low),  lg_gamma_low_desc.c_str()  )
-		("lg-gamma-high,m", po::value<double>(&lg_gamma_high), lg_gamma_high_desc.c_str()  )
-		("lg-gamma-inc,n", po::value<double>(&lg_gamma_inc),   lg_gamma_inc_desc.c_str()  )
-		("all-dataset", po::value<bool>(&use_entire_susceptbility_file), use_entire_susceptbility_file_desc.c_str()  )
-		;
-
-		//must combine all the cmd line option descriptors here
-		po::options_description visible("Visible options");
-		visible.add(required);
-		visible.add(shared);
-		visible.add(model_validation);
-		visible.add(model_selection);
-
-		//parse and store cmd line
-		//po::variables_map vm;
-		//po::store(po::parse_command_line(ac, av, desc), vm);
-		po::store(po::command_line_parser(ac, av).options(visible).run(), vm);	
-		//po::store(po::command_line_parser(ac, av).options(visible).options(params).run(), vm);	
-		//po::store(po::command_line_parser(ac, av).options(optional).run(), vm);	
-		po::notify(vm);
-
-		//config file
-		//std::ifstream ifs( hivm_config_file.c_str() );
-  //      store(parse_config_file(ifs, config_file_options), vm);
-  //      notify(vm);
-
-		//Usage description
-		std::string usage = "\nUsage: hivm [OPTION]... \n";
-		usage += "Example: hivm -d NFV -t 2 -o myoutput_ \n";
-
-		//display usage if requested or if no cmd line options passed
-		//Unit Tests frequently have no cmd line args, so disable this feature
-		//when unit testing.
-		#if defined UNIT_TESTING
-			if ( vm.count("help") ) 
-		#else
-			if ( vm.count("help")   ) 
-		#endif	
-		{
-			std::cout << usage << "\n";
-			std::cout << required << "\n";
-			std::cout << shared << "\n";
-			std::cout << model_validation << "\n";
-			std::cout << model_selection << "\n";
-			help_flag = true;
-			return;
-		}
-
-	//scan for required entries to be set 
-	//(and don't put in defaults for some of these required vars.)
-	//if any required vars are not set, then print out help/usage again and exit.
-	//depending on purpose, can give nice error messages here to user.
-
-	#if !defined UNIT_TESTING
-		if( !validate_required_options_() )
-		{
-			std::cout << "Please type 'hivm -h' for help with usage.\n";
-			help_flag = true;//tells main to exit immediately.
-			return;
-		}
-	#endif
-
-    }
-	//TODO Log and exit here
-	catch(std::exception& e) {
-        std::cerr << "error: " << e.what() << "\n";
-        return;
-    }
-    catch(...) {
-        std::cerr << "Exception of unknown type!\n";
-    }
-}
+  try
+    {
+      //Required Parameter descriptions
+      std::string drug_desc = "HIV drug to be tested";
+      //thresholds
+      
+      // Declare the required parameters
+      po::options_description required("Required Parameters");
+      required.add_options()
+	("drug,d",		 po::value<std::string>(&drug), "HIV drug to be tested")
+	;
+      
+      //Shared Options descriptions w/ defaults
+      std::string purpose_desc = "model-selection or model-validation [" + purpose + "]";
+      std::string thresholds_desc = "Low and high thresholds for drug fold resistance.\n\tPlease use only one or two values. ";
+      thresholds_desc += "[" + boost::lexical_cast<std::string>( threshold_default ) + "]";
+      std::string wild_type_desc = "Wild Type Enzyme Sequence File [" + wild_type_file + "]";
+      std::string hivdb_file_desc = "HIVDB Susceptibility Data File [" + susceptibility_file + "]";
+      std::string output_desc = "Prefix for output files. ['timestamp']";
+      std::string kernel_type_desc = "Kernel type (0: linear; 2: RBF) [2]";
+      std::string seed_desc = "Seed for training/test set partition, pos. integer [" + boost::lexical_cast<std::string>(seed) + "]";
+      std::string suscep_type_desc = "Type of susceptibility (clinical, lab, all) [" + susceptibility_type + "]";
+      std::string probability_desc = "Adds probability info. Changes SVM predicted class. model-selection and model-validation should synchronzie this option. (0,1) [" + boost::lexical_cast<std::string>(probability) + "]";
+      
+      
+      //Declare the shared options
+      po::options_description shared("Shared Options");
+      shared.add_options()
+	("help,h",		  "display usage")
+	("purpose,p",     po::value<std::string>(&purpose), purpose_desc.c_str() )
+	("thresholds,t",  po::value<std::vector< double > >(&thresholds), thresholds_desc.c_str() )
+	("wild-type,w",   po::value<std::string>(&wild_type_file), wild_type_desc.c_str() )
+	("hivdb-file,f",  po::value<std::string>(&susceptibility_file), hivdb_file_desc.c_str() )		
+	("output,o",	  po::value<std::string>(&output_prefix), output_desc.c_str() )
+	("kernel_type,k",		  po::value<int>(&kernel_type), kernel_type_desc.c_str() )
+	("seed,s",		  po::value<int>(&seed), seed_desc.c_str() )
+	("suscep-type,e", po::value<std::string>(&susceptibility_type), suscep_type_desc.c_str() )//TODO maybe just in config file
+	("probability,b", po::value<int>(&probability), probability_desc.c_str() )
+	//("config",	  po::value<std::string>(&hivm_config_file)->default_value("hivm_defaults.cfg"), "Optional: Custom configuration file. Default: hivm_defaulst.cfg")
+	;
+      
+      //Model-Validation Only Options descriptions w/ defaults
+      std::string lg_cost_c_desc =  "SVM lg(cost) parameter.  Good choice is critical to performance. See Readme.txt [" + boost::lexical_cast<std::string>( lg_cost ) + "]";
+      std::string lg_gamma_g_desc = "SVM lg(gamma) parameter. Good choice is critical to performance. See Readme.txt [" + boost::lexical_cast<std::string>( lg_gamma ) + "]";
+      std::string hivdb_file_test_dataset_desc = "HIVDB Susceptibility Test Dataset File. If set, entire hivdb-file is used for training data. Seed to split susceptibility file is ignored. [" + susceptibility_file_test_dataset + "]";
+      
+      po::options_description model_validation("model-validation Only Options");
+      model_validation.add_options()
+	("lg-cost-c,c",		 po::value<double>(&lg_cost),  lg_cost_c_desc.c_str() )//todo rename to lg-cost, or was there an issue?
+	("lg-gamma-g,g",	 po::value<double>(&lg_gamma), lg_gamma_g_desc.c_str() )//todo rename to lg-gamma	
+	("test-dataset,q",  po::value<std::string>(&susceptibility_file_test_dataset), hivdb_file_test_dataset_desc.c_str() )	
 	
+	;
+      
+      //Model-Selection Only  Options descriptions w/ defaults
+      std::string lg_cost_low_desc =   "SVM lg(cost) parameter, grid search low bound [" + boost::lexical_cast<std::string>( lg_cost_low ) + "]";
+      std::string lg_cost_high_desc =  "SVM lg(cost) parameter, grid search high bound [" + boost::lexical_cast<std::string>( lg_cost_high ) + "]";
+      std::string lg_cost_inc_desc =   "SVM lg(cost) parameter, grid search increment [" + boost::lexical_cast<std::string>( lg_cost_inc ) + "]";
+      std::string lg_gamma_low_desc =  "SVM lg(gamma) parameter, grid search low bound [" + boost::lexical_cast<std::string>( lg_gamma_low ) + "]";
+      std::string lg_gamma_high_desc = "SVM lg(gamma) parameter, grid search high bound [" + boost::lexical_cast<std::string>( lg_gamma_high ) + "]";
+      std::string lg_gamma_inc_desc =  "SVM lg(gamma) parameter, grid search increment [" + boost::lexical_cast<std::string>( lg_gamma_inc ) + "]";	
+      std::string use_entire_susceptbility_file_desc = "Use entire susceptibility file for model-selection. Seed to split susceptibility file is ignored. (0,1) [" + boost::lexical_cast<std::string>(use_entire_susceptbility_file) + "]";
+      
+      //Describe Parameter Search Options
+      po::options_description model_selection("Model-Selection Only Options.\nGrid Search for Optimal Parameters");
+      model_selection.add_options()
+	("lg-cost-low,x",   po::value<double>(&lg_cost_low),   lg_cost_low_desc.c_str() )
+	("lg-cost-high,y",  po::value<double>(&lg_cost_high),  lg_cost_high_desc.c_str() )
+	("lg-cost-inc,z", po::value<double>(&lg_cost_inc),     lg_cost_inc_desc.c_str() )
+	("lg-gamma-low,l",  po::value<double>(&lg_gamma_low),  lg_gamma_low_desc.c_str()  )
+	("lg-gamma-high,m", po::value<double>(&lg_gamma_high), lg_gamma_high_desc.c_str()  )
+	("lg-gamma-inc,n", po::value<double>(&lg_gamma_inc),   lg_gamma_inc_desc.c_str()  )
+	("all-dataset", po::value<bool>(&use_entire_susceptbility_file), use_entire_susceptbility_file_desc.c_str()  )
+	;
+      
+      //must combine all the cmd line option descriptors here
+      po::options_description visible("Visible options");
+      visible.add(required);
+      visible.add(shared);
+      visible.add(model_validation);
+      visible.add(model_selection);
+      
+      //parse and store cmd line
+      //po::variables_map vm;
+      //po::store(po::parse_command_line(ac, av, desc), vm);
+      po::store(po::command_line_parser(ac, av).options(visible).run(), vm);	
+      //po::store(po::command_line_parser(ac, av).options(visible).options(params).run(), vm);	
+      //po::store(po::command_line_parser(ac, av).options(optional).run(), vm);	
+      po::notify(vm);
+      
+      //config file
+      //std::ifstream ifs( hivm_config_file.c_str() );
+      //      store(parse_config_file(ifs, config_file_options), vm);
+      //      notify(vm);
+      
+      //Usage description
+      std::string usage = "\nUsage: hivm [OPTION]... \n";
+      usage += "Example: hivm -d NFV -t 2 -o myoutput_ \n";
+      
+      //display usage if requested or if no cmd line options passed
+      //Unit Tests frequently have no cmd line args, so disable this feature
+      //when unit testing.
+#if defined UNIT_TESTING
+      if ( vm.count("help") ) 
+#else
+	if ( vm.count("help")   ) 
+#endif	
+	  {
+	    std::cout << usage << "\n";
+	    std::cout << required << "\n";
+	    std::cout << shared << "\n";
+	    std::cout << model_validation << "\n";
+	    std::cout << model_selection << "\n";
+	    help_flag = true;
+	    return;
+	  }
+      
+      //scan for required entries to be set 
+      //(and don't put in defaults for some of these required vars.)
+      //if any required vars are not set, then print out help/usage again and exit.
+      //depending on purpose, can give nice error messages here to user.
+      
+#if !defined UNIT_TESTING
+      if( !validate_required_options_() )
+	{
+	  std::cout << "Please type 'hivm -h' for help with usage.\n";
+	  help_flag = true;//tells main to exit immediately.
+	  return;
+	}
+#endif
+      
+    }
+  //TODO Log and exit here
+  catch(std::exception& e) {
+    std::cerr << "error: " << e.what() << "\n";
+    return;
+  }
+  catch(...) {
+    std::cerr << "Exception of unknown type!\n";
+  }
+}
+
 
 //destructor
 Options::~Options(){}
