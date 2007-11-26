@@ -35,8 +35,7 @@ int main(int argc, char* argv[] )
 		SvmMachine machine;
 		machine.run( options.purpose, options );
 
-		std::cerr << "\n\nFinished!";
-		std::cerr << "\n\nThank you for using hivm.";
+		std::cerr << "\n\nFinished! Thank you for using hivm.\n";
 
 		{
 			std::string msg;
