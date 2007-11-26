@@ -401,63 +401,69 @@ void BioProcessor::process(
 
 void BioProcessor::process_trainset( const PreProcWUSet& train_input, SvmWUMatrix& train_output)
 {
-	//trainset
-	//makes nxn trainingset matrix
-	//has identity local alignment computed
-	for( int outer = 0; outer < train_input.size(); outer++ )
+  //trainset
+  //makes nxn trainingset matrix
+  //has identity local alignment computed
+
+  //
+  // Dump the raw sequences, for analyses outside hivm.
+  //
+  // printf("\n");
+  // for( int outer = 0; outer < train_input.size(); outer++ )
+  // {
+  // std::string aa_seq = train_input[outer]->get_data();
+  // printf("%s\n", (char*) aa_seq.c_str());
+  // }
+  for( int outer = 0; outer < train_input.size(); outer++ )
+    {
+      
+      SvmWUSet* wu_set;
+      try
 	{
-
-		SvmWUSet* wu_set;
-		try
-		{
-			wu_set = new SvmWUSet( 
-				train_input[outer]->get_id(), 
-				train_input[outer]->known_susceptibility() 
-				);
-		}
-		catch( std::exception& e )
-		{
-			std::string msg = "\nException caught in BioProcessor::process_trainset() new SvmWUSet \n";
-			msg +=   e.what();
-			msg += "\n\nElapsed Time: ";
-			msg += Log::elapsed_time();
-			msg += "\nExiting...";
-			Log::append( msg );
-			std::cerr << msg;
-			exit(1);
-		}		
-	
-		for( int inner = 0; inner < train_input.size(); inner++ )
-		{
-			std::string aa_seq_1 = train_input[outer]->get_data();
-			std::string aa_seq_2 = train_input[inner]->get_data();
-			double score;
-
-			try
-			{
-				score = local_alignment( 
-					(char*)aa_seq_1.c_str(),
-					(char*)aa_seq_2.c_str(),
-					1, NULL, 0, 0
-					);
-			}
-			catch( std::exception& e )
-			{
-				std::string msg = "\nException caught in BioProcessor::process_trainset call to dpl.h, local_alignment(): \n";
-				msg +=   e.what();
-				msg += "\n\nElapsed Time: ";
-				msg += Log::elapsed_time();
-				msg += "\nExiting...";
-				Log::append( msg );
-				std::cerr << msg;
-				exit(1);
-			}
-
-			wu_set->push_back( score );
-		}
-
-		train_output.push_back( wu_set );
+	  wu_set = new SvmWUSet(train_input[outer]->get_id(), 
+				train_input[outer]->known_susceptibility());
 	}
+      catch( std::exception& e )
+	{
+	  std::string msg = "\nException caught in BioProcessor::process_trainset() new SvmWUSet \n";
+	  msg +=   e.what();
+	  msg += "\n\nElapsed Time: ";
+	  msg += Log::elapsed_time();
+	  msg += "\nExiting...";
+	  Log::append( msg );
+	  std::cerr << msg;
+	  exit(1);
+	}		
+      
+      for( int inner = 0; inner < train_input.size(); inner++ )
+	{
+	  std::string aa_seq_1 = train_input[outer]->get_data();
+	  std::string aa_seq_2 = train_input[inner]->get_data();
+	  double score;
+	  
+	  try
+	    {
+	      score = local_alignment((char*)aa_seq_1.c_str(),
+				      (char*)aa_seq_2.c_str(),
+				      1, NULL, 0, 0);
+	    }
+	  catch( std::exception& e )
+	    {
+	      std::string msg = "\nException caught in BioProcessor::process_trainset call to dpl.h, local_alignment(): \n";
+	      msg +=   e.what();
+	      msg += "\n\nElapsed Time: ";
+	      msg += Log::elapsed_time();
+	      msg += "\nExiting...";
+	      Log::append( msg );
+	      std::cerr << msg;
+	      exit(1);
+	    }
+	  
+	  wu_set->push_back( score );
+	}
+      
+      train_output.push_back( wu_set );
+    }
 }
 
 void BioProcessor::process_predictees(		
