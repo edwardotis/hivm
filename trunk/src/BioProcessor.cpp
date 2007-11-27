@@ -408,12 +408,13 @@ void BioProcessor::process_trainset( const PreProcWUSet& train_input, SvmWUMatri
   //
   // Dump the raw sequences, for analyses outside hivm.
   //
-  // printf("\n");
-  // for( int outer = 0; outer < train_input.size(); outer++ )
-  // {
-  // std::string aa_seq = train_input[outer]->get_data();
-  // printf("%s\n", (char*) aa_seq.c_str());
-  // }
+  std::string aa_seq;
+  //  printf("\n");
+  for( int outer = 0; outer < train_input.size(); outer++ )
+    {
+      aa_seq = train_input[outer]->get_data();
+      // printf("%s\n", (char*) aa_seq.c_str());
+    }
   for( int outer = 0; outer < train_input.size(); outer++ )
     {
       
