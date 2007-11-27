@@ -36,6 +36,16 @@ PreProcessor::PreProcessor()
 PreProcessor::~PreProcessor()
 {}
 
+void PreProcessor::setP1(int idx)
+{
+  P1_INDEX = idx;
+}
+
+void PreProcessor::setP99(int idx)
+{
+  P99_INDEX = idx;
+}
+
 //TODO rename. drop the 'v'
 
 string_spread_sheet  PreProcessor::load_spread_sheet( const std::string input_path )
@@ -372,7 +382,8 @@ void PreProcessor::erase_rows( string_spread_sheet& spread_sheet, std::vector<in
 	//otherwise indices mess up. make test in small for this.
 }
 //TODO refactor function to use string_spread_sheet_row instead of passing an iterator.
-std::string PreProcessor::create_mutation_string( const std::string wild_sequence, const string_spread_sheet_row& row)
+std::string PreProcessor::create_mutation_string(const std::string wild_sequence,
+						 const string_spread_sheet_row& row)
 {
 	//check for accidentally passing in header row
 	if( row[0] == "SeqID" )
@@ -384,6 +395,12 @@ std::string PreProcessor::create_mutation_string( const std::string wild_sequenc
 	}
 
 	std::string result = wild_sequence;
+
+	for (int i = 0; i < row.size(); i++)
+	  {
+	    // printf("%s", row[i].c_str());
+	  }
+	// printf("\n");
 
 	//copy p1 - p99 into a container in order to zero out index
 	std::vector<std::string> mut_vector;
@@ -428,6 +445,24 @@ std::string PreProcessor::create_mutation_string( const std::string wild_sequenc
 std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row )
 {
 	return row[ISOLATE_NAME_COLUMN];
+}
+
+int PreProcessor::find_P1(const string_spread_sheet_row& row)
+{
+  int idx;
+  int i;
+  int done;
+
+  done = 0;
+  for (i = 0; (i < row.size()) && !done; i++)
+    {
+      if (row[i] == "P1")
+	{
+	  idx = i;
+	  done = 1;
+	}
+    }
+  return idx;
 }
 
 //DEPRECATED
@@ -687,7 +722,7 @@ void PreProcessor::parseInputFiles(
 	//clean REMOVED!! (switching to all indices solution instead of altering size of spreadsheet)
 	//this->erase_rows( spread_sheet, rows_to_remove_indices );
 
-	//for each row left in spread_sheet. skipping header row
+	//for each row left in spread_sheet. 
 	for( int row = 1; row < spread_sheet.size(); row++ )
 	{
 		//if current row is NOT in rows to be removed
