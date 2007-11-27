@@ -36,16 +36,6 @@ PreProcessor::PreProcessor()
 PreProcessor::~PreProcessor()
 {}
 
-void PreProcessor::setP1(int idx)
-{
-  P1_INDEX = idx;
-}
-
-void PreProcessor::setP99(int idx)
-{
-  P99_INDEX = idx;
-}
-
 //TODO rename. drop the 'v'
 
 string_spread_sheet  PreProcessor::load_spread_sheet( const std::string input_path )
@@ -447,12 +437,18 @@ std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row 
 	return row[ISOLATE_NAME_COLUMN];
 }
 
-int PreProcessor::find_P1(const string_spread_sheet_row& row)
+//
+// Determine and set offsets of P1 and P99 columns by parsing header
+// row of input file.
+//
+void PreProcessor::set_P_index(const std::string fname)
 {
   int idx;
   int i;
   int done;
-
+  
+  string_spread_sheet spread_sheet = this->load_spread_sheet(fname);
+  string_spread_sheet_row row = spread_sheet[0];
   done = 0;
   for (i = 0; (i < row.size()) && !done; i++)
     {
@@ -462,7 +458,8 @@ int PreProcessor::find_P1(const string_spread_sheet_row& row)
 	  done = 1;
 	}
     }
-  return idx;
+  P1_INDEX = idx;
+  P99_INDEX = idx+98;
 }
 
 //DEPRECATED
