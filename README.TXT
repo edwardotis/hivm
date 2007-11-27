@@ -138,38 +138,45 @@ Run gnuplot script *.gpl to see a ROC curve of model selection results.
 From model selection, pick a c,g pair and run it in prediction mode,
 and then compare it to model selection.
 
-
 Linux Unit Tests:
 
-Compiling:
-Compile src/'make check'
-Copy the output file, src/test/testhivm.exe, into src/test/Debug for relative paths of unit 
-tests to work.
+To run unit tests on Linux, first compile a test version of hivm, then
+run it.
 
-Running:
-src/test/Debug/testhivm.exe
+To compile:
 
-In order to control which tests are run use:
-src/test/Definitions.hpp
+$ cd src
+$ make check
+$ cp test/testhivm test/Debug 
 
-By commenting out definitions, you can control which tests will be compiled into testhivm.exe
+To run:
+
+$ cd test/Debug
+$ ./testhivm
+
+In order to control which tests are run, use src/test/Definitions.hpp
+
+By commenting out definitions, you can control which tests will be
+compiled into testhivm.
 
 TEST_ALL: full regression test of every possible test.*
 
-LONG_TESTS: In any given test class, there are some tests that take a long time to run. 
+LONG_TESTS: In any given test class, there are some tests that take a
+long time to run. This definition can be used to turn these on an
+off. Especially useful in conjunction with 'Classname'Tests =
+Definitions used to control explicitly which classes you want to test.
 
-This definition can be used to turn these on an off. Especially useful in conjunction with 
-'Classname'Tests = Definitions used to control explicitly which classes you want to test. 
+*Isolation Tests: Certain classes can only be tested in
+Isolation. Turn off (comment out), all other definitions before
+running these one at a time.
 
-*Isolation Tests: Certain classes can only be tested in Isolation. Turn off (comment out), all 
-other
-definitions before running these one at a time.
 
 WINDOWS:
 
-hivm was developed and tested using Boost.org libraries distribution: 3.1.13
-The appropriate win32 libraries are included in this distribution of hivm.
-If you need to build the libraries yourself for any reason, use this command:
+hivm was developed and tested using Boost.org libraries distribution:
+3.1.13 The appropriate win32 libraries are included in this
+distribution of hivm.  If you need to build the libraries yourself for
+any reason, use this command:
 
 Run src/build_libs.bat
 
