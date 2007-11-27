@@ -23,9 +23,11 @@ public:
 
   //default constructor
   PreProcessor();	
-  void PreProcessor::setP1(int idx);
-  void PreProcessor::setP99(int idx);
-  int PreProcessor::find_P1(const string_spread_sheet_row& row);
+  //
+  // Determine and set offsets of P1 and P99 columns by parsing header
+  // row of input file.
+  //
+  void PreProcessor::set_P_index(const std::string fname);
   //@purpose load hivdb dataset from file
   //@pre seq file are in HIVDB dataset format
   string_spread_sheet load_spread_sheet( const std::string input_path );
