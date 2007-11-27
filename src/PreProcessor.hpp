@@ -21,11 +21,17 @@ friend class PreProcessorTest;//unit tests
 
 public: 
 
-	//default constructor
-	PreProcessor();	
-
-	//destructor
-	virtual ~PreProcessor();
+  //default constructor
+  PreProcessor();	
+  void PreProcessor::setP1(int idx);
+  void PreProcessor::setP99(int idx);
+  int PreProcessor::find_P1(const string_spread_sheet_row& row);
+  //@purpose load hivdb dataset from file
+  //@pre seq file are in HIVDB dataset format
+  string_spread_sheet load_spread_sheet( const std::string input_path );
+  
+  //destructor
+  virtual ~PreProcessor();
 
 /**
 PRODUCTION
@@ -93,9 +99,6 @@ tests on it after all cross validation
 
 private:
 
-	//@purpose load hivdb dataset from file
-	//@pre seq file are in HIVDB dataset format
-	string_spread_sheet load_spread_sheet( const std::string input_path );
 
 	//@purpose load sequence from file
 	//@pre seq file are in FASTA format
@@ -138,7 +141,7 @@ private:
 	bool are_invalid_mutations( const spread_sheet_row_const_iterator& row_it );
 
 	std::string find_isolate_name( const string_spread_sheet_row& );
-
+  
 	//DEPRECATED
 	bool is_susceptible( const int drug_column, const string_spread_sheet_row& row,  double threshold );
 
