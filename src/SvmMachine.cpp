@@ -77,6 +77,13 @@ void SvmMachine::model_select( Options& options )
 	std::cerr << "\n\nParsing File Input...";
 	std::cerr << "\n(Please check the log for details of parsing.)";
 
+	//
+	// parse header row to determine P1_INDEX.
+	//
+	string_spread_sheet spread_sheet = p.load_spread_sheet(options.susceptibility_file);
+	int offset = p.find_P1(spread_sheet[0]);	
+	p.setP1(offset);
+	p.setP99(offset+98);
 	if( options.use_entire_susceptbility_file == 0 )
 	{
 		p.parseInputFiles(
@@ -142,6 +149,13 @@ void SvmMachine::model_validate( const Options& options )
 	std::cerr << "\n\nParsing File Input...";
 	std::cerr << "\n(Please check the log for details of parsing.)";
 
+	//
+	// parse header row to determine P1_INDEX.
+	//
+	string_spread_sheet spread_sheet = p.load_spread_sheet(options.susceptibility_file);
+	int offset = p.find_P1(spread_sheet[0]);	
+	p.setP1(offset);
+	p.setP99(offset+98);
 	if( options.susceptibility_file_test_dataset == "N/A" )//split susceptibility file with seed. 
 	{
 		p.parseInputFiles(
