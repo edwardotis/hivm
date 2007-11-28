@@ -285,27 +285,27 @@ void ExperimentAnalyzer::save_experiment_results_data( const ExperimentResultSet
 	//TODO will the string run out of room in big programs?
 	//create output
 	std::string output;
-	output.append( "lg_cost, lg_gamma, P-error, DOR, Sensitivity, Specificity, PPV, NPV, Accuracy, Error_Rate, TPR Less FPR, TP, FP, TN, FN, KEY: -1_means_Undefined_Value, DOR = Diagnostic Odds Ratio\n" );
+	output.append( "lg_cost,lg_gamma,M_rate,DOR,Sensitivity,Specificity,PPV,NPV,Accuracy,Error_Rate,TPR_less_FPR,TP,FP,TN,FN\n" );
 
 	for(int i=0; i < result_set.size(); i++ )
 	{
-		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_cost ) + ", " );//cost
-		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_gamma ) + ", " );//gamma
-		output.append( boost::lexical_cast<std::string>( p_error( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( diagnostic_odds_ratio( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( sensitivity( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( specificity( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( positive_predictive_value( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( negative_predictive_value( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( accuracy( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( error_rate( result_set.at(i) ) ) + ", " );
-		output.append( boost::lexical_cast<std::string>( tpr_fpr_difference( result_set.at(i) ) ) + ", " );
+		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_cost ) + "," );//cost
+		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_gamma ) + "," );//gamma
+		output.append( boost::lexical_cast<std::string>( p_error( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( diagnostic_odds_ratio( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( sensitivity( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( specificity( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( positive_predictive_value( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( negative_predictive_value( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( accuracy( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( error_rate( result_set.at(i) ) ) + "," );
+		output.append( boost::lexical_cast<std::string>( tpr_fpr_difference( result_set.at(i) ) ) + "," );
 
 		set_tp_tn_fn_fp_n( result_set.at(i) );//prepare class var's for each result in the result set: TP, TN, FP, FN
-		output.append( boost::lexical_cast<std::string>( TP ) + ", " );
-		output.append( boost::lexical_cast<std::string>( FP ) + ", " );
-		output.append( boost::lexical_cast<std::string>( TN ) + ", " );
-		output.append( boost::lexical_cast<std::string>( FN ) + ", " );
+		output.append( boost::lexical_cast<std::string>( TP ) + "," );
+		output.append( boost::lexical_cast<std::string>( FP ) + "," );
+		output.append( boost::lexical_cast<std::string>( TN ) + "," );
+		output.append( boost::lexical_cast<std::string>( FN ));
 		output.append( "\n" );
 	}
 
