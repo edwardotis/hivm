@@ -777,16 +777,16 @@ void PreProcessor::split_input_into_training_and_testing( const string_spread_sh
 		//int range = 3;//0 through 2
 	    //unsigned int rand_result = rand_num % range;
 		unsigned int range_low = 0;
-		unsigned int range_high = 2;
+		unsigned int range_high = 9;
 		unsigned int rand_result = Rand( range_low, range_high );
 
 		//Log::append( "Rand() " + boost::lexical_cast<std::string>( rand_result ) );
 
-		if( rand_result == 2 )
+		if( rand_result == range_high )
 		{
 			rows_for_testing_indices.push_back( i );
 		}
-		else//rand_result == 0 or 1
+		else
 		{
 			rows_for_training_indices.push_back( i );
 		}
