@@ -639,12 +639,12 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
       
       //create new WU 
       PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
-      aa_seq = wu->get_data();
-      printf("%d %s\n", susceptible, (char*) aa_seq.c_str());
-      fflush(stdout);
       //
       // Dump the raw sequences, for analyses outside hivm.
       //
+      // aa_seq = wu->get_data();
+      // printf("%d %s\n", susceptible, (char*) aa_seq.c_str());
+      // fflush(stdout);
       
       //add new WU to output set
       output.push_back( wu );
