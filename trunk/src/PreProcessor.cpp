@@ -587,61 +587,74 @@ void PreProcessor::parseInputFiles(
 }
 
 //TODO DRY (remove single threshold version)
-void PreProcessor::parseInputFiles( 
-	const std::string dataset_path,
-	const std::string wild_sequence_path,
-	const std::string drug,
-	const std::vector<double>& resistance_thresholds,
-	const Options& preproc_options,
-	PreProcWUSet& output
-	)
+void PreProcessor::parseInputFiles(const std::string dataset_path,
+				   const std::string wild_sequence_path,
+				   const std::string drug,
+				   const std::vector<double>& resistance_thresholds,
+				   const Options& preproc_options,
+				   PreProcWUSet& output)
 {
 
-//sort least to highest
-//std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
+  //sort least to highest
+  //std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
+  
+  Log::append( "Parsing for drug: " + drug );
+  
+  //load spreadsheet
+  string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
+  
+  //Log size less header
+  Log::append( "Pre-screening train dataset size: " + 
+	       boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
+  
+  //screen
+  std::vector<int> rows_to_remove_indices = this->screen_drug( drug, spread_sheet );
+  remove_duplicate_entries( drug, wild_sequence_path, spread_sheet, rows_to_remove_indices );
+  screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
+  
+  int fold_col = this->find_drug_fold_col( drug, spread_sheet );
+  remove_medium_fold_entries( fold_col, spread_sheet, resistance_thresholds, rows_to_remove_indices );
+  screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
+  
+  //clean
+  this->erase_rows( spread_sheet, rows_to_remove_indices );
+  
+  //Log size less header
+  Log::append( "Total rows screened out: " +  
+	       boost::lexical_cast<std::string>( rows_to_remove_indices.size() ) );
+  Log::append( "Post-screening train dataset size: " + 
+	       boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
+  
+  //for each row left in spread_sheet. skipping header row
+  for( int row = 1; row < spread_sheet.size(); row++ )
+    {
+      //get data for WU
+      //id
+      std::string id = this->find_isolate_name( spread_sheet[row] );
+      //mutated_seq
+      std::string wild_seq = this->load_wild_seq( wild_sequence_path );
+      std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
+      //resistance
+      bool susceptible = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
+      
+      //create new WU 
+      PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
+      
+      //add new WU to output set
+      output.push_back( wu );
+    }//end loop
 
-Log::append( "Parsing for drug: " + drug );
-
-//load spreadsheet
-string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
-
-//Log size less header
-Log::append( "Pre-screening train dataset size: " + boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
-
-//screen
-std::vector<int> rows_to_remove_indices = this->screen_drug( drug, spread_sheet );
-remove_duplicate_entries( drug, wild_sequence_path, spread_sheet, rows_to_remove_indices );
-screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
-
-int fold_col = this->find_drug_fold_col( drug, spread_sheet );
-remove_medium_fold_entries( fold_col, spread_sheet, resistance_thresholds, rows_to_remove_indices );
-screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
-
-//clean
-this->erase_rows( spread_sheet, rows_to_remove_indices );
-
-//Log size less header
-Log::append( "Total rows screened out: " +  boost::lexical_cast<std::string>( rows_to_remove_indices.size() ) );
-Log::append( "Post-screening train dataset size: " + boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
-
-	//for each row left in spread_sheet. skipping header row
-	for( int row = 1; row < spread_sheet.size(); row++ )
-	{
-		//get data for WU
-		//id
-			std::string id = this->find_isolate_name( spread_sheet[row] );
-		//mutated_seq
-			std::string wild_seq = this->load_wild_seq( wild_sequence_path );
-			std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
-		//resistance
-			bool susceptible = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
-
-		//create new WU 
-		PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
-
-		//add new WU to output set
-		output.push_back( wu );
-	}//end loop
+  //
+  // Dump the raw sequences, for analyses outside hivm.
+  //
+  std::string aa_seq;
+  printf("\n");
+  for( int outer = 0; outer < output.size(); outer++ )
+    {
+      aa_seq = output[outer]->get_data();
+      printf("%s\n", (char*) aa_seq.c_str());
+    }
+  fflush(stdout);
 }
 
 //TODO DRY
