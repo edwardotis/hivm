@@ -594,10 +594,10 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
 				   const Options& preproc_options,
 				   PreProcWUSet& output)
 {
-
+  std::string aa_seq;
   //sort least to highest
   //std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
-  
+
   Log::append( "Parsing for drug: " + drug );
   
   //load spreadsheet
@@ -639,22 +639,17 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
       
       //create new WU 
       PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
+      aa_seq = wu->get_data();
+      printf("%d %s\n", susceptible, (char*) aa_seq.c_str());
+      fflush(stdout);
+      //
+      // Dump the raw sequences, for analyses outside hivm.
+      //
       
       //add new WU to output set
       output.push_back( wu );
     }//end loop
 
-  //
-  // Dump the raw sequences, for analyses outside hivm.
-  //
-  std::string aa_seq;
-  printf("\n");
-  for( int outer = 0; outer < output.size(); outer++ )
-    {
-      aa_seq = output[outer]->get_data();
-      printf("%s\n", (char*) aa_seq.c_str());
-    }
-  fflush(stdout);
 }
 
 //TODO DRY
