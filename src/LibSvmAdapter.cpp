@@ -53,108 +53,108 @@ std::string LibSvmAdapter::one_class_trainset_details_( const SvmWUMatrix& train
 void LibSvmAdapter::predict_susceptibility( const SvmWUMatrix& trainset, const SvmWUMatrix& predictees,
 	const Options& svm_param_options, ExperimentResult* result )
 {
-	//train
-	//ALLOCATE MEMORY 
-	struct svm_problem* problem = create_svm_problem( trainset );//NEW SVM_PROBLEM
-	struct svm_parameter* param = create_svm_parameter( problem, svm_param_options  );//NEW SVM_PARAMETER
-	struct svm_model* train_model = train( trainset, param, problem );//NEW SVM_MODEL
+  //train
+  //ALLOCATE MEMORY 
+  struct svm_problem* problem = create_svm_problem( trainset );//NEW SVM_PROBLEM
+  struct svm_parameter* param = create_svm_parameter( problem, svm_param_options  );//NEW SVM_PARAMETER
+  struct svm_model* train_model = train( trainset, param, problem );//NEW SVM_MODEL
 
-	//check for 1 class problem. i.e. All training data resistant or all was suscepitble.
-	//This means the svm will predict all one class. (I should test assumption.)
-	int num_of_classes = svm_get_nr_class( train_model );
-	
-	if( num_of_classes != 2 )
-	{
-		if( num_of_classes == 1 )
-		{	
-			std::string msg;
-			msg.append( "\n\nWarning! Training data is all in same class. Predictions were automatically all for same class." );
-			msg.append( "Please view Readme.txt to see ways to avoid this problem. View log to see details of training data." );
-			//add details of training set here
-			msg.append( "\nContinuing hivm...\n\n" );
-			Log::append( msg );
-			#if !defined UNIT_TESTING//don't fill up regression tests w/ this warning
-				std::cerr << msg;
-			#endif
-			
-			Log::append( one_class_trainset_details_( trainset ) );
-		}
-		else
-		{	
-			std::string msg;
-			msg.append( "Error! Number of classes can only be 1 or 2 in this version of hivm.\n" );
-			msg.append( "Number of classes is: " );
-			msg.append( boost::lexical_cast<std::string>( num_of_classes ) );
-			msg.append( "\nDon't know how to handle this. Exiting..." );
-			Log::append( msg );
-			std::cerr << msg;
-			exit(1);
-		}
-
+  //check for 1 class problem. i.e. All training data resistant or all was suscepitble.
+  //This means the svm will predict all one class. (I should test assumption.)
+  int num_of_classes = svm_get_nr_class( train_model );
+  
+  if( num_of_classes != 2 )
+    {
+      if( num_of_classes == 1 )
+	{	
+	  std::string msg;
+	  msg.append( "\n\nWarning! Training data is all in same class. Predictions were automatically all for same class." );
+	  msg.append( "Please view Readme.txt to see ways to avoid this problem. View log to see details of training data." );
+	  //add details of training set here
+	  msg.append( "\nContinuing hivm...\n\n" );
+	  Log::append( msg );
+#if !defined UNIT_TESTING//don't fill up regression tests w/ this warning
+	  std::cerr << msg;
+#endif
+	  
+	  Log::append( one_class_trainset_details_( trainset ) );
 	}
-	
-	//std::cout << "Number of classes: " << classes << '\n';
-	//svm_save_model( "mymodel.txt", train_model );
-
-	//declare output container
-	std::vector<bool> susceptibility_predicted_results;
-	std::vector< std::vector <double> > probabilities_collection;
-
-	//predict loop
-	for( int i=0; i < predictees.size(); i++ )
-	{
-		bool is_susceptible;
-		if( svm_param_options.probability== 1 )//use probabiltiy
-		{
-			std::vector<double> probability_output;
-			is_susceptible =  predict_with_probabilities_( predictees.at(i), train_model, param, probability_output );
-			
-			//record probability information
-			probabilities_collection.push_back( probability_output ); 
-
-		}
-		else//straight model-validation with no probability information
-		{
-			is_susceptible =  predict_( predictees.at(i), train_model, param );
-		}
-
-		susceptibility_predicted_results.push_back( is_susceptible );
+      else
+	{	
+	  std::string msg;
+	  msg.append( "Error! Number of classes can only be 1 or 2 in this version of hivm.\n" );
+	  msg.append( "Number of classes is: " );
+	  msg.append( boost::lexical_cast<std::string>( num_of_classes ) );
+	  msg.append( "\nDon't know how to handle this. Exiting..." );
+	  Log::append( msg );
+	  std::cerr << msg;
+	  exit(1);
 	}
-
-	//FREE MEMORY
-	svm_destroy_model( train_model );//DELETE SVM_MODEL
-	delete_svm_parameter( param );//DELETE SVM_PARAMETER
-	delete_svm_problem( problem );//DELETESVM_PROBLEM
-
-	//Prepare Output - ExperimentResultSet manages destruction of these results
-	//ExperimentResult* result = new ExperimentResult( svm_param_options.lg_cost,
-	//	svm_param_options.lg_gamma );
-	result->lg_cost = svm_param_options.lg_cost;
-	result->lg_gamma = svm_param_options.lg_gamma;
-	std::vector<double> empty;
-
-	//Store datapoints. Each datapoint has predicted and actual susceptibility
-	for( int i=0; i < susceptibility_predicted_results.size(); i++ )
+      
+    }
+  
+  //std::cout << "Number of classes: " << classes << '\n';
+  //svm_save_model( "mymodel.txt", train_model );
+  
+  //declare output container
+  std::vector<bool> susceptibility_predicted_results;
+  std::vector< std::vector <double> > probabilities_collection;
+  
+  //predict loop
+  for( int i=0; i < predictees.size(); i++ )
+    {
+      bool is_susceptible;
+      if( svm_param_options.probability== 1 )//use probabiltiy
 	{
-		if( probabilities_collection.size() > 0 )//we have probability information to store
-		{
-			result->add( 
-				susceptibility_predicted_results.at(i),
-				predictees.at(i)->known_susceptibility(),
-				predictees.at(i)->get_id(),
-				probabilities_collection.at( i )
-				);
-		}
-		else
-		{
-			result->add( 
-				susceptibility_predicted_results.at(i),
-				predictees.at(i)->known_susceptibility(),
-				predictees.at(i)->get_id(),
-				empty
-				);
-		}
-	}		
+	  std::vector<double> probability_output;
+	  is_susceptible =  predict_with_probabilities_( predictees.at(i), train_model, param, probability_output );
+	  
+	  //record probability information
+	  probabilities_collection.push_back( probability_output ); 
+	  
+	}
+      else//straight model-validation with no probability information
+	{
+	  is_susceptible =  predict_( predictees.at(i), train_model, param );
+	}
+      
+      susceptibility_predicted_results.push_back( is_susceptible );
+    }
+  
+  //FREE MEMORY
+  svm_destroy_model( train_model );//DELETE SVM_MODEL
+  delete_svm_parameter( param );//DELETE SVM_PARAMETER
+  delete_svm_problem( problem );//DELETESVM_PROBLEM
+  
+  //Prepare Output - ExperimentResultSet manages destruction of these results
+  //ExperimentResult* result = new ExperimentResult( svm_param_options.lg_cost,
+  //	svm_param_options.lg_gamma );
+  result->lg_cost = svm_param_options.lg_cost;
+  result->lg_gamma = svm_param_options.lg_gamma;
+  std::vector<double> empty;
+  
+  //Store datapoints. Each datapoint has predicted and actual susceptibility
+  for( int i=0; i < susceptibility_predicted_results.size(); i++ )
+    {
+      if( probabilities_collection.size() > 0 )//we have probability information to store
+	{
+	  result->add( 
+		      susceptibility_predicted_results.at(i),
+		      predictees.at(i)->known_susceptibility(),
+		      predictees.at(i)->get_id(),
+		      probabilities_collection.at( i )
+		      );
+	}
+      else
+	{
+	  result->add( 
+		      susceptibility_predicted_results.at(i),
+		      predictees.at(i)->known_susceptibility(),
+		      predictees.at(i)->get_id(),
+		      empty
+		      );
+	}
+    }		
 }
 
 
