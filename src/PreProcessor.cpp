@@ -313,7 +313,7 @@ bool PreProcessor::are_invalid_mutations( const spread_sheet_row_const_iterator&
 	bool valid   = false;
 	
 	spread_sheet_column_const_iterator col_it = (*row_it).begin();
-	for( int col = P1_INDEX; col <= P99_INDEX; col++ )
+	for( int col = PSTART_INDEX; col <= PEND_INDEX; col++ )
 	{
 		std::string current_mutation = col_it[col];
 		if( current_mutation == "" )//no empty mutation allowed
@@ -392,7 +392,7 @@ std::string PreProcessor::create_mutation_string(const std::string wild_sequence
 
 	//copy p1 - p99 into a container in order to zero out index
 	std::vector<std::string> mut_vector;
-	for( int i = P1_INDEX; i <= P99_INDEX; i++ )
+	for( int i = PSTART_INDEX; i <= PEND_INDEX; i++ )
 	{
 		std::string mut = row[i];
 		mut_vector.push_back( mut );
@@ -436,28 +436,22 @@ std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row 
 }
 
 //
-// Determine and set offsets of P1 and P99 columns by parsing header
-// row of input file.
+// Determine and set offsets of first and last mutation column (`P
+// columns') by parsing header row of input file.
 //
 void PreProcessor::set_P_index(const std::string fname)
 {
-  int idx;
   int i;
-  int done;
   
   string_spread_sheet spread_sheet = this->load_spread_sheet(fname);
   string_spread_sheet_row row = spread_sheet[0];
-  done = 0;
-  for (i = 0; (i < row.size()) && !done; i++)
+  for (i = 0; i < row.size(); i++)
     {
       if (row[i] == "P1")
-	{
-	  idx = i;
-	  done = 1;
-	}
+	PSTART_INDEX = i;
+      else if (row[i] == "CompMutList")
+	PEND_INDEX = i-1;
     }
-  P1_INDEX = idx;
-  P99_INDEX = idx+98;
 }
 
 bool PreProcessor::is_susceptible( const int drug_column, const string_spread_sheet_row& row, const std::vector<double> thresholds )
