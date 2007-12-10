@@ -24,8 +24,8 @@ public:
   //default constructor
   PreProcessor();	
   //
-  // Determine and set offsets of P1 and P99 columns by parsing header
-  // row of input file.
+  // Determine and set offsets of start and end mutation columns
+  // (P-columns) by parsing header row of input file.
   //
   void set_P_index(const std::string fname);
   //@purpose load hivdb dataset from file
@@ -201,12 +201,10 @@ private:
 		const std::string test_mut_seq
 		);
 
-	//TODO remove magic numbers
-	int P1_INDEX;
-	int P99_INDEX;
-	int ISOLATE_NAME_COLUMN;
-	std::string VALID_MUTATION_CHARS;
-
+  int PSTART_INDEX;
+  int PEND_INDEX;
+  int ISOLATE_NAME_COLUMN;
+  std::string VALID_MUTATION_CHARS;
 
 	//@purpose helper to load spreadsheet columns
 	void tokenize_columns( const std::string line, const int cur_row, 
