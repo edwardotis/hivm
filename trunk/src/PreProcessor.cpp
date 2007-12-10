@@ -11,26 +11,24 @@
 
 PreProcessor::PreProcessor()
 {
-	//TODO remove magic numbers
-	P1_INDEX = 20;
-	P99_INDEX = 118;
-	ISOLATE_NAME_COLUMN = 5;
-
-	//if P1 - P99 have anything other than this list of characters, trash that row
-	//Reference:
-	//http://en.wikipedia.org/wiki/FASTA_format#Sequence_representation
-	/**
-		<empty string> no mutation
-		- no mutation
-		. no mutation
-		# insertion (I don't know how to handle this, so remove it.)
-		* stop codon - means poor quality entry from HIVDB according to syrhee@stanford.edu
-		~ deletion
-		B Aspartic acid or Asparagine
-		Z Glutamate or Glutamine
-		X any
-	*/
-	VALID_MUTATION_CHARS = ".-~*ARNDCQEGHILKMFPSTWYVBZX";
+  //TODO remove column magic number
+  ISOLATE_NAME_COLUMN = 5;
+  // if mutation columns have anything other than this list of
+  // characters, trash that row
+  //Reference:
+  //http://en.wikipedia.org/wiki/FASTA_format#Sequence_representation
+  /**
+     <empty string> no mutation
+     - no mutation
+     . no mutation
+     # insertion (I don't know how to handle this, so remove it.)
+     * stop codon - means poor quality entry from HIVDB according to syrhee@stanford.edu
+     ~ deletion
+     B Aspartic acid or Asparagine
+     Z Glutamate or Glutamine
+     X any
+  */
+  VALID_MUTATION_CHARS = ".-~*ARNDCQEGHILKMFPSTWYVBZX";
 }
 
 PreProcessor::~PreProcessor()
@@ -460,26 +458,6 @@ void PreProcessor::set_P_index(const std::string fname)
     }
   P1_INDEX = idx;
   P99_INDEX = idx+98;
-}
-
-//DEPRECATED
-bool PreProcessor::is_susceptible( const int drug_column, const string_spread_sheet_row& row,  double threshold )
-{
-	std::vector<double> thresholds;
-	thresholds.push_back( threshold );
-    
-	return is_susceptible( drug_column, row, thresholds );
-	//bool susceptible = true;
-	//bool not_susceptible = false;
-
-	//double fold_strength = boost::lexical_cast<double>( row[drug_column] );
-	////TODO If drug resistance value falls on threshold, which category does it go to?
-	//if(  fold_strength <= threshold  )
-	//{
-	//	return susceptible;
-	//}
-
-	//return not_susceptible;
 }
 
 bool PreProcessor::is_susceptible( const int drug_column, const string_spread_sheet_row& row, const std::vector<double> thresholds )
