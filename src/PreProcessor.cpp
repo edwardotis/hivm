@@ -454,41 +454,32 @@ void PreProcessor::set_P_index(const std::string fname)
     }
 }
 
-bool PreProcessor::is_susceptible( const int drug_column, const string_spread_sheet_row& row, const std::vector<double> thresholds )
+int PreProcessor::is_susceptible(const int drug_column, const string_spread_sheet_row& row, 
+				 const std::vector<double> thresholds )
 {
-	bool susceptible = true;
-	bool not_susceptible = false;
-
-	double fold_strength = boost::lexical_cast<double>( row[drug_column] );
-
-	if(  fold_strength <= thresholds.at(0)  )
-	{
-		return susceptible;
-	}
-
-	if( thresholds.size() > 2 )
-	{
-		std::string msg;
-		msg.append( "PreProcessor::is_susceptible() not equipped to handle more than 2 thresholds!" );
-		msg.append( "\nExiting..." );
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-
-	if( thresholds.size() == 2 )
-	{
-		if( fold_strength > thresholds.at(0) &&
-			fold_strength < thresholds.at(1) )
-		{
-			std::string msg;
-			msg.append( "Found medium class susceptibility. Problem PreProcessor::is_susceptible()." );
-			Log::append( msg );
-			std::cerr << msg;
-		}
-	}
-
-	return not_susceptible;
+  double fold_strength = boost::lexical_cast<double>( row[drug_column] );
+  
+  if( thresholds.size() > 2 )
+    {
+      std::string msg;
+      msg.append( "PreProcessor::is_susceptible() not equipped to handle more than 2 thresholds!" );
+      msg.append( "\nExiting..." );
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  if(  fold_strength <= thresholds.at(0)  )
+    return Options::hivm_susceptible;
+  
+  if( thresholds.size() == 2 )
+    {
+      if( fold_strength > thresholds.at(0) &&
+	  fold_strength < thresholds.at(1) )
+	return Options::hivm_intermediate;
+    }
+  
+  return Options::hivm_resistant;
 }
 
 
@@ -607,10 +598,10 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
       std::string wild_seq = this->load_wild_seq( wild_sequence_path );
       std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
       //resistance
-      bool susceptible = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
+      int susceptibility = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
       
       //create new WU 
-      PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
+      PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptibility );
       //
       // Dump the raw sequences, for analyses outside hivm.
       // Each row has one labeled sequence. Sensitive sequences get
@@ -655,91 +646,86 @@ void PreProcessor::parseInputFiles(
 }
 
 //TODO DRY
-void PreProcessor::parseInputFiles( 
-	const std::string dataset_path,
-	const std::string wild_sequence_path,
-	const std::string drug,
-	const std::vector<double>& resistance_thresholds,
-	const Options& preproc_options,
-	int seed,//for randomly picking training and test sets
-	PreProcWUSet& train_output,
-	PreProcWUSet& test_output
-	)
+void PreProcessor::parseInputFiles(const std::string dataset_path,
+				   const std::string wild_sequence_path,
+				   const std::string drug,
+				   const std::vector<double>& resistance_thresholds,
+				   const Options& preproc_options,
+				   int seed,//for randomly picking training and test sets
+				   PreProcWUSet& train_output,
+				   PreProcWUSet& test_output)
 {
-	////sort least to highest
-	//std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
-
-	Log::append( "Parsing for drug: " + drug );
-
-	//load spreadsheet
-	string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
-
-	std::list<int> rows_for_training_indices;
-	std::list<int> rows_for_testing_indices;
-
-	//2/3 training, 1/3 testing.
-	split_input_into_training_and_testing( spread_sheet, seed, rows_for_training_indices, rows_for_testing_indices );
-
-	//screen spreadsheet
-	std::vector<int> rows_to_remove_indices;
-	rows_to_remove_indices = screen_drug( drug, spread_sheet );
-	remove_duplicate_entries( drug, wild_sequence_path, spread_sheet, rows_to_remove_indices );
-	screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
-
-	int fold_col = this->find_drug_fold_col( drug, spread_sheet );
-	remove_medium_fold_entries( fold_col, spread_sheet, resistance_thresholds, rows_to_remove_indices );
-
-	//screen and remove unusable rows from training and testing index sets
-	update_usable_input_indices( rows_to_remove_indices, rows_for_training_indices );
-	update_usable_input_indices( rows_to_remove_indices, rows_for_testing_indices );
-
-	//Log sizes
-	Log::append( "Total rows screened out: " +  boost::lexical_cast<std::string>( rows_to_remove_indices.size() ) );
-	Log::append( "Post-screening train dataset size: " + boost::lexical_cast<std::string>( rows_for_training_indices.size() ) );
-	Log::append( "Post-screening test dataset size: " + boost::lexical_cast<std::string>( rows_for_testing_indices.size() ) );
-
-	//clean REMOVED!! (switching to all indices solution instead of altering size of spreadsheet)
-	//this->erase_rows( spread_sheet, rows_to_remove_indices );
-
-	//for each row left in spread_sheet. 
-	for( int row = 1; row < spread_sheet.size(); row++ )
+  ////sort least to highest
+  //std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
+  
+  Log::append( "Parsing for drug: " + drug );
+  
+  //load spreadsheet
+  string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
+  
+  std::list<int> rows_for_training_indices;
+  std::list<int> rows_for_testing_indices;
+  
+  //2/3 training, 1/3 testing.
+  split_input_into_training_and_testing( spread_sheet, seed, rows_for_training_indices,
+					 rows_for_testing_indices );
+  
+  //screen spreadsheet
+  std::vector<int> rows_to_remove_indices;
+  rows_to_remove_indices = screen_drug( drug, spread_sheet );
+  remove_duplicate_entries( drug, wild_sequence_path, spread_sheet, rows_to_remove_indices );
+  screen_type( drug, spread_sheet, preproc_options.susceptibility_type, rows_to_remove_indices );
+  
+  int fold_col = this->find_drug_fold_col( drug, spread_sheet );
+  remove_medium_fold_entries( fold_col, spread_sheet, resistance_thresholds, rows_to_remove_indices );
+  
+  //screen and remove unusable rows from training and testing index sets
+  update_usable_input_indices( rows_to_remove_indices, rows_for_training_indices );
+  update_usable_input_indices( rows_to_remove_indices, rows_for_testing_indices );
+  
+  //Log sizes
+  Log::append( "Total rows screened out: " +  boost::lexical_cast<std::string>( rows_to_remove_indices.size() ) );
+  Log::append( "Post-screening train dataset size: " + boost::lexical_cast<std::string>( rows_for_training_indices.size() ) );
+  Log::append( "Post-screening test dataset size: " + boost::lexical_cast<std::string>( rows_for_testing_indices.size() ) );
+  
+  //clean REMOVED!! (switching to all indices solution instead of altering size of spreadsheet)
+  //this->erase_rows( spread_sheet, rows_to_remove_indices );
+  
+  //for each row left in spread_sheet. 
+  for( int row = 1; row < spread_sheet.size(); row++ )
+    {
+      //if current row is NOT in rows to be removed
+      if( std::count( rows_to_remove_indices.begin(), rows_to_remove_indices.end(), row ) == 0 )
 	{
-		//if current row is NOT in rows to be removed
-		if( std::count( rows_to_remove_indices.begin(), rows_to_remove_indices.end(), row ) == 0 )
-		{
-			//get data for WU
-			//id
-				std::string id = this->find_isolate_name( spread_sheet[row] );
-			//mutated_seq
-				std::string wild_seq = this->load_wild_seq( wild_sequence_path );
-				std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
-			//resistance
-			bool susceptible = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
-
-			//create new WU 
-			PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
-
-			//NOW, decide whether it goes into training set or testing set
-			if( std::count( rows_for_training_indices.begin(), rows_for_training_indices.end(), row ) == 1 )
-			{
-				train_output.push_back( wu );
-			}
-			else if( std::count( rows_for_testing_indices.begin(), rows_for_testing_indices.end(), row ) == 1  )//put into testing set
-			{
-				test_output.push_back( wu );
-			}
-			else//error
-			{
-				std::string msg = "Error splitting of training and testing input data sets.\n";
-				msg.append( "Error in: PreProcessor::parseInputFiles\n" );
-				msg.append( "Exiting..." );
-				Log::append( msg );
-				std::cerr << msg;
-				exit(1);
-			}
-		}
-		
-	}//end loop
+	  //get data for WU
+	  //id
+	  std::string id = this->find_isolate_name( spread_sheet[row] );
+	  //mutated_seq
+	  std::string wild_seq = this->load_wild_seq( wild_sequence_path );
+	  std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
+	  //resistance
+	  int susceptibility = this->is_susceptible( fold_col, spread_sheet[row], resistance_thresholds );
+	  
+	  //create new WU 
+	  PreProcWorkUnit* wu = new PreProcWorkUnit(id, mut_seq, susceptibility);
+	  
+	  //NOW, decide whether it goes into training set or testing set
+	  if( std::count( rows_for_training_indices.begin(), rows_for_training_indices.end(), row ) == 1 )
+	    train_output.push_back( wu );
+	  else if( std::count( rows_for_testing_indices.begin(), rows_for_testing_indices.end(), row ) == 1  )//put into testing set
+	    test_output.push_back( wu );
+	  else//error
+	    {
+	      std::string msg = "Error splitting of training and testing input data sets.\n";
+	      msg.append( "Error in: PreProcessor::parseInputFiles\n" );
+	      msg.append( "Exiting..." );
+	      Log::append( msg );
+	      std::cerr << msg;
+	      exit(1);
+	    }
+	}
+      
+    }//end loop
 }
 
 void PreProcessor::split_input_into_training_and_testing( const string_spread_sheet& spread_sheet,
@@ -778,7 +764,12 @@ void PreProcessor::split_input_into_training_and_testing( const string_spread_sh
 	Log::append( "Pre-screening test dataset size: " + boost::lexical_cast<std::string>( rows_for_testing_indices.size() ) );
 }
 
-//TODO unit test
+//
+// The function disabled 12/20/2007 due to introduction of
+// intermediate resistance category.
+//
+// Placeholder retained to simplify changes in the rest of code.
+//
 void PreProcessor::remove_medium_fold_entries( 
 	int drug_column,
 	const string_spread_sheet& spread_sheet,
@@ -786,37 +777,7 @@ void PreProcessor::remove_medium_fold_entries(
 	std::vector<int>& rows_to_remove
 	)
 {
-	if( thresholds.size() > 2 )
-	{
-		std::string msg;
-		msg.append( "PreProcessor::remove_medium_fold_entries() not equipped to handle more than 2 thresholds!" );
-		Log::append( msg );
-		std::cerr << msg;
-	}
-
-	if( thresholds.size() < 2 )
-	{
-		//nothing to do here
-		return;
-	}
-
-	//for each row in spreadsheet
-	for( int row=1; row < spread_sheet.size(); row++ )//skip header row
-	{
-		//if( base_row is NOT already set for removal)
-		if( std::count( rows_to_remove.begin(), rows_to_remove.end(), row ) == 0 )
-		{
-			double fold_strength = boost::lexical_cast<double>( spread_sheet[row].at( drug_column ) );
-
-			//if row > low threshold and < high threshold
-			if( fold_strength > thresholds.at(0) &&
-				fold_strength < thresholds.at(1) )
-			{
-				//add current_mut_seq index to rows_to_remove
-				rows_to_remove.push_back( row );
-			}
-		}
-	}
+  return;
 }
 
 //#include <stdlib.h>

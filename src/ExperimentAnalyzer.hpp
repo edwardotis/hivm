@@ -70,8 +70,18 @@ public:
 	*/
 	double pmax( const ExperimentResult* result );
 
-	//p-error = error rate / pmax
-	double p_error( const ExperimentResult* result );
+	//M_rate = error rate / pmax
+       double M_rate(const ExperimentResult* result, int nthd);
+
+       //
+       // Error rate for multiple thresholds.
+       //
+       double ExperimentAnalyzer::m_err(const ExperimentResult* result);
+
+       //
+       // Accuracy rate for multiple thresholds.
+       //
+       double ExperimentAnalyzer::m_acc(const ExperimentResult* result);
 
 	//(TP'/FN')/(FP'/TN'), TP'=TP+0.5, FN'=FN+0.5, etc
 	//The reason we are adding 0.5 is to
@@ -165,8 +175,8 @@ private:
 
 	//@purpose save c,g pairs and accuracy, tpr, fpr, etc in 
 	//spreadsheet friendly file for model-validation or model-selection
-	void save_experiment_results_data( const ExperimentResultSet& result_set,
-		std::string output_prefix );
+	void save_experiment_results_data(const ExperimentResultSet& result_set,
+					  std::string output_prefix, int size);
 
 	//@purpose Save cg pair, TPR and FPR. But only save best TPR for any
 	//given FPR (keeps the ROC Curve Graph easier to read for lots of points)

@@ -58,56 +58,39 @@ void LibSvmAdapter::predict_susceptibility( const SvmWUMatrix& trainset, const S
   struct svm_problem* problem = create_svm_problem( trainset );//NEW SVM_PROBLEM
   struct svm_parameter* param = create_svm_parameter( problem, svm_param_options  );//NEW SVM_PARAMETER
   struct svm_model* train_model = train( trainset, param, problem );//NEW SVM_MODEL
-
-  //check for 1 class problem. i.e. All training data resistant or all was suscepitble.
+  
+  //check for 1 class problem. i.e. all training data in the same class.
   //This means the svm will predict all one class. (I should test assumption.)
   int num_of_classes = svm_get_nr_class( train_model );
   
-  if( num_of_classes != 2 )
-    {
-      if( num_of_classes == 1 )
-	{	
-	  std::string msg;
-	  msg.append( "\n\nWarning! Training data is all in same class. Predictions were automatically all for same class." );
-	  msg.append( "Please view Readme.txt to see ways to avoid this problem. View log to see details of training data." );
-	  //add details of training set here
-	  msg.append( "\nContinuing hivm...\n\n" );
-	  Log::append( msg );
+  if( num_of_classes == 1 )
+    {	
+      std::string msg;
+      msg.append( "\n\nWarning! Training data is all in same class. Predictions were automatically all for same class." );
+      msg.append( "Please view Readme.txt to see ways to avoid this problem. View log to see details of training data." );
+      //add details of training set here
+      msg.append( "\nContinuing hivm...\n\n" );
+      Log::append( msg );
 #if !defined UNIT_TESTING//don't fill up regression tests w/ this warning
-	  std::cerr << msg;
+      std::cerr << msg;
 #endif
-	  
-	  Log::append( one_class_trainset_details_( trainset ) );
-	}
-      else
-	{	
-	  std::string msg;
-	  msg.append( "Error! Number of classes can only be 1 or 2 in this version of hivm.\n" );
-	  msg.append( "Number of classes is: " );
-	  msg.append( boost::lexical_cast<std::string>( num_of_classes ) );
-	  msg.append( "\nDon't know how to handle this. Exiting..." );
-	  Log::append( msg );
-	  std::cerr << msg;
-	  exit(1);
-	}
       
+      Log::append( one_class_trainset_details_( trainset ) );
     }
   
-  //std::cout << "Number of classes: " << classes << '\n';
-  //svm_save_model( "mymodel.txt", train_model );
-  
   //declare output container
-  std::vector<bool> susceptibility_predicted_results;
+  std::vector<int> susceptibility_predicted_results;
   std::vector< std::vector <double> > probabilities_collection;
   
   //predict loop
   for( int i=0; i < predictees.size(); i++ )
     {
-      bool is_susceptible;
+      int susceptibility;
       if( svm_param_options.probability== 1 )//use probabiltiy
 	{
 	  std::vector<double> probability_output;
-	  is_susceptible =  predict_with_probabilities_( predictees.at(i), train_model, param, probability_output );
+	  susceptibility = predict_with_probabilities_( predictees.at(i), train_model, 
+							param, probability_output );
 	  
 	  //record probability information
 	  probabilities_collection.push_back( probability_output ); 
@@ -115,10 +98,10 @@ void LibSvmAdapter::predict_susceptibility( const SvmWUMatrix& trainset, const S
 	}
       else//straight model-validation with no probability information
 	{
-	  is_susceptible =  predict_( predictees.at(i), train_model, param );
+	  susceptibility =  predict_( predictees.at(i), train_model, param );
 	}
       
-      susceptibility_predicted_results.push_back( is_susceptible );
+      susceptibility_predicted_results.push_back( susceptibility );
     }
   
   //FREE MEMORY
@@ -157,7 +140,6 @@ void LibSvmAdapter::predict_susceptibility( const SvmWUMatrix& trainset, const S
     }		
 }
 
-
 void LibSvmAdapter::delete_svm_parameter( struct svm_parameter* param )
 {
 	svm_destroy_param( param );
@@ -165,234 +147,224 @@ void LibSvmAdapter::delete_svm_parameter( struct svm_parameter* param )
 }
 
 //@pre svm_param loaded properly
-bool LibSvmAdapter::predict_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param )
+int LibSvmAdapter::predict_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param )
 {
 
-	if(  train_model == NULL )//todo DRY
-	{
-		std::string msg = "Sorry, Trying to predict without a valid model. Exiting...";
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-
-	double result;
-
-	struct svm_node* predictee_ = create_svm_node_ptr( predictee );//CALLOC SVM_NODE*
-	
-	try
-	{
-		result = svm_predict( train_model, predictee_ );
-	}
-	catch( std::exception& e )
-	{
-		std::string msg = "\nException caught in LibSvmAdapter::predict_with_probabilities_ call to svm.cpp, svm_predict(): \n";
-		msg +=   e.what();
-		msg += "\n\nElapsed Time: ";
-		msg += Log::elapsed_time();
-		msg += "\nExiting...";
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-
-
-
-	free( predictee_ );//FREE SVM_NODE*
-
-	//check that result is always either 1 or -1
-	if( result != 1 )
-	{
-		if( result != -1 )
-		{
-			assert(false);
-		}
-	}
-
-	bool susceptible = true;
-	bool not_susceptible = false;
-
-	if( result == 1 )//labels set in create_svm_problem_categories
-	{
-        return susceptible;
-	}
-	else// result == -1
-	{
-		return not_susceptible;
-	}
+  if(  train_model == NULL )//todo DRY
+    {
+      std::string msg = "Sorry, Trying to predict without a valid model. Exiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  double result;
+  
+  struct svm_node* predictee_ = create_svm_node_ptr( predictee );//CALLOC SVM_NODE*
+  
+  try
+    {
+      result = svm_predict( train_model, predictee_ );
+    }
+  catch( std::exception& e )
+    {
+      std::string msg = "\nException caught in LibSvmAdapter::predict_with_probabilities_ call to svm.cpp, svm_predict(): \n";
+      msg +=   e.what();
+      msg += "\n\nElapsed Time: ";
+      msg += Log::elapsed_time();
+      msg += "\nExiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  
+  
+  free( predictee_ );//FREE SVM_NODE*
+  
+  return (int) result;
 }
 
-bool LibSvmAdapter::predict_with_probabilities_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param,
-	std::vector<double>& probabilities_output )
+int LibSvmAdapter::predict_with_probabilities_(const SvmWUSet* predictee, 
+					       const svm_model* train_model, 
+					       const struct svm_parameter* param,
+					       std::vector<double>& probabilities_output )
 {
-	if(  train_model == NULL )//todo DRY
+  int first_label;
+  int second_label;
+  int third_label;
+
+  if(  train_model == NULL )//todo DRY
+    {
+      std::string msg = "Sorry, Trying to predict without a valid model in LibSvmAdaper::predict_with_probabilities_(). Exiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  if (  svm_check_probability_model( train_model ) != 1 )
+    {
+      std::string msg = "Sorry, Trying to predict probabilities without a valid model in LibSvmAdaper::predict_with_probabilities_(). Exiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  
+  double result = -24;
+  int num_classes =  svm_get_nr_class( train_model );
+  double *prob_estimates;
+  prob_estimates = (double *) calloc( num_classes, sizeof( double ) );//svm_problem_categories CALLOC
+  
+  //check for calloc error, return of null pointer
+  if( prob_estimates == 0 )
+    {
+      std::string msg = "Memory Allocation Error!";
+      msg += " calloc returned null pointer ";
+      msg += " in LibSvmAdapter::predict_with_probabilities_ ";
+      msg += " cannot continue. Exiting...";
+      msg.append( "\nElapsed time: " );
+      msg.append( Log::elapsed_time() );
+      std::cerr << msg;
+      Log::append( msg );
+      exit(1);
+    }
+  
+  //set -1 default for unit test purposes. don't remove this
+  double* walker = prob_estimates;
+  for( int k = 0; k < num_classes; k++ )
+    {
+      *walker = -1;
+      walker++;
+    }
+  
+  struct svm_node* predictee_ = create_svm_node_ptr( predictee );//CALLOC SVM_NODE*
+  try
+    {
+      result = svm_predict_probability( train_model, predictee_, prob_estimates );
+    }
+  catch( std::exception& e )
+    {
+      std::string msg = "\nException caught in LibSvmAdapter::predict_with_probabilities_ call to svm.cpp, svm_predict_probability(): \n";
+      msg +=   e.what();
+      msg += "\n\nElapsed Time: ";
+      msg += Log::elapsed_time();
+      msg += "\nExiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  free( predictee_ );//FREE SVM_NODE*
+  
+  //
+  // Order the probabilities to match the following:
+  //
+  // probabilities_output offset  value (label)    semantics
+  //
+  //          0                        1           sensitive (susceptible)
+  //          1                        0           intermediate
+  //          2                       -1           resistant (non-susceptible)
+  //
+  // Logic based on: "The label which appears in the training file
+  // first gets [0th probability estimate position]" - Dr. Chih-Jen
+  // Lin
+  //
+  // TBD: presently supports up to three classes (two thresholds).
+  //
+  if (num_classes > 2)
+    {
+      first_label = train_model->label[0];
+      second_label = train_model->label[1];
+      third_label = train_model->label[2];
+      // printf("LOG labels: %d %d %d\n", first_label, second_label, third_label);
+      // printf("LOG prob_estimates: %g %g %g\n", prob_estimates[0], prob_estimates[1], prob_estimates[2]);
+      if (first_label == Options::hivm_susceptible)
+	probabilities_output.push_back(prob_estimates[0]);
+      else if (second_label == Options::hivm_susceptible)
+	probabilities_output.push_back(prob_estimates[1]);
+      else if (third_label == Options::hivm_susceptible)
+	probabilities_output.push_back(prob_estimates[2]);
+      if (first_label == Options::hivm_intermediate)
+	probabilities_output.push_back(prob_estimates[0]);
+      else if (second_label == Options::hivm_intermediate)
+	probabilities_output.push_back(prob_estimates[1]);
+      else if (third_label == Options::hivm_intermediate)
+	probabilities_output.push_back(prob_estimates[2]);
+      if (first_label == Options::hivm_resistant)
+	probabilities_output.push_back(prob_estimates[0]);
+      else if (second_label == Options::hivm_resistant)
+	probabilities_output.push_back(prob_estimates[1]);
+      else if (third_label == Options::hivm_resistant)
+	probabilities_output.push_back(prob_estimates[2]);
+      // printf("LOG probabilities_output: %g %g %g\n", probabilities_output.at(0),
+      // probabilities_output.at(1),
+      // probabilities_output.at(2));
+    }
+  else if (num_classes == 2)
+    {
+      first_label = train_model->label[0];
+      if( first_label == Options::hivm_susceptible)
 	{
-		std::string msg = "Sorry, Trying to predict without a valid model in LibSvmAdaper::predict_with_probabilities_(). Exiting...";
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
+	  probabilities_output.push_back(prob_estimates[1]);// probability of resistance
+	  probabilities_output.push_back(prob_estimates[0]);// probability of susceptible
 	}
-
-	if(  svm_check_probability_model( train_model ) != 1 )
+      else //first_label == -1
 	{
-		std::string msg = "Sorry, Trying to predict probabilities without a valid model in LibSvmAdaper::predict_with_probabilities_(). Exiting...";
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
+	  probabilities_output.push_back(prob_estimates[0]);// probability of resistance
+	  probabilities_output.push_back(prob_estimates[1]);// probability of susceptible
 	}
-
-
-	//svm_get_nr_class( train_model );
-
-	double result = -24;
-//	double prob_estimates[ 2 ];//todo. better to leave this as array?
-	
-	int num_classes =  svm_get_nr_class( train_model );
-	double *prob_estimates;
-	prob_estimates = (double *) calloc( num_classes, sizeof( double ) );//svm_problem_categories CALLOC
-
-	//check for calloc error, return of null pointer
-	if( prob_estimates == 0 )
+    }
+  else if( num_classes == 1 ) //special case
+    {	
+      if( result == Options::hivm_susceptible)//susceptible
 	{
-		std::string msg = "Memory Allocation Error!";
-		msg += " calloc returned null pointer ";
-		msg += " in LibSvmAdapter::predict_with_probabilities_ ";
-		msg += " cannot continue. Exiting...";
-		msg.append( "\nElapsed time: " );
-		msg.append( Log::elapsed_time() );
-		std::cerr << msg;
-		Log::append( msg );
-		exit(1);
+	  probabilities_output.push_back( 0 );//0% probability of resistance
+	  probabilities_output.push_back( 1 );//100% probability of susceptible
 	}
-
-	//set -1 default for unit test purposes. don't remove this
-	double* walker = prob_estimates;
-	for( int k = 0; k < num_classes; k++ )
+      else//resistant
 	{
-		*walker = -1;
-		walker++;
+	  probabilities_output.push_back( 1 );//100% probability of resistance
+	  probabilities_output.push_back( 0 );//0% probability of susceptible
 	}
-
-	//test for 2 classes. That's all the classes we use right now.
-	//assert( svm_get_nr_class( train_model ) == 2 );
-
-	struct svm_node* predictee_ = create_svm_node_ptr( predictee );//CALLOC SVM_NODE*
-	try
-	{
-		result = svm_predict_probability( train_model, predictee_, prob_estimates );
-	}
-	catch( std::exception& e )
-	{
-		std::string msg = "\nException caught in LibSvmAdapter::predict_with_probabilities_ call to svm.cpp, svm_predict_probability(): \n";
-		msg +=   e.what();
-		msg += "\n\nElapsed Time: ";
-		msg += Log::elapsed_time();
-		msg += "\nExiting...";
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-	free( predictee_ );//FREE SVM_NODE*
-
-	//double class_not_susceptible = prob_estimates[0];
-	//double class_susceptible = prob_estimates[1];
-	
-	if( num_classes == 2 )
-	{
-		//Manage the order of probabilities to match semantics above.
-		//"The lable which appears in the training file first gets [0th probability estimate position]" - Dr. Chih-Jen Lin
-
-		int first_label = train_model->label[0];
-		if( first_label == 1 )
-		{
-			probabilities_output.push_back( *(prob_estimates+1) );// probability of resistance
-			probabilities_output.push_back( *(prob_estimates) );// probability of susceptible
-		}
-		else //first_label == -1
-		{
-			probabilities_output.push_back( *(prob_estimates) );// probability of resistance
-			probabilities_output.push_back( *(prob_estimates+1) );// probability of susceptible
-		}
-	}
-	else if( num_classes == 1 ) //special case
-	{	
-		if( result == 1 )//susceptible
-		{
-			probabilities_output.push_back( 0 );//0% probability of resistance
-			probabilities_output.push_back( 1 );//100% probability of susceptible
-		}
-		else//resistant
-		{
-			probabilities_output.push_back( 1 );//100% probability of resistance
-			probabilities_output.push_back( 0 );//0% probability of susceptible
-		}
-	}
-	else//problem, hivm only handles max of 2 classes
-	{
-		std::string msg = "Error: Number of classes was not 1 or 2. Don't know what to do. Exiting...";
-		msg.append( "\n Error in LibSvmAdapter::predict_with_probabilities_" );
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-
-	free( prob_estimates );
-
-	//check that result is always either 1 or -1
-	if( result != 1 )
-	{
-		if( result != -1 )
-		{
-			assert(false);
-		}
-	}
-
-	bool susceptible = true;
-	bool not_susceptible = false;
-
-	if( result == 1 )//labels set in create_svm_problem_categories
-	{
-        return susceptible;
-	}
-	else
-	{
-		return not_susceptible;
-	}
+    }
+  free( prob_estimates );
+  return (int) result;
 }
 
-struct svm_model* LibSvmAdapter::train( const SvmWUMatrix& trainset, struct svm_parameter* param,
-	struct svm_problem* problem )
+struct svm_model* LibSvmAdapter::train(const SvmWUMatrix& trainset, 
+				       struct svm_parameter* param,
+				       struct svm_problem* problem)
 {
-	//CHECK PARAM
-	if( svm_check_parameter( problem, param ) != NULL )
-	{
-		std::string msg = svm_check_parameter( problem, param );
-		msg.append( "\n Exiting program from struct svm_model* LibSvmAdapter::train( const SvmWUMatrix& trainset, struct svm_parameter* param )" ); 
-		msg.append( "Failed svm_check_parameter" );
-		Log::append( msg );
-		std::cerr << msg;
-		exit(1);
-	}
-
-	struct svm_model* result_model;
-
-	try
-	{
-		result_model = svm_train( problem, param );//svm.h
-	}
-		catch( std::exception& e )
-		{
-			std::string msg = "\nException caught in LibSvmAdapter::train, call to svm.cpp svm_train() \n";
-			msg +=   e.what();
-			msg += "\n\nElapsed Time: ";
-			msg += Log::elapsed_time();
-			msg += "\nExiting...";
-			Log::append( msg );
-			std::cerr << msg;
-			exit(1);
-		}
-
-	return result_model;
+  //CHECK PARAM
+  if( svm_check_parameter( problem, param ) != NULL )
+    {
+      std::string msg = svm_check_parameter( problem, param );
+      msg.append( "\n Exiting program from struct svm_model* LibSvmAdapter::train( const SvmWUMatrix& trainset, struct svm_parameter* param )" ); 
+      msg.append( "Failed svm_check_parameter" );
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  struct svm_model* result_model;
+  
+  try
+    {
+      result_model = svm_train( problem, param );//svm.h
+    }
+  catch( std::exception& e )
+    {
+      std::string msg = "\nException caught in LibSvmAdapter::train, call to svm.cpp svm_train() \n";
+      msg +=   e.what();
+      msg += "\n\nElapsed Time: ";
+      msg += Log::elapsed_time();
+      msg += "\nExiting...";
+      Log::append( msg );
+      std::cerr << msg;
+      exit(1);
+    }
+  
+  return result_model;
 }
 
 //
@@ -504,51 +476,39 @@ struct svm_parameter* LibSvmAdapter::create_svm_parameter( const struct svm_prob
 
 double* LibSvmAdapter::create_svm_problem_categories( const SvmWUMatrix& trainset )
 {
-	int length = trainset.size();
+  int length = trainset.size();
 
-	double *head;
-	head = (double *) calloc( length, sizeof( double ) );//svm_problem_categories CALLOC
-	
-	//check for calloc error, return of null pointer
-	if( head == 0 )
-	{
-		std::string msg = "Memory Allocation Error!";
-		msg += " calloc returned null pointer ";
-		msg += " in LibSvmAdapter::create_svm_problem_categories ";
-		msg += " cannot continue. Exiting...";
-		msg.append( "\nElapsed time: " );
-		msg.append( Log::elapsed_time() );
-		std::cerr << msg;
-		Log::append( msg );
-		exit(1);
-	}
-
-	double *walker = head;
-
-	std::vector< SvmWUSet*>::const_iterator it;
-
-	//fill up double array with Category/Label values of WorkUnits
-	for( it = trainset.begin(); it != trainset.end(); it++ )
-	{
-		double susceptible;
-		std::string _id = (*it)->get_id();//TODO this is debug code
-
-		if( (*it)->known_susceptibility() )//true
-		{
-			susceptible = 1;
-		}
-		else //if( (*it)->get_susceptibility() == 0 )//false
-		{
-			susceptible = -1;//resistant
-		}
-
-		//std::cerr << _id << " " << susceptible << "\n";
-
-		(*walker) = susceptible;
-		walker++;
-	}
-
-	return head;
+  double *head;
+  head = (double *) calloc( length, sizeof( double ) );//svm_problem_categories CALLOC
+  
+  //check for calloc error, return of null pointer
+  if( head == 0 )
+    {
+      std::string msg = "Memory Allocation Error!";
+      msg += " calloc returned null pointer ";
+      msg += " in LibSvmAdapter::create_svm_problem_categories ";
+      msg += " cannot continue. Exiting...";
+      msg.append( "\nElapsed time: " );
+      msg.append( Log::elapsed_time() );
+      std::cerr << msg;
+      Log::append( msg );
+      exit(1);
+    }
+  
+  double *walker = head;
+  
+  std::vector< SvmWUSet*>::const_iterator it;
+  
+  //fill up double array with Category/Label values of WorkUnits
+  for( it = trainset.begin(); it != trainset.end(); it++ )
+    {
+      std::string _id = (*it)->get_id();//TODO this is debug code
+      
+      (*walker) = (*it)->known_susceptibility();
+      walker++;
+    }
+  
+  return head;
 }
 
 struct svm_problem* LibSvmAdapter::create_svm_problem( const SvmWUMatrix& trainset )

@@ -144,11 +144,9 @@ private:
 
 	std::string find_isolate_name( const string_spread_sheet_row& );
   
-	//DEPRECATED
-	bool is_susceptible( const int drug_column, const string_spread_sheet_row& row,  double threshold );
-
 	//@pre assums sorted thresholds
-	bool is_susceptible( const int drug_column, const string_spread_sheet_row& row,  std::vector<double> thresholds );
+        int is_susceptible( const int drug_column, const string_spread_sheet_row& row,  
+			    std::vector<double> thresholds );
 
 	int find_drug_fold_col( const std::string drug, const string_spread_sheet& spread_sheet );
 

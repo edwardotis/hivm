@@ -3,10 +3,10 @@
 PreProcWorkUnit::PreProcWorkUnit() :
 _id( "" ),
 _data( "" ),
-_known_susceptibility( false )
+_known_susceptibility( 0 )
 {}
 
-PreProcWorkUnit::PreProcWorkUnit(std::string id, std::string data, bool known_susceptibility) :
+PreProcWorkUnit::PreProcWorkUnit(std::string id, std::string data, int known_susceptibility) :
 _id( id ),
 _data( data ),
 _known_susceptibility( known_susceptibility )
@@ -21,9 +21,9 @@ _data( rhs.get_data() ),
 _known_susceptibility( rhs.known_susceptibility() )
 {}
 
-bool PreProcWorkUnit::known_susceptibility() const
+int PreProcWorkUnit::known_susceptibility() const
 {
-	return _known_susceptibility;
+  return _known_susceptibility;
 }
 
 std::string PreProcWorkUnit::get_data() const
