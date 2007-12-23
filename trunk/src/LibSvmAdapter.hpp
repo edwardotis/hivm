@@ -53,14 +53,15 @@ private:
 	*/
 	std::string one_class_trainset_details_( const SvmWUMatrix& trainset );
 
-	bool predict_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param );
+        int predict_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param );
 
 	/**
 	@post
 	probabilities_output: position 0 = resistance probability, position 1 = suceptibility probability
 	*/
-	bool predict_with_probabilities_(  const SvmWUSet* predictee, const svm_model* train_model, const struct svm_parameter* param,
-		std::vector<double>& probabilities_output );
+	int predict_with_probabilities_(  const SvmWUSet* predictee, const svm_model* train_model, 
+					  const struct svm_parameter* param,
+					  std::vector<double>& probabilities_output );
 
 	//@purpose 
 	struct svm_model* train( const SvmWUMatrix& trainset, struct svm_parameter*,

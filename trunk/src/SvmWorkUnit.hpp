@@ -13,12 +13,12 @@ class SvmWUSet : public std::vector< double >//each double is LA score
 {
 
 public:
-	SvmWUSet( std::string id, bool known_susceptibility );
+	SvmWUSet( std::string id, int known_susceptibility );
 	virtual ~SvmWUSet();
 
 	//@returns resistance
 	//void isResistant( bool );
-	bool known_susceptibility();
+        int known_susceptibility();
 
 	//@returns isolate name
 	std::string get_id();
@@ -28,7 +28,7 @@ private:
 	SvmWUSet();
 
 	std::string _id;
-	bool _known_susceptibility;	
+	int _known_susceptibility;	
 
 	//copy constructor
 	SvmWUSet( const SvmWUSet& );

@@ -11,14 +11,14 @@ public:
 	PreProcWorkUnit();	
 
 	//consturctor
-	PreProcWorkUnit( std::string id, std::string data, bool known_susceptibility );	
+	PreProcWorkUnit( std::string id, std::string data, int known_susceptibility );	
 
 	//destructor
 	virtual ~PreProcWorkUnit();
 
 	//@returns resistance
 	//void isResistant( bool );
-	bool known_susceptibility() const;
+        int known_susceptibility() const;
 
 	//@returns amino acid sequence
 	std::string get_data() const;
@@ -33,7 +33,7 @@ public:
 private:
 
 	std::string _id;
-	bool _known_susceptibility;
+	int _known_susceptibility;
 	std::string _data;
 
 	//assignment operator

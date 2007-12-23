@@ -110,6 +110,10 @@ public:
 	//TODO unit test this
 	bool validate_required_options_();
 
+        static const int hivm_susceptible = 1;
+        static const int hivm_intermediate = 0;
+        static const int hivm_resistant = -1;
+
 private:
 
 	/**

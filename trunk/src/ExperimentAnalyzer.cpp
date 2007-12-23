@@ -167,13 +167,18 @@ std::string ExperimentAnalyzer::determine_probability( const ExperimentResult* r
 		return "n/a";
 	}
 
-	if( result->at(it)->predicted_susceptibility == true )
-	{
-		return boost::lexical_cast<std::string>( probabilities.at(1) );
-	}
-	else//resistant
-	{
-		return boost::lexical_cast<std::string>( probabilities.at(0) );
+	if (probabilities.size() == 2) {
+	  if(result->at(it)->predicted_susceptibility == Options::hivm_susceptible)
+	    return boost::lexical_cast<std::string>(probabilities.at(1));
+	  else//resistant
+	    return boost::lexical_cast<std::string>(probabilities.at(0));
+	} else if (probabilities.size() == 3) {
+	  if(result->at(it)->predicted_susceptibility == Options::hivm_susceptible)
+	    return boost::lexical_cast<std::string>(probabilities.at(0));
+	  if(result->at(it)->predicted_susceptibility == Options::hivm_intermediate)
+	    return boost::lexical_cast<std::string>(probabilities.at(1));
+	  if(result->at(it)->predicted_susceptibility == Options::hivm_resistant)
+	    return boost::lexical_cast<std::string>(probabilities.at(2));
 	}
 }
 
@@ -182,41 +187,41 @@ std::string ExperimentAnalyzer::determine_probability( const ExperimentResult* r
 (put n/a in probability column if probability not used.)
 */
 void ExperimentAnalyzer::save_prediction_detailed_results( const ExperimentResult* result,
-	const std::string output_prefix )
+							   const std::string output_prefix )
 {
-	std::string output;
-
-	//create header row
-	output.append( "Isolate, Predicted Susceptible? (0|1), Actual Susceptibility (0|1), Probability_of_Pred., Lg_Cost, Lg_Gamma\n" );
-
-	//enter data
-	for(int i=0; i < result->size(); i++ )
-	{
-		output.append( result->at(i)->id + ", " );
-		output.append( boost::lexical_cast<std::string>( result->at(i)->predicted_susceptibility ) + ", " );
-		output.append( boost::lexical_cast<std::string>( result->at(i)->actual_susceptibility ) + ", " );
-		output.append( determine_probability( result, i ) + ", " );
-		output.append( boost::lexical_cast<std::string>( result->lg_cost ) + ", " );//cost
-		output.append( boost::lexical_cast<std::string>( result->lg_gamma ) + "\n" );//gamma
-	}
-
-	//filename
-	std::string file_name = output_prefix + "_prediction_detailed_results.csv";
-
-	try
-	{
-		FileIO::write( file_name, output );
-	}
-	catch( boost::filesystem::filesystem_error& e )
-	{
-	    std::cerr << "Exception Type " << typeid(e).name() << std::endl;
-		std::cerr << e.what() << std::endl;
-		std::cerr << "Could not open prediction_detailed_results.csv file for writing." << std::endl;
-		std::cerr << "Data Results file name: " << file_name << std::endl;
-		std::cerr << "Sending results to std err instead:" << std::endl;
-		std::cerr << output << std::endl;
-		std::cerr << "Continuing to run hivm..." << std::endl;
-	}
+  std::string output;
+  
+  //create header row
+  output.append("Isolate,PredictedSusceptibility,ActualSusceptibility,PredictionProbability,lg_cost,lg_gamma\n");
+  
+  //enter data
+  for(int i = 0; i < result->size(); i++ )
+    {
+      output.append( result->at(i)->id + "," );
+      output.append( boost::lexical_cast<std::string>( result->at(i)->predicted_susceptibility ) + "," );
+      output.append( boost::lexical_cast<std::string>( result->at(i)->actual_susceptibility ) + "," );
+      output.append( determine_probability( result, i ) + "," );
+      output.append( boost::lexical_cast<std::string>( result->lg_cost ) + "," );//cost
+      output.append( boost::lexical_cast<std::string>( result->lg_gamma ) + "\n" );//gamma
+    }
+  
+  //filename
+  std::string file_name = output_prefix + "_prediction_detailed_results.csv";
+  
+  try
+    {
+      FileIO::write( file_name, output );
+    }
+  catch( boost::filesystem::filesystem_error& e )
+    {
+      std::cerr << "Exception Type " << typeid(e).name() << std::endl;
+      std::cerr << e.what() << std::endl;
+      std::cerr << "Could not open prediction_detailed_results.csv file for writing." << std::endl;
+      std::cerr << "Data Results file name: " << file_name << std::endl;
+      std::cerr << "Sending results to std err instead:" << std::endl;
+      std::cerr << output << std::endl;
+      std::cerr << "Continuing to run hivm..." << std::endl;
+    }
 }
 
 void ExperimentAnalyzer::save_model_selection_ids( const ExperimentResult* result,
@@ -279,54 +284,75 @@ void ExperimentAnalyzer::save_dataset_ids( const PreProcWUSet& data_set, const s
 	}
 }
 
-void ExperimentAnalyzer::save_experiment_results_data( const ExperimentResultSet& result_set,
-				std::string output_prefix )
+//
+// size is the number of thresholds (i.e., number of classes minus
+// one).
+//
+void ExperimentAnalyzer::save_experiment_results_data(const ExperimentResultSet& result_set,
+						      std::string output_prefix, int size)
 {
-	//TODO will the string run out of room in big programs?
-	//create output
-	std::string output;
-	output.append( "lg_cost,lg_gamma,M_rate,DOR,Sensitivity,Specificity,PPV,NPV,Accuracy,Error_Rate,TPR_less_FPR,TP,FP,TN,FN\n" );
-
-	for(int i=0; i < result_set.size(); i++ )
-	{
-		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_cost ) + "," );//cost
-		output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_gamma ) + "," );//gamma
-		output.append( boost::lexical_cast<std::string>( p_error( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( diagnostic_odds_ratio( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( sensitivity( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( specificity( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( positive_predictive_value( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( negative_predictive_value( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( accuracy( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( error_rate( result_set.at(i) ) ) + "," );
-		output.append( boost::lexical_cast<std::string>( tpr_fpr_difference( result_set.at(i) ) ) + "," );
-
-		set_tp_tn_fn_fp_n( result_set.at(i) );//prepare class var's for each result in the result set: TP, TN, FP, FN
-		output.append( boost::lexical_cast<std::string>( TP ) + "," );
-		output.append( boost::lexical_cast<std::string>( FP ) + "," );
-		output.append( boost::lexical_cast<std::string>( TN ) + "," );
-		output.append( boost::lexical_cast<std::string>( FN ));
-		output.append( "\n" );
-	}
-
-	//filename
-	//std::string file_name = get_file_path( result_set ) + "_results.csv";
-	std::string file_name = output_prefix + "_results.csv";
-
-	try
-	{
-		FileIO::write( file_name, output );
-	}
-	catch( boost::filesystem::filesystem_error& e )
-	{
-	    std::cerr << "Exception Type " << typeid(e).name() << std::endl;
-		std::cerr << e.what() << std::endl;
-		std::cerr << "Could not open results file for writing." << std::endl;
-		std::cerr << "Data Results file name: " << file_name << std::endl;
-		std::cerr << "Sending results to std err instead:" << std::endl;
-		std::cerr << output << std::endl;
-		std::cerr << "Continuing to run hivm..." << std::endl;
-	}
+  //TODO will the string run out of room in big programs?
+  //create output
+  std::string output;
+  output.append("lg_cost,lg_gamma,M_rate,DOR,Sensitivity,Specificity,PPV,NPV,Accuracy,Error_Rate,TPR_less_FPR,TP,FP,TN,FN\n");
+  
+  for(int i=0; i < result_set.size(); i++ )
+    {
+      output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_cost ) + "," );//cost
+      output.append( boost::lexical_cast<std::string>( result_set.at(i)->lg_gamma ) + "," );//gamma
+      output.append( boost::lexical_cast<std::string>(M_rate(result_set.at(i), size))+",");
+      if (size > 1) {
+	//
+	// For two or more thresholds, only accuracy, error rate and
+	// M_rate are defined.
+	//
+	for (int j = 0; j < 5; j++)
+	  output.append("-1,");
+	output.append( boost::lexical_cast<std::string>(m_acc(result_set.at(i)))+",");
+	output.append( boost::lexical_cast<std::string>(m_err(result_set.at(i)))+",");
+      } else {
+	output.append( boost::lexical_cast<std::string>( diagnostic_odds_ratio( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( sensitivity( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( specificity( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( positive_predictive_value( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( negative_predictive_value( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( accuracy( result_set.at(i) ) ) + "," );
+	output.append( boost::lexical_cast<std::string>( error_rate( result_set.at(i) ) ) + "," );
+      }
+      if (size > 1) {
+	for (int j = 0; j < 4; j++)
+	  output.append("-1,");
+	output.append("-1");
+      } else {
+	output.append( boost::lexical_cast<std::string>( tpr_fpr_difference( result_set.at(i) ) ) + "," );
+	
+	set_tp_tn_fn_fp_n( result_set.at(i) );//prepare class var's for each result in the result set: TP, TN, FP, FN
+	output.append( boost::lexical_cast<std::string>( TP ) + "," );
+	output.append( boost::lexical_cast<std::string>( FP ) + "," );
+	output.append( boost::lexical_cast<std::string>( TN ) + "," );
+	output.append( boost::lexical_cast<std::string>( FN ));
+      }
+      output.append( "\n" );
+    }
+  
+  //filename
+  //std::string file_name = get_file_path( result_set ) + "_results.csv";
+  std::string file_name = output_prefix + "_results.csv";
+  
+  try
+    {
+      FileIO::write( file_name, output );
+    }
+  catch( boost::filesystem::filesystem_error& e )
+    {
+      std::cerr << "Exception Type " << typeid(e).name() << std::endl;
+      std::cerr << e.what() << std::endl;
+      std::cerr << "Could not open results file for writing." << std::endl;
+      std::cerr << "Data Results file name: " << file_name << std::endl;
+      std::cerr << "Sending results to std err instead:" << std::endl;
+      std::cerr << output << std::endl;
+      std::cerr << "Continuing to run hivm..." << std::endl;
+    }
 }
 
 
@@ -346,8 +372,9 @@ void ExperimentAnalyzer::analyze( const ExperimentResultSet& result_set, const O
   }
   //options.save_config_file_options();
   std::cerr << "\n\nSaving Results to local results directory...";
-  
-  save_experiment_results_data( result_set, options.output_prefix );//all data points and statistics
+
+  // save all data points and statistics  
+  save_experiment_results_data(result_set, options.output_prefix, options.thresholds.size());
   
   if( options.purpose == "model-selection" )
     {
@@ -360,7 +387,7 @@ void ExperimentAnalyzer::analyze( const ExperimentResultSet& result_set, const O
 }
 
 void ExperimentAnalyzer::save_all_roc_info( const ExperimentResultSet& result_set,
-										   const std::string output_prefix, const std::string drug )
+					    const std::string output_prefix, const std::string drug )
 {
   ExperimentResultSet pruned_result_set;//only contains best TPR's per FPR
   prune( result_set, pruned_result_set );
@@ -369,45 +396,37 @@ void ExperimentAnalyzer::save_all_roc_info( const ExperimentResultSet& result_se
   save_gnuplot_script( pruned_result_set, output_prefix, drug );
 }
 
-void ExperimentAnalyzer::set_tp_tn_fn_fp_n( const ExperimentResult* result )
+void ExperimentAnalyzer::set_tp_tn_fn_fp_n(const ExperimentResult* result)
 {
-	//zero out all the variables
-	TN = 0;
-	FN = 0;
-	TP = 0;
-	FP = 0;
-	 N = 0;
-
-	//N
-	this->N = result->size();
-
-	for( int i = 0; i < result->size(); i++ )
+  //zero out all the variables
+  TN = 0;
+  FN = 0;
+  TP = 0;
+  FP = 0;
+  N = 0;
+  
+  //N
+  this->N = result->size();
+  
+  for (int i = 0; i < result->size(); i++)
+    {
+      if (result->at(i)->predicted_susceptibility == Options::hivm_susceptible)
 	{
-		if( result->at(i)->predicted_susceptibility == true)
-		{
-			if(	result->at(i)->actual_susceptibility  == true )
-			{
-				TP++;
-			}
-			if(	result->at(i)->actual_susceptibility  == false )
-			{
-				FP++;
-			}
-		}
-
-		if( result->at(i)->predicted_susceptibility == false)
-		{
-			if(	result->at(i)->actual_susceptibility  == true )
-			{
-				FN++;
-			}
-			if(	result->at(i)->actual_susceptibility  == false )
-			{
-				TN++;
-			}
-		}
+	  if (result->at(i)->actual_susceptibility == Options::hivm_susceptible)
+	    TP++;
+	  if (result->at(i)->actual_susceptibility == Options::hivm_resistant)
+	    FP++;
 	}
-
+      
+      if (result->at(i)->predicted_susceptibility == Options::hivm_resistant)
+	{
+	  if (result->at(i)->actual_susceptibility == Options::hivm_susceptible)
+	    FN++;
+	  if (result->at(i)->actual_susceptibility == Options::hivm_resistant)
+	    TN++;
+	}
+    }
+  
 }
 
 //ALL STATS RETURN -1 FOR DIVIDE BY ZERO
@@ -441,38 +460,63 @@ double ExperimentAnalyzer::diagnostic_odds_ratio( const ExperimentResult* result
 	return num / denom;
 }
 
-// n1 = Positive class, susceptible = TP + FN
-// n2 = Negative class, resistant  = TN + FP
-// pmax = min(n1, n2)/(n1+n2) = (TN + FP) / ( TP + FN + TN + FP )
+//
+// pmax is error rate using majority rule, whereas all samples are
+// assigned to the dominant class. Therefore accuracy is equal to the
+// dominant class probability. Error rate is one minus that.
+//
+// pmax = 1-max(ni)/N
+//
+// NOTE: works only for two or three classes.
+//
 double ExperimentAnalyzer::pmax( const ExperimentResult* result )
 {
-	set_tp_tn_fn_fp_n( result );
+  double retval;
 
-	if( N == 0 )
-	{
-		return -1;
-	}
-
-	double n1 = TP + FN;
-	double n2 = TN + FP;
-	double min = std::min( n1, n2 );
-	return min / ( n1 + n2 );
+  this->N = result->size();
+  int n1 = 0;
+  int n2 = 0;
+  int n3 = 0;
+  for (int i = 0; i < N; i++)
+    {
+      if (result->at(i)->actual_susceptibility == Options::hivm_susceptible)
+	n1++;
+      if (result->at(i)->actual_susceptibility == Options::hivm_intermediate)
+	n2++;
+      if (result->at(i)->actual_susceptibility == Options::hivm_resistant)
+	n3++;
+    }
+  if (N == 0)
+    retval = -1;
+  else
+    {
+      int max = std::max(n1, n2);
+      max = std::max(max, n3);
+      retval = 1-((double) max)/N;
+    }
+  return retval;
 }
 
-//p-error = error rate / pmax
-double ExperimentAnalyzer::p_error( const ExperimentResult* result )
+//M_rate = error rate / pmax
+double ExperimentAnalyzer::M_rate(const ExperimentResult* result, int nthd)
 {
-	if( pmax( result ) == -1 || pmax( result ) == 0 )
-	{
-		return -1;
-	}
+  double retval;
+  double erate;
 
-	if( error_rate( result ) == -1 )
-	{
-		return -1;
-	}
-
-	return error_rate( result ) / pmax( result );
+  if (pmax(result) == -1 || pmax(result) == 0)
+    retval = -1;
+  else
+    {
+      if (nthd > 1)
+	erate = m_err(result);
+      else
+	erate = error_rate(result);
+      if (erate == -1)
+	retval = -1;
+      else
+	retval = erate/pmax(result);
+    }
+  return retval;
 }
 
 double ExperimentAnalyzer::accuracy( const ExperimentResult* result )
@@ -498,6 +542,48 @@ double ExperimentAnalyzer::error_rate( const ExperimentResult* result )
 	}
 
 	return(FP+FN)/N;
+}
+
+//
+// Error rate for multiple thresholds.
+//
+double ExperimentAnalyzer::m_err(const ExperimentResult* result)
+{
+  int count;
+  int nx;
+  double retval;
+  
+  this->N = result->size();
+  nx = 0;
+  for (int i = 0; i < N; i++)
+    if (result->at(i)->actual_susceptibility != result->at(i)->predicted_susceptibility)
+      nx++;
+  if (N == 0)
+    retval = -1;
+  else
+    retval = nx/N;
+  return retval;
+}
+
+//
+// Accuracy rate for multiple thresholds.
+//
+double ExperimentAnalyzer::m_acc(const ExperimentResult* result)
+{
+  int count;
+  int nx;
+  double retval;
+  
+  this->N = result->size();
+  nx = 0;
+  for (int i = 0; i < N; i++)
+    if (result->at(i)->actual_susceptibility == result->at(i)->predicted_susceptibility)
+      nx++;
+  if (N == 0)
+    retval = -1;
+  else
+    retval = nx/N;
+  return retval;
 }
 
 //true positive rate
