@@ -604,16 +604,19 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
       PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptibility );
       //
       // Dump the raw sequences, for analyses outside hivm.
-      // Each row has one labeled sequence. Sensitive sequences get
-      // label 0. Resistant sequences get label 1.
+      // Each row has one labeled sequence.
       //
-      //aa_seq = wu->get_data();
-      // printf("%d %s\n", !susceptible, (char*) aa_seq.c_str());
-      //fflush(stdout);
+      if (preproc_options.dump_sequences == 1) {
+	aa_seq = wu->get_data();
+	printf("%2d %20s %s\n", susceptibility, (char *) id.c_str(), (char *) aa_seq.c_str());
+	fflush(stdout);
+      }
       
       //add new WU to output set
       output.push_back( wu );
     }//end loop
+  if (preproc_options.dump_sequences == 1)
+    exit(0);
 
 }
 
