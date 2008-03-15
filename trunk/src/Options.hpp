@@ -71,6 +71,8 @@ public:
 	//use entire susceptibility file for model selection. 
 	//if true, seed ignored.
 	bool use_entire_susceptbility_file;
+        // dump the raw sequences.
+        bool dump_sequences;
 
 //cost and gamma grid search 
 	double lg_cost_low;
