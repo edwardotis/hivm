@@ -63,6 +63,7 @@ void Options::_initialize( int argc, char* argv[] )
 
 	//model-selection only options
 	use_entire_susceptbility_file = 0;
+	dump_sequences = 0;
 
 	//model-validation only options
 	susceptibility_file_test_dataset = "N/A";
@@ -236,6 +237,7 @@ void Options::parse_options( int ac, char* av[], po::variables_map& vm )
       std::string lg_gamma_high_desc = "SVM lg(gamma) parameter, grid search high bound [" + boost::lexical_cast<std::string>( lg_gamma_high ) + "]";
       std::string lg_gamma_inc_desc =  "SVM lg(gamma) parameter, grid search increment [" + boost::lexical_cast<std::string>( lg_gamma_inc ) + "]";	
       std::string use_entire_susceptbility_file_desc = "Use entire susceptibility file for model-selection. Seed to split susceptibility file is ignored. (0,1) [" + boost::lexical_cast<std::string>(use_entire_susceptbility_file) + "]";
+      std::string dump_sequences_desc = "Dump the raw sequences to stdout (0,1) [" + boost::lexical_cast<std::string>(dump_sequences) + "]";
       
       //Describe Parameter Search Options
       po::options_description model_selection("Model-Selection Only Options.\nGrid Search for Optimal Parameters");
@@ -247,6 +249,7 @@ void Options::parse_options( int ac, char* av[], po::variables_map& vm )
 	("lg-gamma-high,m", po::value<double>(&lg_gamma_high), lg_gamma_high_desc.c_str()  )
 	("lg-gamma-inc,n", po::value<double>(&lg_gamma_inc),   lg_gamma_inc_desc.c_str()  )
 	("all-dataset", po::value<bool>(&use_entire_susceptbility_file), use_entire_susceptbility_file_desc.c_str()  )
+	("dump", po::value<bool>(&dump_sequences), dump_sequences_desc.c_str()  )
 	;
       
       //must combine all the cmd line option descriptors here
@@ -440,6 +443,7 @@ void Options::save_cmd_line_options_( const std::string file_name_prefix  ) cons
 		opts.append( "--lg-gamma-high " + boost::lexical_cast<std::string>( lg_gamma_high ) + "\n" );
 		opts.append( "--lg-gamma-inc  " + boost::lexical_cast<std::string>( lg_gamma_inc ) + "\n" );
 		opts.append( "--all-dataset   " + boost::lexical_cast<std::string>( use_entire_susceptbility_file ) + "\n" );
+		opts.append( "--dump          " + boost::lexical_cast<std::string>( dump_sequences ) + "\n" );
 		
 		cmdline.append( "--lg-cost-low   " + boost::lexical_cast<std::string>( lg_cost_low ) + " " );
 		cmdline.append( "--lg-cost-high  " + boost::lexical_cast<std::string>( lg_cost_high ) + " " );
@@ -448,6 +452,7 @@ void Options::save_cmd_line_options_( const std::string file_name_prefix  ) cons
 		cmdline.append( "--lg-gamma-high " + boost::lexical_cast<std::string>( lg_gamma_high ) + " " );
 		cmdline.append( "--lg-cost-inc   " + boost::lexical_cast<std::string>( lg_gamma_inc ) + " " );
 		cmdline.append( "--all-dataset   " + boost::lexical_cast<std::string>( use_entire_susceptbility_file ) + " " );
+		cmdline.append( "--dump          " + boost::lexical_cast<std::string>( dump_sequences ) + " " );
 	}
 
 	if( purpose == "model-validation" )
