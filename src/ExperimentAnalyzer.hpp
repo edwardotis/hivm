@@ -76,12 +76,12 @@ public:
        //
        // Error rate for multiple thresholds.
        //
-       double ExperimentAnalyzer::m_err(const ExperimentResult* result);
+       double m_err(const ExperimentResult* result);
 
        //
        // Accuracy rate for multiple thresholds.
        //
-       double ExperimentAnalyzer::m_acc(const ExperimentResult* result);
+       double m_acc(const ExperimentResult* result);
 
 	//(TP'/FN')/(FP'/TN'), TP'=TP+0.5, FN'=FN+0.5, etc
 	//The reason we are adding 0.5 is to
