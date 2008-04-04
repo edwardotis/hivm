@@ -21,14 +21,13 @@ PreProcessor::PreProcessor()
      <empty string> no mutation
      - no mutation
      . no mutation
-     # insertion (I don't know how to handle this, so remove it.)
      * stop codon - means poor quality entry from HIVDB according to syrhee@stanford.edu
      ~ deletion
      B Aspartic acid or Asparagine
      Z Glutamate or Glutamine
      X any
   */
-  VALID_MUTATION_CHARS = ".-~*ARNDCQEGHILKMFPSTWYVBZX";
+  VALID_MUTATION_CHARS = ".-~*ARNDCQEGHILKMFPSTWYVBZX#";
 }
 
 PreProcessor::~PreProcessor()
@@ -216,25 +215,39 @@ std::string PreProcessor::load_wild_seq( const std::string input_path )
 
 std::vector<int> PreProcessor::screen_drug ( const std::string drug, const string_spread_sheet& spread_sheet )
 {
-	std::vector<int> rows_to_remove;
-
-	//find header column
-	int drug_fold_col = find_drug_fold_col( drug, spread_sheet );
-
-	for( int row = 1; row < spread_sheet.size(); row++ )//skip header row
-	{
-		spread_sheet_row_const_iterator row_it = spread_sheet.begin()+row;
-
-		if(	is_invalid_drug_fold(      row_it, drug_fold_col )   ||
-			is_invalid_drug_foldmatch( row_it, drug_fold_col+1 ) ||
-			are_invalid_mutations(     row_it )
-		  )
-		{
-			rows_to_remove.push_back( row );
-		}
-	}
-
-	return rows_to_remove;
+  std::vector<int> rows_to_remove;
+  int rr;
+  bool invalid_drug_fold;
+  bool invalid_drug_foldmatch;
+  bool invalid_mutation;
+  int invalid_drug_fold_cntr = 0;
+  int invalid_drug_foldmatch_cntr = 0;
+  int invalid_mutation_cntr = 0;
+  
+  //find header column
+  int drug_fold_col = find_drug_fold_col( drug, spread_sheet );
+  
+  for( int row = 1; row < spread_sheet.size(); row++ )//skip header row
+    {
+      spread_sheet_row_const_iterator row_it = spread_sheet.begin()+row;
+      invalid_drug_fold = is_invalid_drug_fold(row_it, drug_fold_col);
+      invalid_drug_foldmatch = is_invalid_drug_foldmatch(row_it, drug_fold_col+1);
+      invalid_mutation = are_invalid_mutations(row_it);
+      if (invalid_drug_fold)
+	invalid_drug_fold_cntr++;
+      if (invalid_drug_foldmatch)
+	invalid_drug_foldmatch_cntr++;
+      if (invalid_mutation)
+	invalid_mutation_cntr++;
+      if(invalid_drug_fold || invalid_drug_foldmatch || invalid_mutation)
+	rows_to_remove.push_back(row);
+    }
+  rr = rows_to_remove.size(); // for debugging
+  printf("rows to remove: %d\n", rr);
+  printf("invalid folds: %d\n", invalid_drug_fold_cntr);
+  printf("invalid foldmatches: %d\n", invalid_drug_foldmatch_cntr);
+  printf("invalid mutations: %d\n", invalid_mutation_cntr);
+  return rows_to_remove;
 }
 
 int PreProcessor::find_drug_fold_col( const std::string drug, const string_spread_sheet& spread_sheet )
@@ -281,30 +294,30 @@ int PreProcessor::find_header_col( const std::string header_name, const string_s
 
 bool PreProcessor::is_invalid_drug_fold( const spread_sheet_row_const_iterator& row_it, int drug_fold_column )
 {
-	bool invalid = true;
-	bool valid   = false;
-
-	std::string drug_fold = (*row_it).at(drug_fold_column);
-	if( drug_fold == "na" || drug_fold == "" )
-	{
-		return invalid;
-	}
-
-	return valid;
+  bool invalid = true;
+  bool valid   = false;
+  
+  std::string drug_fold = (*row_it).at(drug_fold_column);
+  for (int jdx = 0; jdx < drug_fold.size(); jdx++)
+    drug_fold[jdx] = toupper(drug_fold[jdx]);
+  if( drug_fold == "NA" || drug_fold == "" )
+    {
+      return invalid;
+    }
+  return valid;
 }
 
+//
+// Function effectively disabled 04/01/2008. Why remove entries with
+// very low or very high fold values? We know they belong to
+// resistant/susceptible categories. We don't need to know the exact
+// value of the fold.
+//
 bool PreProcessor::is_invalid_drug_foldmatch( const spread_sheet_row_const_iterator& row_it, int drug_foldmatch_column )
 {
-	bool invalid = true;
 	bool valid   = false;
 
-	std::string drug_foldmatch = (*row_it).at(drug_foldmatch_column);
-	if( drug_foldmatch == "=" )
-	{
-		return valid;
-	}
-
-	return invalid;	
+	return valid;
 }
 
 bool PreProcessor::are_invalid_mutations( const spread_sheet_row_const_iterator& row_it )
@@ -316,6 +329,8 @@ bool PreProcessor::are_invalid_mutations( const spread_sheet_row_const_iterator&
 	for( int col = PSTART_INDEX; col <= PEND_INDEX; col++ )
 	{
 		std::string current_mutation = col_it[col];
+		for (int jdx = 0; jdx < current_mutation.size(); jdx++)
+		  current_mutation[jdx] = toupper(current_mutation[jdx]);
 		if( current_mutation == "" )//no empty mutation allowed
 		{
 			Log::append( "Found Invalid Blank Mutation: " );
@@ -373,61 +388,73 @@ void PreProcessor::erase_rows( string_spread_sheet& spread_sheet, std::vector<in
 std::string PreProcessor::create_mutation_string(const std::string wild_sequence,
 						 const string_spread_sheet_row& row)
 {
-	//check for accidentally passing in header row
-	if( row[0] == "SeqID" )
+  //check for accidentally passing in header row
+  if( row[0] == "SeqID" )
+    {
+      std::string msg = "Passed in header row to create_mutation_string()\nExiting program.";
+      Log::append( msg );
+      std::cerr << msg << std::endl;
+      exit(1);
+    }
+  
+  std::string result = wild_sequence;
+  
+  for (int i = 0; i < row.size(); i++)
+    {
+      // printf("%s", row[i].c_str());
+    }
+  // printf("\n");
+  
+  //copy p1 - p99 into a container in order to zero out index
+  std::vector<std::string> mut_vector;
+  for( int i = PSTART_INDEX; i <= PEND_INDEX; i++ )
+    {
+      std::string mut = row[i];
+      mut_vector.push_back( mut );
+    }
+  
+  //handles difference from the P1-P99 index as 
+  int index_offest = 0;//can be negative or positive
+  
+  for( int pos = 0; pos < mut_vector.size(); pos++ )
+    {
+      std::string mutation = mut_vector[pos];
+      std::string::iterator str_pos_iter = result.begin() + (pos + index_offest);
+      
+      if( mutation == ""  ||
+	  mutation == "." ||
+	  mutation == "-")
 	{
-		std::string msg = "Passed in header row to create_mutation_string()\nExiting program.";
-		Log::append( msg );
-		std::cerr << msg << std::endl;
-		exit(1);
+	  //do nothing
 	}
-
-	std::string result = wild_sequence;
-
-	for (int i = 0; i < row.size(); i++)
-	  {
-	    // printf("%s", row[i].c_str());
+      else if ( mutation == "~" )
+	{
+	  //delete; delete that position at index + index_offest	
+	  result.erase( str_pos_iter );
+	  index_offest--;
+	}
+      else// insertions and substitutions
+	{
+	  int length = mutation.size();
+	  //
+	  // In case of insertion (mutation with a trailing `#'),
+	  // remove the `#' from the mutation, and insert the rest
+	  // after the current amino-acid. Else just replace the old
+	  // aa with the mutation.
+	  //
+	  if (mutation.at(length-1) == '#') {
+	    mutation.erase(length-1);
+	    result.insert(pos+index_offest+1, mutation); //insert new aa(s) after the current position
+	    index_offest += mutation.size()+1;
+	  } else {
+	    result.erase( str_pos_iter );//remove old aa
+	    result.insert( (pos + index_offest), mutation );//insert new aa(s)
+	    index_offest += mutation.size()-1;
 	  }
-	// printf("\n");
-
-	//copy p1 - p99 into a container in order to zero out index
-	std::vector<std::string> mut_vector;
-	for( int i = PSTART_INDEX; i <= PEND_INDEX; i++ )
-	{
-		std::string mut = row[i];
-		mut_vector.push_back( mut );
 	}
-
-	//handles difference from the P1-P99 index as 
-	int index_offest = 0;//can be negative or positive
-
-	for( int pos = 0; pos < mut_vector.size(); pos++ )
-	{
-		std::string mutation = mut_vector[pos];
-		std::string::iterator str_pos_iter = result.begin() + (pos + index_offest);
-		
-		if( mutation == ""  ||
-			mutation == "." ||
-			mutation == "-")
-		{
-			//do nothing
-		}
-		else if ( mutation == "~" )
-		{
-			//delete; delete that position at index + index_offest	
-			result.erase( str_pos_iter );
-			index_offest--;
-		}
-		else//substitutions
-		{
-			result.erase( str_pos_iter );//remove old aa
-			result.insert( (pos + index_offest), mutation );//insert new aa(s)
-			index_offest += mutation.size()-1;
-		}
-
-	}
-
-	return result;
+    }
+  
+  return result;
 }
 
 std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row )
@@ -457,6 +484,7 @@ void PreProcessor::set_P_index(const std::string fname)
 int PreProcessor::is_susceptible(const int drug_column, const string_spread_sheet_row& row, 
 				 const std::vector<double> thresholds )
 {
+
   double fold_strength = boost::lexical_cast<double>( row[drug_column] );
   
   if( thresholds.size() > 2 )
@@ -494,59 +522,17 @@ void PreProcessor::parseInputFiles(
 	)
 {
 
-	std::vector<double> thresholds;
-	thresholds.push_back( resistance_threshold );
-	
-	parseInputFiles(
-		dataset_path,
-		wild_sequence_path,
-		drug,
-		thresholds,
-		preproc_options,
-		output
-		);
-
-//Log::append( "Parsing for drug: " + drug );
-//
-////load spreadsheet
-//string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
-//
-////Log size less header
-//Log::append( "Pre-screening train dataset size: " + boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
-//
-////screen
-//std::vector<int> rows_to_remove_indices = this->screen_drug( drug, spread_sheet );
-//remove_duplicate_entries( drug, wild_sequence_path, spread_sheet, rows_to_remove_indices );
-//
-////clean
-//this->erase_rows( spread_sheet, rows_to_remove_indices );
-//
-////Log size less header
-//Log::append( "Total rows screeded out: " +  boost::lexical_cast<std::string>( rows_to_remove_indices.size() ) );
-//Log::append( "Post-screening train dataset size: " + boost::lexical_cast<std::string>( spread_sheet.size()-1 ) );
-//
-//	//for each row left in spread_sheet. skipping header row
-//	for( int row = 1; row < spread_sheet.size(); row++ )
-//	{
-//		//get data for WU
-//		//id
-//			std::string id = this->find_isolate_name( spread_sheet[row] );
-//		//mutated_seq
-//			std::string wild_seq = this->load_wild_seq( wild_sequence_path );
-//			std::string mut_seq = this->create_mutation_string( wild_seq, spread_sheet[row] );
-//		//resistance
-//			std::vector<double> thresholds;
-//			thresholds.push_back( resistance_threshold );
-//
-//			int fold_col = this->find_drug_fold_col( drug, spread_sheet );
-//			bool susceptible = this->is_susceptible( fold_col, spread_sheet[row], thresholds );
-//
-//		//create new WU 
-//		PreProcWorkUnit* wu = new PreProcWorkUnit( id, mut_seq, susceptible );
-//
-//		//add new WU to output set
-//		output.push_back( wu );
-//	}//end loop
+  std::vector<double> thresholds;
+  thresholds.push_back( resistance_threshold );
+  
+  parseInputFiles(
+		  dataset_path,
+		  wild_sequence_path,
+		  drug,
+		  thresholds,
+		  preproc_options,
+		  output
+		  );
 }
 
 //TODO DRY (remove single threshold version)
@@ -661,7 +647,7 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
   ////sort least to highest
   //std::sort( resistance_thresholds.begin(), resistance_thresholds.end(), std::less<double>() );
   
-  Log::append( "Parsing for drug: " + drug );
+  Log::append( "Parsing for drug " + drug );
   
   //load spreadsheet
   string_spread_sheet	spread_sheet = this->load_spread_sheet( dataset_path );
@@ -697,6 +683,7 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
   //for each row left in spread_sheet. 
   for( int row = 1; row < spread_sheet.size(); row++ )
     {
+      //printf("Analyzing row %d...\n", row);
       //if current row is NOT in rows to be removed
       if( std::count( rows_to_remove_indices.begin(), rows_to_remove_indices.end(), row ) == 0 )
 	{
@@ -729,6 +716,7 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
 	}
       
     }//end loop
+  Log::append( "Parsing completed.");
 }
 
 void PreProcessor::split_input_into_training_and_testing( const string_spread_sheet& spread_sheet,
