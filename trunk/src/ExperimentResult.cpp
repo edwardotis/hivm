@@ -1,5 +1,6 @@
 #include "ExperimentResult.hpp"
 #include "Log.hpp"
+#include "stdlib.h"
 
 ExperimentResult::ExperimentResult()
 {}
