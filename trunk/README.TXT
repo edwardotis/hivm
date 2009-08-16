@@ -181,9 +181,20 @@ any reason, use this command:
 Run src/build_libs.bat
 
 HIVM Build Instructions:
-Open hivm.sln in MS Visual Studio.(Created with v7.1)
+Open hivm.sln in MS Visual Studio.(Created with v7.1 aka MS Visual Studio 2003)
 Choose Release version of the hivm project and build.
 Copy Release/hivm.exe into samples/windows/
+
+Note: MS Visual Studio 2008 users.
+If you let MS Visual Studio 2008 update the sln file, you need to do manually update the referenced boost unit test library.
+These are located in: hivm\src\3rd_party\boost\lib
+
+Instructions after opening the MS sln file:
+Right Click the 'testhivm' project. 
+
+Goto Properties. Select Configuration: All Configurations
+Open Linker > Input > Additional Dependencies.
+Change 'libboost_unit_test_framework-vc71-mt-sgd-1_33_1.lib' to 'libboost_unit_test_framework-vc80-mt-sgd-1_33_1.lib'
 
 Run:
 Open a drug script. like IDV.bat
