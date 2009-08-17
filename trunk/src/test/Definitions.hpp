@@ -4,28 +4,36 @@ Repository of definitions
 
 //Run full regression tests using every possible test available
 //except for ones listed under ISOLATION TESTS
-#define TEST_ALL
+//#define TEST_ALL
 
 //Run unit tests that take a long time in various test files
-#define LONG_TESTS	
+//#define LONG_TESTS	
 
 //Individual unit test files to run
 ////
-//#define BOOST_TEST
-//#define FILEIO_TEST
-//#define STL_TEST
-//#define PREPROCESSOR_TEST 
-//#define DPL_TEST
-//#define SVMWORKUNIT_TEST
-//#define BIOPROCESSOR_TEST
+#define BOOST_TEST
+#define FILEIO_TEST
+#define STL_TEST
+#define DPL_TEST
+#define SVMWORKUNIT_TEST
+#define PREPROCWORKUNIT_TEST 
+#define EXPERIMENTRESULT_TEST // located in PREPROCWORKUNIT_TEST
+
+//Partially failing
+#define PREPROCESSOR_TEST 
+
+#define BIOPROCESSOR_TEST
+#define OPTIONS_TEST
+
+//Failing
 //#define LIBSVMADAPTER_TEST 
+
 //#define SVMMACHINE_TEST//param search is medium long
-#define EXPERIMENTANALYZER_TEST
-//#define PREPROCWORKUNIT_TEST 
-//#define EXPERIMENTRESULT_TEST // located in PREPROCWORKUNIT_TEST
+//#define EXPERIMENTANALYZER_TEST
+
 //#define CROSSVALIDATIONEXPERIMENTTEST_TEST
 //#define VALIDATIONEXPERIMENTTEST_TEST // located in VALIDATIONEXPERIMENTTEST_TEST
-//#define OPTIONS_TEST
+
 
 //not a unit test. just a hack before putting in
 //cmd line parser
