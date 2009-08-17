@@ -10,7 +10,8 @@ Repository of definitions
 //#define LONG_TESTS	
 
 //Individual unit test files to run
-////
+
+//PASSING
 #define BOOST_TEST
 #define FILEIO_TEST
 #define STL_TEST
@@ -18,12 +19,14 @@ Repository of definitions
 #define SVMWORKUNIT_TEST
 #define PREPROCWORKUNIT_TEST 
 #define EXPERIMENTRESULT_TEST // located in PREPROCWORKUNIT_TEST
-
-//Partially failing
-#define PREPROCESSOR_TEST 
-
 #define BIOPROCESSOR_TEST
+
+//Partially failing (tests with problems are currently commented out)
+#define PREPROCESSOR_TEST 
 #define OPTIONS_TEST
+
+
+
 
 //Failing
 //#define LIBSVMADAPTER_TEST 

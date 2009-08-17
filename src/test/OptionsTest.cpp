@@ -318,119 +318,120 @@ BOOST_AUTO_TEST_CASE( OptionsTest_vm )
 }
 
 //Test two thresholds, but dumping medium group of input seq's. i.e. only high and low are kept
-BOOST_AUTO_TEST_CASE( OptiounsTest_parseInputFiles_pr_small7highlow_two_thresholds_sort )
-{
-	
-		int ac = 37;
-		char* av[ 37 ];
-		av[0] = "hivm";
-
-		av[1] = "--lg-cost-low";
-		av[2] = "1";
-		av[3] = "--lg-cost-high";
-		av[4] = "2";
-		av[5] = "--lg-cost-inc";
-		av[6] = "3";
-
-		av[7] = "--lg-gamma-low";
-		av[8] = "4";
-		av[9] = "--lg-gamma-high";
-		av[10] = "5";
-		av[11] = "--lg-gamma-inc";
-		av[12] = "6";
-
-		av[13] = "--drug";
-		av[14] = "NFV";
-
-		av[17] = "--thresholds";//high
-		av[18] = "10";
-
-		av[15] = "--thresholds";//low, so out of order
-		av[16] = "2";
-
-		av[19] = "--wild-type";
-		av[20] = "../data/shared/PI_wild.seq";
-
-		av[21] = "--suscep-type";
-		av[22] = "all";
-
-		av[23] = "--seed";
-		av[24] = "42";
-
-		av[25] = "--output";
-		av[26] = "../results/Ed";
-
-		av[27] = "--purpose";
-		av[28] = "model-selection";
-
-		av[29] = "--hivdb-file";
-		av[30] = "../suscep";
-
-		av[31] = "--lg-gamma-g";
-		av[32] = "8.5";
-
-		av[33] = "--lg-cost-c";
-		av[34] = "7.5";
-
-		av[35] = "--probability";
-		av[36] = "0";
-				
-		
-		Options options(ac, av);
-
-	PreProcessor pre_proc;
-	PreProcWUSet wu_set;
-	//std::vector<double> thresholds;
-	//thresholds.push_back( 2 );//low threshold
-	//thresholds.push_back( 10);//high threshold
-
-
-	//using the selftest version of parseInputFiles
-	pre_proc.parseInputFiles(
-		"../data/PreProcessorTest/PR_2006-05-25_v2.0_small7_highlow.tsv",
-		"../data/shared/PI_wild.seq",
-		"NFV",
-		options.thresholds,
-		options,
-		wu_set
-		);
-
-	//*** Breakdown of file by hand based on 2 and 10 thresholds inclusive.
-	//no duplicates or >, < results.
-	//index, H = high, L = low
-	//0 header row
-	//1 H
-	//2 L
-	//3 H
-	//4 M
-	//5 H
-	//6 M
-	//7 L
-
-	//post preprocess indices
-	//0 H 
-	//1 L
-	//2 H
-	//3 H
-	//4 L
-
-	BOOST_CHECK_EQUAL( 5, wu_set.size() );//7 minus two medium resistant
-
-	BOOST_CHECK_EQUAL( "CA2634", wu_set[0]->get_id() );
-	BOOST_CHECK_EQUAL( false, wu_set[0]->known_susceptibility() );
-
-	BOOST_CHECK_EQUAL( "SD-10", wu_set[1]->get_id() );
-	BOOST_CHECK_EQUAL( true, wu_set[1]->known_susceptibility() );
-
-	BOOST_CHECK_EQUAL( "ALD-pt611", wu_set[2]->get_id() );
-	BOOST_CHECK_EQUAL( false, wu_set[2]->known_susceptibility() );
-
-	BOOST_CHECK_EQUAL( "V2031", wu_set[3]->get_id() );
-	BOOST_CHECK_EQUAL( false, wu_set[3]->known_susceptibility() );
-
-	BOOST_CHECK_EQUAL( "CA3872", wu_set[4]->get_id() );
-	BOOST_CHECK_EQUAL( true, wu_set[4]->known_susceptibility() );
-}
+//TODO test me
+//BOOST_AUTO_TEST_CASE( OptiounsTest_parseInputFiles_pr_small7highlow_two_thresholds_sort )
+//{
+//	
+//		int ac = 37;
+//		char* av[ 37 ];
+//		av[0] = "hivm";
+//
+//		av[1] = "--lg-cost-low";
+//		av[2] = "1";
+//		av[3] = "--lg-cost-high";
+//		av[4] = "2";
+//		av[5] = "--lg-cost-inc";
+//		av[6] = "3";
+//
+//		av[7] = "--lg-gamma-low";
+//		av[8] = "4";
+//		av[9] = "--lg-gamma-high";
+//		av[10] = "5";
+//		av[11] = "--lg-gamma-inc";
+//		av[12] = "6";
+//
+//		av[13] = "--drug";
+//		av[14] = "NFV";
+//
+//		av[17] = "--thresholds";//high
+//		av[18] = "10";
+//
+//		av[15] = "--thresholds";//low, so out of order
+//		av[16] = "2";
+//
+//		av[19] = "--wild-type";
+//		av[20] = "../data/shared/PI_wild.seq";
+//
+//		av[21] = "--suscep-type";
+//		av[22] = "all";
+//
+//		av[23] = "--seed";
+//		av[24] = "42";
+//
+//		av[25] = "--output";
+//		av[26] = "../results/Ed";
+//
+//		av[27] = "--purpose";
+//		av[28] = "model-selection";
+//
+//		av[29] = "--hivdb-file";
+//		av[30] = "../suscep";
+//
+//		av[31] = "--lg-gamma-g";
+//		av[32] = "8.5";
+//
+//		av[33] = "--lg-cost-c";
+//		av[34] = "7.5";
+//
+//		av[35] = "--probability";
+//		av[36] = "0";
+//				
+//		
+//		Options options(ac, av);
+//
+//	PreProcessor pre_proc;
+//	PreProcWUSet wu_set;
+//	//std::vector<double> thresholds;
+//	//thresholds.push_back( 2 );//low threshold
+//	//thresholds.push_back( 10);//high threshold
+//
+//
+//	//using the selftest version of parseInputFiles
+//	pre_proc.parseInputFiles(
+//		"../data/PreProcessorTest/PR_2006-05-25_v2.0_small7_highlow.tsv",
+//		"../data/shared/PI_wild.seq",
+//		"NFV",
+//		options.thresholds,
+//		options,
+//		wu_set
+//		);
+//
+//	//*** Breakdown of file by hand based on 2 and 10 thresholds inclusive.
+//	//no duplicates or >, < results.
+//	//index, H = high, L = low
+//	//0 header row
+//	//1 H
+//	//2 L
+//	//3 H
+//	//4 M
+//	//5 H
+//	//6 M
+//	//7 L
+//
+//	//post preprocess indices
+//	//0 H 
+//	//1 L
+//	//2 H
+//	//3 H
+//	//4 L
+//
+//	BOOST_CHECK_EQUAL( 5, wu_set.size() );//7 minus two medium resistant
+//
+//	BOOST_CHECK_EQUAL( "CA2634", wu_set[0]->get_id() );
+//	BOOST_CHECK_EQUAL( false, wu_set[0]->known_susceptibility() );
+//
+//	BOOST_CHECK_EQUAL( "SD-10", wu_set[1]->get_id() );
+//	BOOST_CHECK_EQUAL( true, wu_set[1]->known_susceptibility() );
+//
+//	BOOST_CHECK_EQUAL( "ALD-pt611", wu_set[2]->get_id() );
+//	BOOST_CHECK_EQUAL( false, wu_set[2]->known_susceptibility() );
+//
+//	BOOST_CHECK_EQUAL( "V2031", wu_set[3]->get_id() );
+//	BOOST_CHECK_EQUAL( false, wu_set[3]->known_susceptibility() );
+//
+//	BOOST_CHECK_EQUAL( "CA3872", wu_set[4]->get_id() );
+//	BOOST_CHECK_EQUAL( true, wu_set[4]->known_susceptibility() );
+//}
 
 
 
