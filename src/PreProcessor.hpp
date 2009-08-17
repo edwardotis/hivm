@@ -24,10 +24,7 @@ public:
   //default constructor
   PreProcessor();	
   //
-  // Determine and set offsets of start and end mutation columns
-  // (P-columns) by parsing header row of input file.
-  //
-  void set_P_index(const std::string fname);
+
   //@purpose load hivdb dataset from file
   //@pre seq file are in HIVDB dataset format
   string_spread_sheet load_spread_sheet( const std::string input_path );
@@ -101,6 +98,10 @@ tests on it after all cross validation
 
 private:
 
+  // Determine and set PreProcessor state variables containging offsets of start and end mutation columns
+  // (P-columns) by parsing header row of input file.
+  //
+  void set_P_index(const string_spread_sheet& spread_sheet);
 
 	//@purpose load sequence from file
 	//@pre seq file are in FASTA format

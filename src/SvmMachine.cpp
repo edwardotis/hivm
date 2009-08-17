@@ -80,7 +80,7 @@ void SvmMachine::model_select( Options& options )
 	//
 	// parse header row to determine P1_INDEX, P99_INDEX.
 	//
-	p.set_P_index(options.susceptibility_file);
+//	p.set_P_index(options.susceptibility_file);
 	if( options.use_entire_susceptbility_file == 0 )
 	{
 		p.parseInputFiles(
@@ -149,7 +149,7 @@ void SvmMachine::model_validate( const Options& options )
 	//
 	// parse header row to determine P1_INDEX.
 	//
-	p.set_P_index(options.susceptibility_file);
+//	p.set_P_index(options.susceptibility_file);
 	if( options.susceptibility_file_test_dataset == "N/A" )//split susceptibility file with seed. 
 	{
 		p.parseInputFiles(

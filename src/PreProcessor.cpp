@@ -37,6 +37,7 @@ PreProcessor::~PreProcessor()
 
 string_spread_sheet  PreProcessor::load_spread_sheet( const std::string input_path )
 {
+
 	std::string input;
 	try
 	{
@@ -46,7 +47,7 @@ string_spread_sheet  PreProcessor::load_spread_sheet( const std::string input_pa
 	{
 		std::cout << e.what() << std::endl;
 		Log::append( "Error in: " );
-		Log::append( "vspread_sheet  PreProcessor::load_vspread_sheet( const std::string input_path )");
+		Log::append( "vspread_sheet  PreProcessor::load_spread_sheet( const std::string input_path )");
 		Log::append( e.what() );
 	}
 	//count new lines
@@ -100,6 +101,8 @@ string_spread_sheet  PreProcessor::load_spread_sheet( const std::string input_pa
 		//tokenize columns, enter into spread sheet
 		tokenize_columns( line, cur_row, spread_sheet );
 	}
+
+	set_P_index(spread_sheet);
 
 	return spread_sheet;
 }
@@ -353,6 +356,19 @@ bool PreProcessor::are_invalid_mutations( const spread_sheet_row_const_iterator&
 
 }
 
+/**
+Pass in a string of amino acids, and return a randomly selected single amino acid from that param
+Randomness is statictly seeded, so the method will repeatably always return same aa from a given string of aa's
+@param aas amino acid string
+@return single amino acid
+*/
+ char pickRandomAA( std::string aas){
+	RandInt Rand( 52 );
+	int rangeHigh = aas.length()-1 ;
+    unsigned int randomPosition = Rand( 0, rangeHigh );
+	return aas.at(randomPosition);
+}
+
 void PreProcessor::erase_rows( string_spread_sheet& spread_sheet, std::vector<int>& rows_to_delete )
 {
 	string_spread_sheet temp_sheet;
@@ -446,16 +462,39 @@ std::string PreProcessor::create_mutation_string(const std::string wild_sequence
 	    mutation.erase(length-1);
 	    result.insert(pos+index_offest+1, mutation); //insert new aa(s) after the current position
 	    index_offest += mutation.size()+1;
-	  } else {
+	  } else {//substitution
+	  //Updating this code to handle aa mixture's properly. They should result in single substitution, not multiple substitution.
 	    result.erase( str_pos_iter );//remove old aa
-	    result.insert( (pos + index_offest), mutation );//insert new aa(s)
-	    index_offest += mutation.size()-1;
+		if(length >= 2){
+			if(length>2){
+			  Log::append("Found a mutation mixture > 2 aa's: " + mutation + "\n"  );
+			  //just use first aa found in this case for now.
+			 }else if(length==2){
+					//Log::append("Found a mutation mixture of size 2 aa's: " + mutation + "\n"  );	
+			}
+				    //Randomly select one of the aa's from the aa mixture substitution
+			std::string rndMixtureAA = "";
+			rndMixtureAA.push_back(pickRandomAA(mutation));
+
+			if(rndMixtureAA.length() != 1){
+				std::cerr <<"Error inserting amino acid mixture!\n";
+			}
+			//Log::append("Inserting randomly selected aa out of the mutation mixture: " + rndMixtureAA);
+			result.insert( (pos + index_offest), rndMixtureAA );//insert new aa
+		}else{//length == 1 (usual case)
+			if(mutation.length() != 1){
+				std::cerr <<"Error inserting amino acid!\n";
+			}
+			result.insert( (pos + index_offest), mutation );//insert new aa  
+		}
+	    //index_offest += mutation.size()-1;
 	  }
 	}
     }
   
   return result;
 }
+
 
 std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row )
 {
@@ -466,11 +505,12 @@ std::string PreProcessor::find_isolate_name( const string_spread_sheet_row& row 
 // Determine and set offsets of first and last mutation column (`P
 // columns') by parsing header row of input file.
 //
-void PreProcessor::set_P_index(const std::string fname)
+//void PreProcessor::set_P_index(const std::string fname)
+void PreProcessor::set_P_index(const string_spread_sheet& spread_sheet)
 {
   int i;
   
-  string_spread_sheet spread_sheet = this->load_spread_sheet(fname);
+  //string_spread_sheet spread_sheet = this->load_spread_sheet(fname);
   string_spread_sheet_row row = spread_sheet[0];
   for (i = 0; i < row.size(); i++)
     {
