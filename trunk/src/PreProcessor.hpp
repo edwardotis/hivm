@@ -120,6 +120,7 @@ private:
 	//@purpose remove rows where drug has no test result or result is outside assay limits
 	//@ref: http://hivdb.stanford.edu/cgi-bin/GenoPhenoDS.cgi
 	//@pre  spread sheet has been loaded with HIVDB dataset
+	//@pre spread sheet contains a header row
 	//@post spread sheet doesn't change contents
 	//@post returns a container of indices to rows that should be removed
 	std::vector<int> screen_drug ( const std::string drug, const string_spread_sheet& );

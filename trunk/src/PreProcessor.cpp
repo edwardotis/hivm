@@ -236,14 +236,19 @@ std::vector<int> PreProcessor::screen_drug ( const std::string drug, const strin
       invalid_drug_fold = is_invalid_drug_fold(row_it, drug_fold_col);
       invalid_drug_foldmatch = is_invalid_drug_foldmatch(row_it, drug_fold_col+1);
       invalid_mutation = are_invalid_mutations(row_it);
-      if (invalid_drug_fold)
-	invalid_drug_fold_cntr++;
-      if (invalid_drug_foldmatch)
-	invalid_drug_foldmatch_cntr++;
-      if (invalid_mutation)
-	invalid_mutation_cntr++;
-      if(invalid_drug_fold || invalid_drug_foldmatch || invalid_mutation)
-	rows_to_remove.push_back(row);
+	  if (invalid_drug_fold){
+		invalid_drug_fold_cntr++;
+	  }    
+	  if (invalid_drug_foldmatch){
+		invalid_drug_foldmatch_cntr++;
+	  }
+	  if (invalid_mutation){
+		invalid_mutation_cntr++;
+	  }
+
+	  if(invalid_drug_fold || invalid_drug_foldmatch || invalid_mutation){
+		rows_to_remove.push_back(row);
+	  }
     }
   rr = rows_to_remove.size(); // for debugging
   printf("rows to remove: %d\n", rr);

@@ -1,61 +1,79 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="testhivm"
 	ProjectGUID="{AC149450-1B09-475E-B5BC-4C4FB6E859FA}"
 	RootNamespace="testhivm"
-	Keyword="ManagedCProj">
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="$(ConfigurationName)/obj"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="0"
-				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="0"
-				EnableIntrinsicFunctions="FALSE"
-				ImproveFloatingPointConsistency="FALSE"
+				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="0"
-				OmitFramePointers="FALSE"
-				EnableFiberSafeOptimizations="FALSE"
-				OptimizeForProcessor="0"
-				OptimizeForWindowsApplication="FALSE"
+				OmitFramePointers="false"
+				EnableFiberSafeOptimizations="false"
 				AdditionalIncludeDirectories="$(SolutionDir)\src\3rd_party\boost\include\boost-1_33_1"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;UNIT_TESTING"
-				IgnoreStandardIncludePath="FALSE"
+				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
-				KeepComments="FALSE"
-				StringPooling="FALSE"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="TRUE"
+				KeepComments="false"
+				StringPooling="false"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
-				SmallerTypeCheck="FALSE"
+				SmallerTypeCheck="false"
 				RuntimeLibrary="1"
 				StructMemberAlignment="0"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="0"
-				DisableLanguageExtensions="FALSE"
-				DefaultCharIsUnsigned="FALSE"
-				TreatWChar_tAsBuiltInType="FALSE"
-				ForceConformanceInForLoopScope="FALSE"
-				RuntimeTypeInfo="TRUE"
+				DisableLanguageExtensions="false"
+				DefaultCharIsUnsigned="false"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile=""
-				ExpandAttributedSource="FALSE"
+				ExpandAttributedSource="false"
 				AssemblerOutput="0"
 				AssemblerListingLocation=""
 				ObjectFile="$(IntDir)/"
@@ -63,32 +81,40 @@
 				BrowseInformation="0"
 				BrowseInformationFile=""
 				WarningLevel="3"
-				WarnAsError="FALSE"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="TRUE"
+				WarnAsError="false"
+				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 				CallingConvention="0"
 				CompileAs="0"
 				DisableSpecificWarnings=""
 				ForcedIncludeFiles=""
 				ForcedUsingFiles=""
-				ShowIncludes="FALSE"
+				ShowIncludes="false"
 				UndefinePreprocessorDefinitions=""
-				UndefineAllPreprocessorDefinitions="FALSE"/>
+				UndefineAllPreprocessorDefinitions="false"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				RegisterOutput="FALSE"
-				IgnoreImportLibrary="FALSE"
-				AdditionalDependencies="libboost_unit_test_framework-vc71-mt-sgd-1_33_1.lib"
+				RegisterOutput="false"
+				IgnoreImportLibrary="false"
+				AdditionalDependencies="libboost_unit_test_framework-vc80-mt-sgd-1_33_1.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/testhivm.exe"
 				Version=""
 				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)src\3rd_party\boost\lib;"
-				IgnoreAllDefaultLibraries="FALSE"
+				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=""
 				AddModuleNamesToAssembly=""
@@ -96,18 +122,17 @@
 				ForceSymbolReferences=""
 				DelayLoadDLLs=""
 				MidlCommandFile=""
-				IgnoreEmbeddedIDL="FALSE"
+				IgnoreEmbeddedIDL="false"
 				MergedIDLBaseFileName=""
 				TypeLibraryFile=""
 				TypeLibraryResourceID="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				AssemblyDebug="0"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				StripPrivateSymbols=""
-				GenerateMapFile="FALSE"
+				GenerateMapFile="false"
 				MapFileName=""
-				MapExports="FALSE"
-				MapLines="FALSE"
+				MapExports="false"
 				SubSystem="1"
 				HeapReserveSize="0"
 				HeapCommitSize="0"
@@ -115,89 +140,106 @@
 				StackCommitSize="0"
 				LargeAddressAware="0"
 				TerminalServerAware="0"
-				SwapRunFromCD="FALSE"
-				SwapRunFromNet="FALSE"
+				SwapRunFromCD="false"
+				SwapRunFromNet="false"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				OptimizeForWindows98="0"
 				FunctionOrder=""
 				EntryPointSymbol=""
-				ResourceOnlyDLL="FALSE"
-				SetChecksum="FALSE"
+				ResourceOnlyDLL="false"
+				SetChecksum="false"
 				BaseAddress=""
-				TurnOffAssemblyGeneration="FALSE"
-				SupportUnloadOfDelayLoadedDLL="FALSE"
+				RandomizedBaseAddress="1"
+				FixedBaseAddress="0"
+				DataExecutionPrevention="0"
+				TurnOffAssemblyGeneration="false"
+				SupportUnloadOfDelayLoadedDLL="false"
 				ImportLibrary=""
 				MergeSections=""
 				TargetMachine="1"
-				FixedBaseAddress="0"/>
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Autorun: Unit Test Output"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Description="Autorun: Unit Test Output"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="$(ConfigurationName)/obj"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="2"
-				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="FALSE"
-				ImproveFloatingPointConsistency="FALSE"
+				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="0"
-				OmitFramePointers="FALSE"
-				EnableFiberSafeOptimizations="FALSE"
-				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="FALSE"
+				OmitFramePointers="false"
+				EnableFiberSafeOptimizations="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\3rd_party\boost\include\boost-1_33_1&quot;"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;UNIT_TESTING"
-				IgnoreStandardIncludePath="FALSE"
+				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
-				KeepComments="FALSE"
-				StringPooling="FALSE"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="TRUE"
+				KeepComments="false"
+				StringPooling="false"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="0"
-				SmallerTypeCheck="FALSE"
+				SmallerTypeCheck="false"
 				RuntimeLibrary="1"
 				StructMemberAlignment="0"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="0"
-				DisableLanguageExtensions="FALSE"
-				DefaultCharIsUnsigned="FALSE"
-				TreatWChar_tAsBuiltInType="FALSE"
-				ForceConformanceInForLoopScope="FALSE"
-				RuntimeTypeInfo="TRUE"
+				DisableLanguageExtensions="false"
+				DefaultCharIsUnsigned="false"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile=""
-				ExpandAttributedSource="FALSE"
+				ExpandAttributedSource="false"
 				AssemblerOutput="0"
 				AssemblerListingLocation=""
 				ObjectFile="$(IntDir)/"
@@ -205,32 +247,40 @@
 				BrowseInformation="0"
 				BrowseInformationFile=""
 				WarningLevel="3"
-				WarnAsError="FALSE"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="TRUE"
+				WarnAsError="false"
+				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 				CallingConvention="0"
 				CompileAs="0"
 				DisableSpecificWarnings=""
 				ForcedIncludeFiles=""
 				ForcedUsingFiles=""
-				ShowIncludes="FALSE"
+				ShowIncludes="false"
 				UndefinePreprocessorDefinitions=""
-				UndefineAllPreprocessorDefinitions="FALSE"/>
+				UndefineAllPreprocessorDefinitions="false"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				RegisterOutput="FALSE"
-				IgnoreImportLibrary="FALSE"
-				AdditionalDependencies="libboost_unit_test_framework-vc71-mt-sgd-1_33_1.lib"
+				RegisterOutput="false"
+				IgnoreImportLibrary="false"
+				AdditionalDependencies="libboost_unit_test_framework-vc80-mt-sgd-1_33_1.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				Version=""
 				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)src\3rd_party\boost\lib;"
-				IgnoreAllDefaultLibraries="FALSE"
+				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=""
 				AddModuleNamesToAssembly=""
@@ -238,18 +288,17 @@
 				ForceSymbolReferences=""
 				DelayLoadDLLs=""
 				MidlCommandFile=""
-				IgnoreEmbeddedIDL="FALSE"
+				IgnoreEmbeddedIDL="false"
 				MergedIDLBaseFileName=""
 				TypeLibraryFile=""
 				TypeLibraryResourceID="1"
-				GenerateDebugInformation="FALSE"
+				GenerateDebugInformation="false"
 				AssemblyDebug="0"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				StripPrivateSymbols=""
-				GenerateMapFile="FALSE"
+				GenerateMapFile="false"
 				MapFileName=""
-				MapExports="FALSE"
-				MapLines="FALSE"
+				MapExports="false"
 				SubSystem="1"
 				HeapReserveSize="0"
 				HeapCommitSize="0"
@@ -257,88 +306,105 @@
 				StackCommitSize="0"
 				LargeAddressAware="0"
 				TerminalServerAware="0"
-				SwapRunFromCD="FALSE"
-				SwapRunFromNet="FALSE"
+				SwapRunFromCD="false"
+				SwapRunFromNet="false"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				OptimizeForWindows98="0"
 				FunctionOrder=""
 				EntryPointSymbol=""
-				ResourceOnlyDLL="FALSE"
-				SetChecksum="FALSE"
+				ResourceOnlyDLL="false"
+				SetChecksum="false"
 				BaseAddress=""
-				TurnOffAssemblyGeneration="FALSE"
-				SupportUnloadOfDelayLoadedDLL="FALSE"
+				RandomizedBaseAddress="1"
+				FixedBaseAddress="0"
+				DataExecutionPrevention="0"
+				TurnOffAssemblyGeneration="false"
+				SupportUnloadOfDelayLoadedDLL="false"
 				ImportLibrary=""
 				MergeSections=""
 				TargetMachine="1"
-				FixedBaseAddress="0"/>
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_with_Visual_Leak_Detector|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)/obj"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions=""
 				Optimization="0"
-				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="0"
-				EnableIntrinsicFunctions="FALSE"
-				ImproveFloatingPointConsistency="FALSE"
+				EnableIntrinsicFunctions="false"
 				FavorSizeOrSpeed="0"
-				OmitFramePointers="FALSE"
-				EnableFiberSafeOptimizations="FALSE"
-				OptimizeForProcessor="0"
-				OptimizeForWindowsApplication="FALSE"
+				OmitFramePointers="false"
+				EnableFiberSafeOptimizations="false"
 				AdditionalIncludeDirectories="$(SolutionDir)\src\3rd_party\boost\include\boost-1_33_1"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;VISUAL_LEAK_DETECTOR;UNIT_TESTING"
-				IgnoreStandardIncludePath="FALSE"
+				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
-				KeepComments="FALSE"
-				StringPooling="FALSE"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="TRUE"
+				KeepComments="false"
+				StringPooling="false"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
-				SmallerTypeCheck="FALSE"
+				SmallerTypeCheck="false"
 				RuntimeLibrary="1"
 				StructMemberAlignment="0"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="false"
 				EnableEnhancedInstructionSet="0"
-				DisableLanguageExtensions="FALSE"
-				DefaultCharIsUnsigned="FALSE"
-				TreatWChar_tAsBuiltInType="FALSE"
-				ForceConformanceInForLoopScope="FALSE"
-				RuntimeTypeInfo="TRUE"
+				DisableLanguageExtensions="false"
+				DefaultCharIsUnsigned="false"
+				TreatWChar_tAsBuiltInType="false"
+				ForceConformanceInForLoopScope="false"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile=""
-				ExpandAttributedSource="FALSE"
+				ExpandAttributedSource="false"
 				AssemblerOutput="0"
 				AssemblerListingLocation=""
 				ObjectFile="$(IntDir)/"
@@ -346,32 +412,40 @@
 				BrowseInformation="0"
 				BrowseInformationFile=""
 				WarningLevel="3"
-				WarnAsError="FALSE"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="TRUE"
+				WarnAsError="false"
+				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 				CallingConvention="0"
 				CompileAs="0"
 				DisableSpecificWarnings=""
 				ForcedIncludeFiles=""
 				ForcedUsingFiles=""
-				ShowIncludes="FALSE"
+				ShowIncludes="false"
 				UndefinePreprocessorDefinitions=""
-				UndefineAllPreprocessorDefinitions="FALSE"/>
+				UndefineAllPreprocessorDefinitions="false"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				RegisterOutput="FALSE"
-				IgnoreImportLibrary="FALSE"
-				AdditionalDependencies="libboost_unit_test_framework-vc71-mt-sgd-1_33_1.lib"
+				RegisterOutput="false"
+				IgnoreImportLibrary="false"
+				AdditionalDependencies="libboost_unit_test_framework-vc80-mt-sgd-1_33_1.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/testhivm.exe"
 				Version=""
 				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)src\3rd_party\boost\lib;"
-				IgnoreAllDefaultLibraries="FALSE"
+				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=""
 				AddModuleNamesToAssembly=""
@@ -379,18 +453,17 @@
 				ForceSymbolReferences=""
 				DelayLoadDLLs=""
 				MidlCommandFile=""
-				IgnoreEmbeddedIDL="FALSE"
+				IgnoreEmbeddedIDL="false"
 				MergedIDLBaseFileName=""
 				TypeLibraryFile=""
 				TypeLibraryResourceID="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				AssemblyDebug="0"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				StripPrivateSymbols=""
-				GenerateMapFile="FALSE"
+				GenerateMapFile="false"
 				MapFileName=""
-				MapExports="FALSE"
-				MapLines="FALSE"
+				MapExports="false"
 				SubSystem="1"
 				HeapReserveSize="0"
 				HeapCommitSize="0"
@@ -398,43 +471,47 @@
 				StackCommitSize="0"
 				LargeAddressAware="0"
 				TerminalServerAware="0"
-				SwapRunFromCD="FALSE"
-				SwapRunFromNet="FALSE"
+				SwapRunFromCD="false"
+				SwapRunFromNet="false"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
 				OptimizeForWindows98="0"
 				FunctionOrder=""
 				EntryPointSymbol=""
-				ResourceOnlyDLL="FALSE"
-				SetChecksum="FALSE"
+				ResourceOnlyDLL="false"
+				SetChecksum="false"
 				BaseAddress=""
-				TurnOffAssemblyGeneration="FALSE"
-				SupportUnloadOfDelayLoadedDLL="FALSE"
+				RandomizedBaseAddress="1"
+				FixedBaseAddress="0"
+				DataExecutionPrevention="0"
+				TurnOffAssemblyGeneration="false"
+				SupportUnloadOfDelayLoadedDLL="false"
 				ImportLibrary=""
 				MergeSections=""
 				TargetMachine="1"
-				FixedBaseAddress="0"/>
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Autorun: Unit Test Output"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Description="Autorun: Unit Test Output"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -443,202 +520,262 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<File
-				RelativePath="..\BioProcessor.cpp">
+				RelativePath="..\BioProcessor.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\CrossValidationExperiment.cpp">
+				RelativePath="..\CrossValidationExperiment.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\dpl.cpp">
+				RelativePath="..\dpl.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\ExperimentAnalyzer.cpp">
+				RelativePath="..\ExperimentAnalyzer.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\ExperimentResult.cpp">
+				RelativePath="..\ExperimentResult.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\FileIO.cpp">
+				RelativePath="..\FileIO.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Hash.cpp">
+				RelativePath="..\Hash.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\LibSvmAdapter.cpp">
+				RelativePath="..\LibSvmAdapter.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Log.cpp">
+				RelativePath="..\Log.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Options.cpp">
+				RelativePath="..\Options.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\PreProcessor.cpp">
+				RelativePath="..\PreProcessor.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\PreProcWorkUnit.cpp">
+				RelativePath="..\PreProcWorkUnit.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\svm.cpp">
+				RelativePath="..\svm.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\SvmMachine.cpp">
+				RelativePath="..\SvmMachine.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\SvmWorkUnit.cpp">
+				RelativePath="..\SvmWorkUnit.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\ValidationExperiment.cpp">
+				RelativePath="..\ValidationExperiment.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath="..\BioProcessor.hpp">
+				RelativePath="..\BioProcessor.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\CrossValidationExperiment.hpp">
+				RelativePath="..\CrossValidationExperiment.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\dpl.h">
+				RelativePath="..\dpl.h"
+				>
 			</File>
 			<File
-				RelativePath="..\ExperimentAnalyzer.hpp">
+				RelativePath="..\ExperimentAnalyzer.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\ExperimentResult.hpp">
+				RelativePath="..\ExperimentResult.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\FileIO.hpp">
+				RelativePath="..\FileIO.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Hash.hpp">
+				RelativePath="..\Hash.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\LibSvmAdapter.hpp">
+				RelativePath="..\LibSvmAdapter.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\LibSvmFacade.h">
+				RelativePath="..\LibSvmFacade.h"
+				>
 			</File>
 			<File
-				RelativePath="..\Log.hpp">
+				RelativePath="..\Log.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Options.hpp">
+				RelativePath="..\Options.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\PreProcessor.hpp">
+				RelativePath="..\PreProcessor.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\PreProcWorkUnit.hpp">
+				RelativePath="..\PreProcWorkUnit.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\svm.h">
+				RelativePath="..\svm.h"
+				>
 			</File>
 			<File
-				RelativePath="..\SvmMachine.hpp">
+				RelativePath="..\SvmMachine.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\SvmWorkUnit.hpp">
+				RelativePath="..\SvmWorkUnit.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\Types.hpp">
+				RelativePath="..\Types.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\ValidationExperiment.hpp">
+				RelativePath="..\ValidationExperiment.hpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 		</Filter>
 		<Filter
 			Name="Test Files"
-			Filter="">
+			>
 			<File
-				RelativePath=".\BioProcessorTest.cpp">
+				RelativePath=".\BioProcessorTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\BoostTests.cpp">
+				RelativePath=".\BoostTests.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\CrossValidationExperimentTest.cpp">
+				RelativePath=".\CrossValidationExperimentTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\Definitions.hpp">
+				RelativePath=".\Definitions.hpp"
+				>
 			</File>
 			<File
-				RelativePath=".\DplTest.cpp">
+				RelativePath=".\DplTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\ExperimentAnalyzerTest.cpp">
+				RelativePath=".\ExperimentAnalyzerTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\FileIOTest.cpp">
+				RelativePath=".\FileIOTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\LibSvmAdapterTest.cpp">
+				RelativePath=".\LibSvmAdapterTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\LogTest.cpp">
+				RelativePath=".\LogTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\main.cpp">
+				RelativePath=".\main.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\OptionsTest.cpp">
+				RelativePath=".\OptionsTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\PreProcessorTest.cpp">
+				RelativePath=".\PreProcessorTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\PreProcWorkUnitTest.cpp">
+				RelativePath=".\PreProcWorkUnitTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\StlTests.cpp">
+				RelativePath=".\StlTests.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SvmMachineTest.cpp">
+				RelativePath=".\SvmMachineTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\SvmWorkUnitTest.cpp">
+				RelativePath=".\SvmWorkUnitTest.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\UiTest.cpp">
+				RelativePath=".\UiTest.cpp"
+				>
 			</File>
 			<Filter
 				Name="Errata"
-				Filter="">
+				>
 				<File
-					RelativePath=".\ExperimentTests.cpp">
+					RelativePath=".\ExperimentTests.cpp"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Function Objects"
-			Filter="">
+			>
 			<File
-				RelativePath="..\FunctionObjects.cpp">
+				RelativePath="..\FunctionObjects.cpp"
+				>
 			</File>
 		</Filter>
 	</Files>
 	<Globals>
 		<Global
 			Name="utm.layout"
-			Value="boost.1.31"/>
+			Value="boost.1.31"
+		/>
 		<Global
 			Name="utm.projectUnderTest"
-			Value="hivm.vcproj"/>
+			Value="hivm.vcproj"
+		/>
 		<Global
 			Name="utm.runnername"
-			Value="Boost.1.31"/>
+			Value="Boost.1.31"
+		/>
 		<Global
 			Name="utm.suite"
-			Value="MySuite;MySuite2;TestIO"/>
+			Value="MySuite;MySuite2;TestIO"
+		/>
 	</Globals>
 </VisualStudioProject>
