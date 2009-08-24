@@ -279,17 +279,11 @@ public:
 
 		int base_index = 6;
 		int fold_index = base_index;
-		int foldmatch_index = fold_index + 1;
-
+		
 		for( int i = 0; i < drugs.size(); i++ )
 		{
 			fold_index = base_index + 2*i;
-			foldmatch_index = fold_index + 1;
-
-			
-
 			seq = pre_proc.load_wild_seq( "../data/shared/PI_wild.seq" );
-
 			spread_sheet = pre_proc.load_spread_sheet( 
 				"../data/PreProcessorTest/PR_2006-05-25_v2.0.tsv"
 				); 
@@ -308,29 +302,8 @@ public:
 				std::string msg = drugs[i] + " ";
 				msg.append( "[" + boost::lexical_cast<std::string>(row+1) + "," + boost::lexical_cast<std::string>(fold_index+1) + "]" );
 							
-				//msg.append( " spread_sheet[" + boost::lexical_cast<std::string>(row) + "][" ) ;
-				//msg.append( boost::lexical_cast<std::string>(fold_index) + "]\n" );
-				//msg.append( 
-				//	boost::lexical_cast<std::string>( spread_sheet[row][fold_index] ) + "should not equal 'na' \n" 
-				//	);
-				//BOOST_CHECK_MESSAGE( spread_sheet[row][fold_index] != "na", msg );//fold	
 				BOOST_CHECK_PREDICATE( std::not_equal_to< std::string >(), 
 					(spread_sheet[row][fold_index])("na") );
-
-				//BOOST_CHECK_PREDICATE( std::not_equal_to< std::string >(), 
-				//	(spread_sheet[row][fold_index])("") );
-
-				std::string msg2 = drugs[i] + " ";
-				msg2.append( "[" + boost::lexical_cast<std::string>(row+1) + "," + boost::lexical_cast<std::string>(foldmatch_index+1) + "]" );
-				//msg2.append( "Row: " + boost::lexical_cast<std::string>(row) + "\n" );
-				//msg2.append( " spread_sheet[" + boost::lexical_cast<std::string>(row) + "][" ) ;
-				//msg2.append( boost::lexical_cast<std::string>(foldmatch_index) + "]\n" );
-				//msg2.append( 
-				//	boost::lexical_cast<std::string>( spread_sheet[row][foldmatch_index] ) + "!= '=' \n" 
-				//	);
-
-				BOOST_CHECK_MESSAGE( spread_sheet[row][foldmatch_index] == "=", msg2 );//fold
-				BOOST_CHECK_EQUAL( spread_sheet[row][foldmatch_index] ,  "="  );//fold match
 
 				//no good way to test create_mutation_string for all datasets, but I'll run it here to make sure
 				//it doesn't crash the system, etc. 
@@ -392,7 +365,7 @@ public:
 
 			//size == # rows
 			BOOST_CHECK_EQUAL( spread_sheet.size(), 16 );
-			BOOST_CHECK_EQUAL( rows_to_remove.size(), 7 );
+			BOOST_CHECK_EQUAL( rows_to_remove.size(), 0 );
 
 			//check header
 			BOOST_CHECK_EQUAL( spread_sheet[0][18], "SQV Fold" );
@@ -410,15 +383,6 @@ public:
 			//size == # rows
 			BOOST_CHECK_EQUAL( spread_sheet.size(), 16 );
 			BOOST_CHECK_EQUAL( rows_to_remove.size(), 14 );
-
-			//for( spread_sheet_row_const_iterator row_it = spread_sheet.begin()+1;//skip header row
-			//	row_it != spread_sheet.end();
-			//	row_it++
-			//	)
-			//{
-			//	BOOST_CHECK( (*row_it)[12] != "na" );//fold
-			//	BOOST_CHECK_EQUAL( (*row_it)[13] , "=" );//fold match
-			//}
 		}
 	}
 
@@ -493,20 +457,20 @@ public:
 					);
 
 				BOOST_CHECK_EQUAL( 4, wu_set.size() );
-
+				//aa sequences depend on seed of 42 remaing fixed for mutation mixture substitution
 				BOOST_CHECK_EQUAL( "CA3809", wu_set[0]->get_id() );
-				BOOST_CHECK_EQUAL( true, wu_set[0]->known_susceptibility() );
+				BOOST_CHECK_EQUAL( 1, wu_set[0]->known_susceptibility() );
 				BOOST_CHECK_EQUAL( "PQITLWQRPLVTVKIGGQLKEALLDTGADDTVLEEMNLPGRWKPKMIGGIGGFIKVRQYDQIPIEICGHKAIGTVLVGPTPVNIIGRNLLTQIGCTLNF",
 					wu_set[0]->get_data() );
 
 				BOOST_CHECK_EQUAL( "CA3872", wu_set[1]->get_id() );
-				BOOST_CHECK_EQUAL( false, wu_set[1]->known_susceptibility() );
-				BOOST_CHECK_EQUAL( "PQITLWQRPLVTIKVGGQLKEALLDTGADDTVLEDMELPGRWKPKMIGGIGGFIKVKQYEDQIPIEICGHKATIGTVLVGPTPVNIIGRNLLTQIGCTLNF",
+				BOOST_CHECK_EQUAL( -1, wu_set[1]->known_susceptibility() );
+				BOOST_CHECK_EQUAL( "PQITLWQRPLVTIKVGGQLKEALLDTGADDTVLEDMELPGRWKPKMIGGIGGFIKVKQYDQIPIEICGHKAIGTVLVGPTPVNIIGRNLLTQIGCTLNF",
 					wu_set[1]->get_data() );
 
 				BOOST_CHECK_EQUAL( "CA3876", wu_set[3]->get_id() );
-				BOOST_CHECK_EQUAL( false, wu_set[3]->known_susceptibility() );
-				BOOST_CHECK_EQUAL( "AGQITLWQRPLVTIKIGGQLKEALLDTGADDTVLEEMNLPGRWKPKMIGGIGGFIKVRQYDQILIEICGHKAIGTVLVGPTPVNIIGRNLLTQIGCTLNP",
+				BOOST_CHECK_EQUAL( -1, wu_set[3]->known_susceptibility() );
+				BOOST_CHECK_EQUAL( "GQITLWQRPLVTIKIGGQLKEALLDTGADDTVLEEMNLPGRWKPKMIGGIGGFIKVRQYDQILIEICGHKAIGTVLVGPTPVNIIGRNLLTQIGCTLNP",					
 					wu_set[3]->get_data() );
 
 
@@ -554,22 +518,22 @@ public:
 		//3 H
 		//4 L
 
-		BOOST_CHECK_EQUAL( 5, wu_set.size() );//7 minus two medium resistant
+		BOOST_CHECK_EQUAL( 7, wu_set.size() );//7 including two medium resistant
 
 		BOOST_CHECK_EQUAL( "CA2634", wu_set[0]->get_id() );
-		BOOST_CHECK_EQUAL( false, wu_set[0]->known_susceptibility() );
+		BOOST_CHECK_EQUAL( -1, wu_set[0]->known_susceptibility() );
 
 		BOOST_CHECK_EQUAL( "SD-10", wu_set[1]->get_id() );
-		BOOST_CHECK_EQUAL( true, wu_set[1]->known_susceptibility() );
+		BOOST_CHECK_EQUAL( 1, wu_set[1]->known_susceptibility() );
 
 		BOOST_CHECK_EQUAL( "ALD-pt611", wu_set[2]->get_id() );
-		BOOST_CHECK_EQUAL( false, wu_set[2]->known_susceptibility() );
+		BOOST_CHECK_EQUAL( -1, wu_set[2]->known_susceptibility() );
 
-		BOOST_CHECK_EQUAL( "V2031", wu_set[3]->get_id() );
-		BOOST_CHECK_EQUAL( false, wu_set[3]->known_susceptibility() );
+		BOOST_CHECK_EQUAL( "V2031", wu_set[4]->get_id() );
+		BOOST_CHECK_EQUAL( -1, wu_set[4]->known_susceptibility() );
 
-		BOOST_CHECK_EQUAL( "CA3872", wu_set[4]->get_id() );
-		BOOST_CHECK_EQUAL( true, wu_set[4]->known_susceptibility() );
+		BOOST_CHECK_EQUAL( "CA3872", wu_set[6]->get_id() );
+		BOOST_CHECK_EQUAL( 1, wu_set[6]->known_susceptibility() );
 	}
 
 	void Destructors2()
@@ -885,12 +849,13 @@ public:
 
 		std::string drug = "APV";
 		int fold_col = pre_proc.find_drug_fold_col( drug, spread_sheet );
-		double threshold = 5.2;
 
+		std::vector<double> thresholds;
+		thresholds.push_back(5.2);
 		//TODO fix tests
-//		BOOST_CHECK_EQUAL( false, pre_proc.is_susceptible(fold_col, spread_sheet[8], threshold) ) ; 
-//		BOOST_CHECK_EQUAL( true, pre_proc.is_susceptible(fold_col, spread_sheet[9], threshold) ) ; 
-//		BOOST_CHECK_EQUAL( true, pre_proc.is_susceptible(fold_col, spread_sheet[10], threshold) ) ; 
+		BOOST_CHECK_EQUAL( -1, pre_proc.is_susceptible(fold_col, spread_sheet[8], thresholds) ) ; 
+		BOOST_CHECK_EQUAL( 1, pre_proc.is_susceptible(fold_col, spread_sheet[9], thresholds) ) ; 
+		BOOST_CHECK_EQUAL( 1, pre_proc.is_susceptible(fold_col, spread_sheet[10], thresholds) ) ; 
 	}
 	void find_duplicate_entries()
 	{
@@ -1023,12 +988,12 @@ BOOST_AUTO_TEST_CASE( PreProcessorTest_spreadsheet_PR_small)
 }
 
 
-//BOOST_AUTO_TEST_CASE( PreProcessorTest_screen_drug_and_erase_rows_pr )
-//{
-//	PreProcessorTest t;
-//	t.screen_drug_and_erase_rows_pr();	
-//
-//}
+BOOST_AUTO_TEST_CASE( PreProcessorTest_screen_drug_and_erase_rows_pr )
+{
+	PreProcessorTest t;
+	t.screen_drug_and_erase_rows_pr();	
+
+}
 
 
 BOOST_AUTO_TEST_CASE( PreProcessorTest_erase_rows_pr_small2 )
@@ -1038,11 +1003,11 @@ BOOST_AUTO_TEST_CASE( PreProcessorTest_erase_rows_pr_small2 )
 }
 
 
-//BOOST_AUTO_TEST_CASE( PreProcessorTest_screen_drug_pr_small2 )
-//{
-//	PreProcessorTest t;
-//	t.screen_drug_pr_small2 ();	
-//}
+BOOST_AUTO_TEST_CASE( PreProcessorTest_screen_drug_pr_small2 )
+{
+	PreProcessorTest t;
+	t.screen_drug_pr_small2 ();	
+}
 
 
 BOOST_AUTO_TEST_CASE( PreProcessorTest_create_mutation_string_pr_small )
@@ -1064,18 +1029,18 @@ BOOST_AUTO_TEST_CASE( PreProcessorTest_is_resistant_pr_small2 )
 	t.is_resistant_pr_small2();		
 }
 
-//BOOST_AUTO_TEST_CASE( PreProcessorTest_parseInputFiles_pr_small3 )
-//{
-//	PreProcessorTest t;
-//	t.parseInputFiles_pr_small3 ();	
-//}
+BOOST_AUTO_TEST_CASE( PreProcessorTest_parseInputFiles_pr_small3 )
+{
+	PreProcessorTest t;
+	t.parseInputFiles_pr_small3 ();	
+}
 
 
-//BOOST_AUTO_TEST_CASE( PreProcessorTest_parseInputFiles_pr_small7highlow_two_thresholds )
-//{
-//	PreProcessorTest t;
-//	t.parseInputFiles_pr_small7highlow_two_thresholds();		
-//}
+BOOST_AUTO_TEST_CASE( PreProcessorTest_parseInputFiles_pr_small7highlow_two_thresholds )
+{
+	PreProcessorTest t;
+	t.parseInputFiles_pr_small7highlow_two_thresholds();		
+}
 
 
 BOOST_AUTO_TEST_CASE( PreProcessorTest_Destructors2 )
