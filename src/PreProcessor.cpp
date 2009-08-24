@@ -639,7 +639,7 @@ void PreProcessor::parseInputFiles(const std::string dataset_path,
       //
       if (preproc_options.dump_sequences == 1) {
 	aa_seq = wu->get_data();
-	printf("%2d %20s %s\n", susceptibility, (char *) id.c_str(), (char *) aa_seq.c_str());
+	printf("%2d, %20s, %s\n", susceptibility, (char *) id.c_str(), (char *) aa_seq.c_str());
 	fflush(stdout);
       }
       
