@@ -6,6 +6,7 @@
 #ifndef FILEIO_HPP
 #define FILEIO_HPP
 
+#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/exception.hpp> //portable file system exceptions
 
 namespace fs = boost::filesystem;

@@ -2,6 +2,8 @@
 #include "Log.hpp"//logging
 
 #include <sstream> //stringstreams
+#include <boost/filesystem/exception.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp> //path based file streams
 #include <boost/filesystem/operations.hpp> //provides operations on files and directories
@@ -18,10 +20,10 @@ FileIO::~FileIO()
 
 void FileIO::_write( const boost::filesystem::path _path, const std::string& output, bool isAppend )
 {
-	if( !boost::filesystem::portable_name( _path.leaf() ) )
+	if( !boost::filesystem::portable_name( _path.leaf().string() ) )
 	{
-		fs::error_code ec = fs::path_error;
-		throw( fs::filesystem_error( "FileIO", _path, "Non OS Portable File Name", ec ) );		
+		//fs::error_code ec = fs::path_error;
+		//throw( fs::filesystem_error( "FileIO", _path, "Non OS Portable File Name", ec ) );		
 	}
 
 	//create directories
@@ -35,7 +37,7 @@ void FileIO::_write( const boost::filesystem::path _path, const std::string& out
 	}
 
 	fs::ofstream outFile;
-	
+
 	if( isAppend == true )
 	{
 		outFile.open( _path, std::ios::app);
@@ -46,18 +48,20 @@ void FileIO::_write( const boost::filesystem::path _path, const std::string& out
 	}
 	outFile << output;
 	outFile.close();
-	
+
 	//error check file exists after writing it
 	if ( !fs::exists( _path ) )
 	{
-		fs::error_code ec = fs::not_found_error;
-		throw( fs::filesystem_error( "FileIO", _path, "File Not Written", ec ) );
+		//fs:: ec = fs::not_found_error
+		//throw(boost::filesystem::filesystem_error( "FileIO", _path, "File Not Written", ec);
+		throw std::runtime_error("FileIO" + _path.string() + "File Not Written");
 	}
 
 	if ( outFile.fail() )
 	{
-		fs::error_code ec = fs::system_error;
-		throw( fs::filesystem_error( "FileIO", _path, "File Not Written", ec ) );
+		//fs::error_code ec = fs::not_found_error
+		//throw( fs::filesystem_error( "FileIO", _path, "File Not Written", ec ) );
+		throw std::runtime_error("FileIO" + _path.string() + "File Not Written");
 	}
 }
 
@@ -130,8 +134,10 @@ void FileIO::read( const std::string path, std::string& input)
 		//Log::append( "void FileIO::read( const std::string path, std::string& input)");
 		//Log::append( "fs::filesystem_error( \"FileIO\", _path, \"File Not Found\", fs::not_found_error )" );
 
-		fs::error_code ec = fs::not_found_error;
-		throw( fs::filesystem_error( "FileIO", _path, "File Not Found", ec ) );
+		//fs::error_code ec = fs::not_found_error;
+		//throw( fs::filesystem_error( "FileIO", _path, "File Not Found", ec ) );
+		throw std::runtime_error("FileIO" + _path.string() + "File Not Written");
+
 	}
 
 	if ( fs::is_directory( _path ) )
@@ -140,8 +146,10 @@ void FileIO::read( const std::string path, std::string& input)
 		//Log::append( "void FileIO::read( const std::string path, std::string& input)");
 		//Log::append( "fs::filesystem_error( \"FileIO\", _path, \"File Not Found\", fs::not_found_error )" );
 
-		fs::error_code ec = fs::is_directory_error;
-		throw( fs::filesystem_error( "FileIO", _path, "Is Directory, Not File", ec ) );
+		//fs::error_code ec = fs::is_directory_error;
+		//throw( fs::filesystem_error( "FileIO", _path, "Is Directory, Not File", ec ) );
+		throw std::runtime_error("FileIO" + _path.string() + "File Not Written");
+
 	}
 
 	fs::ifstream inFile;
@@ -159,11 +167,11 @@ void FileIO::read( const std::string path, std::string& input)
 
 	//remove all the extra line breaks. (sometimes getline() appends an extra
 	//line break on the last line of a text file)
-	input.append( boost::algorithm::trim_right_copy_if( 
-										temp_str,  
-										std::bind2nd( std::equal_to<char>(), '\n')
-										) 
+	input.append( boost::algorithm::trim_right_copy_if(
+			temp_str,
+			std::bind2nd( std::equal_to<char>(), '\n')
+	)
 	);
-	
+
 	inFile.close();
 }
