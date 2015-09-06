@@ -27,6 +27,7 @@ if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIR: ${Boost_INCLUDE_DIR}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
     message(STATUS "Boost_VERSION-: ${Boost_VERSION}")
+    message("CMAKE_INSTALL_PREFIX - ${CMAKE_INSTALL_PREFIX}")
 
     set(SOURCE_FILES
         src/BioProcessor.cpp
